@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli

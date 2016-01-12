@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -55,9 +55,9 @@ public class Me extends APlayer
 	 * @param cols - il numero di colonne del campo di gioco
 	 * @param sheeps - la poszione iniziale delle pecore nel campo di gioco
 	 */
-	public Me(String username, int rows, int cols, boolean[][] sheeps) {
+	public Me(String username, boolean[][] sheeps) {
 		super(username);
-		this.myField = new MyField(rows, cols, sheeps);
+		this.myField = new MyField(sheeps);
 	}
 	
 	

@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -40,6 +40,18 @@ public class ViewResources
 	 * costante per il nome del programma
 	 */
 	public static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
+	
+	
+	
+	/**
+	 * costante per la larghezza del frame per la registrazione
+	 */
+	public static final int REGISTRATION_FRAME_WIDTH = 800;
+	
+	/**
+	 * costante per l'altezza del frame per la registrazione
+	 */
+	public static final int REGISTRATION_FRAME_HEIGHT = 600;
 	
 	
 	

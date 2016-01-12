@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -22,21 +22,21 @@
 
 import java.io.IOException;
 
-
-
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import controller.RegistrationObserver;
+import model.ModelResources;
 import model.player.Me;
 import model.player.Opponent;
 import view.ViewResources;
 import view.game.GameFrame;
 import view.registration.RegistrationFrame;
+import view.registration.RegistrationFrameObserver;
 
 
 
-public class Main implements RegistrationObserver
+public class Main implements RegistrationFrameObserver
 {
 	private RegistrationFrame registrationFrame;
 	
@@ -51,22 +51,26 @@ public class Main implements RegistrationObserver
 	
 	
 	private Main() {
-		registrationFrame = new RegistrationFrame(this);
-		registrationFrame.setVisible(true);
+		registrationFrame = new RegistrationFrame(
+			ModelResources.FIELD_ROWS,
+			ModelResources.FIELD_COLS,
+			ModelResources.SHEEPS_NUMBER,
+			this
+		);
 	}
 	
 	
 	
 	@Override
-	public void notifyRegistration(String username, boolean[][] sheeps) {
-		me = new Me(username, ViewResources.FIELD_ROWS, ViewResources.FIELD_COLS, sheeps);
+	public void onRegistrationClick(String username, boolean[][] sheeps) {
+		me = new Me(username, sheeps);
 		
 		// communication with the server (in a thread)
 		
 		// fill "opponents"
 		
-		gameFrame = new GameFrame();
-		gameFrame.setVisible(true);
+		// gameFrame = new GameFrame();
+		JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	

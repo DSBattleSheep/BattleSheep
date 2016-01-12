@@ -20,29 +20,28 @@
 
 
 
-package model;
+package view.registration;
 
 
 
 /**
- * Classe per le costanti del modello.
+ * Interfaccia per gli osservatori dell'UsernamePanel
  * 
  * @author Giulio Biagini
  */
-public class ModelResources
+public interface UsernamePanelObserver
 {
 	/**
-	 * costante per il numero di righe del campo di gioco
+	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
+	 * al click sul bottone "exit"
 	 */
-	public static final int FIELD_ROWS = 10;
+	public void onExitClick();
 	
 	/**
-	 * costante per il numero di colonne del campo di gioco
+	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
+	 * al click sul bottone "next"
+	 * 
+	 * @param username - l'username inserito nel pannello
 	 */
-	public static final int FIELD_COLS = 10;
-	
-	/**
-	 * costante per il numero di pecore nel campo di gioco
-	 */
-	public static final int SHEEPS_NUMBER = 10;
+	public void onNextClick(String username);
 }

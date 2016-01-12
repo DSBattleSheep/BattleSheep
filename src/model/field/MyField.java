@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -61,12 +61,10 @@ public class MyField extends AField
 	/**
 	 * crea un campo di gioco per il giocatore
 	 * 
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
 	 * @param sheeps - la posizione delle pecore nel campo di gioco
 	 */
-	public MyField(int rows, int cols, boolean[][] sheeps) {
-		super(rows, cols);
+	public MyField(boolean[][] sheeps) {
+		super(sheeps.length, sheeps[0].length);
 		this.field = new char[rows][cols];
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)

@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -20,25 +20,23 @@
 
 
 
-package controller;
+package view.registration;
 
 
 
 /**
- * Interfaccia per la notifica del controller da parte della grafica relativa
- * alla registrazione dell'evento scatenato dall'utente per la registrazione
- * al server.
+ * Interfaccia per gli osservatori del RegistrationFrame
  * 
  * @author Giulio Biagini
  */
-public interface RegistrationObserver
+public interface RegistrationFrameObserver
 {
 	/**
-	 * funzione che si occupa di notificare l'osservatore della volontà
-	 * dell'utente di registrarsi presso il server
+	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
+	 * al click sul bottone "registration"
 	 * 
-	 * @param username - l'username dell'utente
+	 * @param username - l'username del giocatore
 	 * @param sheeps - la posizione delle pecore nel campo di gioco
 	 */
-	public void notifyRegistration(String username, boolean[][] sheeps);
+	public void onRegistrationClick(String username, boolean[][] sheeps);
 }

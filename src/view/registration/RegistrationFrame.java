@@ -1,5 +1,5 @@
 /*
- * Battlesheep is a funny remake of the famous BattleShip game, developed
+ * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
  * 
  * Copyright (C) 2016 - Giulio Biagini, Michele Corazza, Gianluca Iselli
@@ -25,124 +25,99 @@ package view.registration;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-import controller.RegistrationObserver;
 import view.ViewResources;
 
 
 
+/**
+ * Classe per il frame che richiede username e posizione delle pecore nel campo
+ * di gioco al giocatore ed effettua la registrazione al server.
+ * 
+ * @author Giulio Biagini
+ */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends JFrame
+public class RegistrationFrame extends JFrame implements UsernamePanelObserver, SheepsPanelObserver
 {
-	private static final int FRAME_WIDTH = 500;
+	/**
+	 * pannello per l'username del giocatore
+	 */
+	private UsernamePanel usernamePanel;
 	
-	private static final int FRAME_HEIGHT = 500;
-	
-	
-	
-	private UsernamePanel playerNamePanel;
-	
-	private FieldPanel playerFieldPanel;
-	
-	private JPanel southPanel;
-	
-	private JButton leftButton;
-	
-	private JButton rightButton;
+	/**
+	 * pannello per la posizione delle pecore nel campo di gioco
+	 */
+	private SheepsPanel sheepsPanel;
 	
 	
 	
-	private RegistrationObserver registrationObserver;
+	/**
+	 * l'osservatore delle azioni compiute sul frame
+	 */
+	private RegistrationFrameObserver observer;
 	
 	
 	
-	public RegistrationFrame(RegistrationObserver registrationObserver) {
+	/**
+	 * l'username del giocatore
+	 */
+	private String username;
+	
+	
+	
+	/**
+	 * crea un frame che richiede username e posizione delle pecore nel campo
+	 * di gioco al giocatore ed effettua la registrazione al server
+	 * 
+	 * @param rows - il numero di righe del campo di gioco
+	 * @param cols - il numero di colonne del campo di gioco
+	 * @param sheeps - il numero di pecore da inserire nel campo di gioco
+	 * @param observer - l'osservatore delle azioni compiute sul frame
+	 */
+	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
 		super(ViewResources.PROGRAM_NAME);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setSize(ViewResources.REGISTRATION_FRAME_WIDTH, ViewResources.REGISTRATION_FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		
-		playerNamePanel = new UsernamePanel();
-		playerFieldPanel = new FieldPanel();
-		initSouthPanel();
+		usernamePanel = new UsernamePanel(this);
+		sheepsPanel = new SheepsPanel(rows, cols, sheeps, this);
 		
-		add(playerNamePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
+		add(usernamePanel, BorderLayout.CENTER);
 		
-		this.registrationObserver = registrationObserver;
+		this.observer = observer;
+		
+		setVisible(true);
 	}
 	
 	
 	
-	private void initSouthPanel() {
-		southPanel = new JPanel();
-		southPanel.setLayout(new GridBagLayout());
-		southPanel.setBackground(Color.WHITE);
-		southPanel.setOpaque(true);
-		
-		leftButton = new JButton("Exit");
-		leftButton.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent e) {
-				if (leftButton.getText().equals("Exit"))
-					actionExit();
-				else if (leftButton.getText().equals("<<"))
-					actionPrev();
-			}
-		});
-		
-		rightButton = new JButton(">>");
-		rightButton.addActionListener(new ActionListener() {
-			@Override public void actionPerformed(ActionEvent e) {
-				if (rightButton.getText().equals(">>"))
-					actionNext();
-				else if (rightButton.getText().equals("Play"))
-					actionPlay();
-			}
-		});
-		
-		southPanel.add(leftButton, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0));
-		southPanel.add(rightButton, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10), 0, 0));
-	}
-	
-	
-	
-	private void actionExit() {
+	@Override
+	public void onExitClick() {
 		dispose();
 	}
 	
-	private void actionNext() {
-		rightButton.setEnabled(false);
-		remove(playerNamePanel);
-		add(playerFieldPanel, BorderLayout.CENTER);
-		leftButton.setText("<<");
-		rightButton.setText("Play");
-		rightButton.setEnabled(true);
-		update(getGraphics());
+	@Override
+	public void onNextClick(String username) {
+		this.username = username;
+		remove(usernamePanel);
+		add(sheepsPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
-	private void actionPrev() {
-		leftButton.setEnabled(false);
-		remove(playerFieldPanel);
-		add(playerNamePanel, BorderLayout.CENTER);
-		update(getGraphics());
-		leftButton.setText("Exit");
-		rightButton.setText(">>");
-		leftButton.setEnabled(true);
-		update(getGraphics());
+	@Override
+	public void onPreviousClick() {
+		remove(sheepsPanel);
+		add(usernamePanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
-	private void actionPlay() {
-		registrationObserver.notifyRegistration();// TODO
+	@Override
+	public void onRegistrationClick(boolean[][] sheeps) {
+		observer.onRegistrationClick(username, sheeps);
 	}
 }
