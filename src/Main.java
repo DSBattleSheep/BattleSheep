@@ -26,13 +26,13 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import model.ModelResources;
-import model.player.Me;
-import model.player.Opponent;
-import view.ViewResources;
-import view.game.GameFrame;
-import view.registration.RegistrationFrame;
-import view.registration.RegistrationFrameObserver;
+import game.model.ModelResources;
+import game.model.player.Me;
+import game.model.player.Opponent;
+import game.view.ViewResources;
+import game.view.game.GameFrame;
+import game.view.registration.RegistrationFrame;
+import game.view.registration.RegistrationFrameObserver;
 
 
 
