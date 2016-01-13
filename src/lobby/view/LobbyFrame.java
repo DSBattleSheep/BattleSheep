@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * @author DSBattleSheep
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends JFrame implements LobbyFrameObserver {
+public class LobbyFrame extends JFrame implements LobbyFrameObserver,Runnable,ActionListener {
 
 	private final static String LOBBY_FRAME_TITLE = "Lobby @ ";
 	
@@ -59,7 +60,7 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		ImageIcon loading = new ImageIcon("imgs/ajax-loader.gif");
 		loadingPanel.add(new JLabel("loading... ", loading, JLabel.CENTER));
 		
-		/*add(loadingPanel);*/
+		add(loadingPanel);
 		
 	    
 		tablePanel = new JPanel();
@@ -72,12 +73,7 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		JScrollPane scrollPane = new JScrollPane(table);
 		
 		JButton addButton = new JButton("Start game");
-		addButton.addActionListener(new ActionListener() {			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//model.addRow(new Object[] { "Kathy", "127.0.0.1", new Integer(5) });
-			}
-		});
+		addButton.addActionListener(this);
 
 		Dimension tableSize = table.getPreferredSize();
 		Dimension addButtonSize = addButton.getPreferredSize();
@@ -97,7 +93,7 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		tablePanel.add(scrollPane, BorderLayout.NORTH);
 		tablePanel.add(addButton, BorderLayout.SOUTH);
 		
-		add(tablePanel);
+		//add(tablePanel);
 		
 		setVisible(true);
 	}
@@ -110,10 +106,29 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 	
 	@Override
 	public void onClientJoin(String username, String host, int port) {
+		System.out.println(model.getRowCount());
 		if (model.getRowCount() == 0) {
 			remove(loadingPanel);
 			add(tablePanel);
+			SwingUtilities.updateComponentTreeUI(this);
 		}
 		model.addRow(new Object[] { username, host, new Integer(port) });
+	}
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		observer.onLobbyStartClick();
+		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Thread t= new Thread(this);
+		t.start();
+		
 	}	
 }

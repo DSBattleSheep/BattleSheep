@@ -8,6 +8,8 @@ import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import lobby.model.NetPlayer;
 import lobby.view.LobbyFrameObserver;
@@ -17,6 +19,8 @@ public class LobbyServerRMI extends UnicastRemoteObject implements JoinInterface
 
 	private List<NetPlayer> playerList;
 	private LobbyFrameObserver frameobs;
+	private ReentrantLock plock,plock2;
+	private Condition waitForStart;
 	
 	public LobbyServerRMI(int port, LobbyFrameObserver frameobs) throws RemoteException, AlreadyBoundException {
 		super();
@@ -24,30 +28,37 @@ public class LobbyServerRMI extends UnicastRemoteObject implements JoinInterface
 		Registry registry=LocateRegistry.createRegistry(port);
 		registry.bind("lobby", this);
 		this.frameobs=frameobs;
+		plock=new ReentrantLock();
+		waitForStart=plock.newCondition();
 	}
 
 	@Override
-	public void JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
-		synchronized(playerList) {
+	public List<NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
 			String host=getClientHost();
 			System.out.println("ip is "+host);
 			NetPlayer player=new NetPlayer(username, host, port);
+			plock.lock();
+			System.out.println("ip is "+host);
 			playerList.add(player);
 			frameobs.onClientJoin(username, host, port);
-		}
+			System.out.println("sono denter");
+			try {
+				waitForStart.await();
+			} catch (InterruptedException e) {
+				throw new RemoteException(e.getMessage());
+			} finally {
+				plock.unlock();
+			}
+			
+			return playerList;
+			
 	}
-
-
 
 	@Override
 	public void onLobbyStartClick() {
-		for(NetPlayer p: playerList) {
-			//chiama i regaz e digli OK
-			System.out.println("On lobby start click");
-		}
+		plock.lock();
+		waitForStart.signal();
+		plock.unlock();
 	}
 	
-	
-	
-
 }

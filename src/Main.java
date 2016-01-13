@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import game.communication.PlayerRegistration;
 import game.model.ModelResources;
 import game.model.player.Me;
 import game.model.player.Opponent;
@@ -65,7 +66,10 @@ public class Main implements RegistrationFrameObserver
 	public void onRegistrationClick(String username, boolean[][] sheeps) {
 		me = new Me(username, sheeps);
 		
-		// communication with the server (in a thread)
+		//FIXME port client constant
+		PlayerRegistration.Join(username, 20000);
+		
+		System.out.println("registrato!");
 		
 		// fill "opponents"
 		

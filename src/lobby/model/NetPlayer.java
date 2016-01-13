@@ -12,4 +12,8 @@ public class NetPlayer implements Serializable {
 		this.host=host;
 		this.port=port;
 	}
+	
+	public String getUsername() {
+		return username;
+	}
 }
