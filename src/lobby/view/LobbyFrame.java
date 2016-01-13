@@ -17,6 +17,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import lobby.server.LobbyStartObserver;
+
 
 /**
  * 
@@ -24,7 +26,8 @@ import javax.swing.table.DefaultTableModel;
  * @author DSBattleSheep
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends JFrame implements LobbyFrameObserver,Runnable,ActionListener {
+public class LobbyFrame extends JFrame implements LobbyJoinFrameObserver 
+{
 
 	private final static String LOBBY_FRAME_TITLE = "Lobby @ ";
 	
@@ -42,65 +45,87 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver,Runnable,Ac
 	
 	private DefaultTableModel model;
 
-	private LobbyStartObserver observer;
+	private LobbyStartObserver onStartObserver;
+	
+	
 	
 	public LobbyFrame(String host, int port) {
 		super(LOBBY_FRAME_TITLE + host + ":" + port);
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(LOBBY_FRAME_WIDTH, LOBBY_FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		setResizable(false);
 
+		// creo il pannello per l'attesa dei giocatori
 		loadingPanel = new JPanel();
 		loadingPanel.setLayout(new BorderLayout());
 		loadingPanel.setBackground(Color.WHITE);
 		loadingPanel.setOpaque(true);
 		
+		// carico la gif animata, creo la label e le metto al centro del pannello 		
 		ImageIcon loading = new ImageIcon("imgs/ajax-loader.gif");
-		loadingPanel.add(new JLabel("loading... ", loading, JLabel.CENTER));
+		loadingPanel.add(new JLabel("Waiting for clients...", loading, JLabel.CENTER));
 		
-		add(loadingPanel);
 		
-	    
+		// creo il pannello per la tabella dei dati dei giocatori
 		tablePanel = new JPanel();
 		tablePanel.setLayout(new BorderLayout());
 		tablePanel.setBackground(Color.WHITE);
 		tablePanel.setOpaque(true);
 		
-		model = new DefaultTableModel(TABLE_COLUMN_NAMES, 0);		
+		// creo il modello con cui devono essere aggiunte le righe nella tabella, la tabella e lo scrollPane. 
+		model = new DefaultTableModel(TABLE_COLUMN_NAMES, 0);
 		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		
+		// aggiungo il pulsante per far partire il gioco ed aggiungo il listener 
 		JButton addButton = new JButton("Start game");
-		addButton.addActionListener(this);
+		addButton.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new Runnable() {			
+					@Override
+					public void run() {
+						onStartObserver.onLobbyStartClick();				
+					}
+				}).start();		
+			}
+		});
 
+		// do una dimensione alla tabella affinchè non vada a coprire il pulsante
 		Dimension tableSize = table.getPreferredSize();
 		Dimension addButtonSize = addButton.getPreferredSize();
 		scrollPane.setPreferredSize(new Dimension(tableSize.width, 
-				LOBBY_FRAME_HEIGHT - addButtonSize.height - 25)); // TODO: 25 pixel 
+				LOBBY_FRAME_HEIGHT - addButtonSize.height - 25)); // FIXME: 25 pixel 
 		
+		// imposto una larghezza migliore per le singole colonne
 		table.getColumnModel().getColumn(0).setPreferredWidth(Math.round(tableSize.width*0.50f));
 		table.getColumnModel().getColumn(1).setPreferredWidth(Math.round(tableSize.width*0.40f));
 		table.getColumnModel().getColumn(2).setPreferredWidth(Math.round(tableSize.width*0.10f));
 		
+		// metto l'allineamento centrale alle celle della tabella
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		
+		// aggiungo la tabella ed il pulsante al pannello 
 		tablePanel.add(scrollPane, BorderLayout.NORTH);
 		tablePanel.add(addButton, BorderLayout.SOUTH);
 		
+		// aggiungo al frame della lobby solo il pannello di attesa
+		add(loadingPanel);
 		//add(tablePanel);
 		
 		setVisible(true);
 	}
 		
 	
-	public void RegisterOnStart(LobbyStartObserver observer){
-		this.observer=observer;
+	public void setOnStartObserver(LobbyStartObserver onStartObserver){
+		this.onStartObserver = onStartObserver;
 	}
 	
 	
@@ -114,21 +139,4 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver,Runnable,Ac
 		}
 		model.addRow(new Object[] { username, host, new Integer(port) });
 	}
-
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		observer.onLobbyStartClick();
-		
-	}
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Thread t= new Thread(this);
-		t.start();
-		
-	}	
 }

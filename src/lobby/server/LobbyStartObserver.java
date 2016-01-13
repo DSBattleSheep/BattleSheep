@@ -1,4 +1,4 @@
-package lobby.view;
+package lobby.server;
 
 public interface LobbyStartObserver {
 

@@ -63,18 +63,37 @@ public class Main implements RegistrationFrameObserver
 	
 	
 	@Override
-	public void onRegistrationClick(String username, boolean[][] sheeps) {
+	public void onRegistrationClick(final String username, boolean[][] sheeps) {
 		me = new Me(username, sheeps);
 		
-		//FIXME port client constant
-		PlayerRegistration.Join(username, 20000);
+		Thread t = new Thread(new Runnable() {			
+			@Override
+			public void run() {
+				/*
+				 * FIXME calcolare la porta che bilda il client
+				 * FIXME se ci sono dei problemi nella join (exception) dobbiamo 
+				 * 		 mostrare un messaggio che qualcosa è andato storto,
+				 * 		 altrimenti dobbiamo andare nella schermata di gioco!
+				 * 		 Ma intanto il la view dovrebbe entrare in una fase di waiting!
+				 * 		 Bisogna certamente creare un Observer con almeno 2 metodi: onStart e onError! 
+				 */				
+				try {
+					PlayerRegistration.Join(username, 20000);
+				} catch (Exception e) {
+					e.printStackTrace();	
+				}
+				
+				System.out.println("registrato!");
+				
+				// fill "opponents"
+				
+				// gameFrame = new GameFrame();
+				JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		t.start();
 		
-		System.out.println("registrato!");
 		
-		// fill "opponents"
-		
-		// gameFrame = new GameFrame();
-		JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	

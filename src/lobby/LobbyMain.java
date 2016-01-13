@@ -5,25 +5,37 @@ import java.io.IOException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+
 import game.model.ModelResources;
 import lobby.server.LobbyServerRMI;
 import lobby.view.LobbyFrame;
+import utils.Utils;
 
 
-public class LobbyMain {
+public class LobbyMain 
+{
 
 	private LobbyFrame lobbyFrame;
+	
 	private LobbyServerRMI lobbyServer;
 	
+	
 	private LobbyMain() {
-		lobbyFrame = new LobbyFrame("192.168.1.100", ModelResources.PORT_LOBBY);
-		try{
-			lobbyServer=new LobbyServerRMI(ModelResources.PORT_LOBBY, lobbyFrame);
+		
+		
+		try {
+			String currHost = Utils.getLocalAddress().getHostAddress();
+		
+			lobbyServer = new LobbyServerRMI(ModelResources.PORT_LOBBY);
+			lobbyFrame = new LobbyFrame(currHost, ModelResources.PORT_LOBBY);
+			
+			lobbyFrame.setOnStartObserver(lobbyServer);
+			lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		lobbyFrame.RegisterOnStart(lobbyServer);
+		
 	}
 	
 	

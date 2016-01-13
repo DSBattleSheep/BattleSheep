@@ -7,7 +7,7 @@ import java.util.List;
 
 import lobby.model.NetPlayer;
 
-public interface JoinInterface extends Remote {
+public interface LobbyJoinRemoteInterface extends Remote {
 	
 	public List<NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException;
 }

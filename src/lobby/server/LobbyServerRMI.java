@@ -12,35 +12,44 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import lobby.model.NetPlayer;
-import lobby.view.LobbyFrameObserver;
-import lobby.view.LobbyStartObserver;
+import lobby.view.LobbyJoinFrameObserver;
 
-public class LobbyServerRMI extends UnicastRemoteObject implements JoinInterface,LobbyStartObserver{
+@SuppressWarnings("serial")
+public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemoteInterface, LobbyStartObserver
+{
 
 	private List<NetPlayer> playerList;
-	private LobbyFrameObserver frameobs;
-	private ReentrantLock plock,plock2;
+	
+	private LobbyJoinFrameObserver lobbyJoinFrameObserver;
+	
+	private ReentrantLock plock;
+	
 	private Condition waitForStart;
 	
-	public LobbyServerRMI(int port, LobbyFrameObserver frameobs) throws RemoteException, AlreadyBoundException {
+	
+	
+	public LobbyServerRMI(int port) throws RemoteException, AlreadyBoundException {
 		super();
-		playerList= new ArrayList<NetPlayer>();
-		Registry registry=LocateRegistry.createRegistry(port);
-		registry.bind("lobby", this);
-		this.frameobs=frameobs;
-		plock=new ReentrantLock();
-		waitForStart=plock.newCondition();
+		playerList = new ArrayList<NetPlayer>();
+		Registry registry = LocateRegistry.createRegistry(port);
+		registry.bind("lobby", this); //FIXME static final room name
+		plock = new ReentrantLock();
+		waitForStart = plock.newCondition();
+	}
+	
+	public void setLobbyJoinFrameObserver(LobbyJoinFrameObserver lobbyJoinFrameObserver) {
+		this.lobbyJoinFrameObserver = lobbyJoinFrameObserver;
 	}
 
 	@Override
 	public List<NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
-			String host=getClientHost();
+			String host = getClientHost();
 			System.out.println("ip is "+host);
-			NetPlayer player=new NetPlayer(username, host, port);
+			NetPlayer player = new NetPlayer(username, host, port);
 			plock.lock();
 			System.out.println("ip is "+host);
 			playerList.add(player);
-			frameobs.onClientJoin(username, host, port);
+			lobbyJoinFrameObserver.onClientJoin(username, host, port);
 			System.out.println("sono denter");
 			try {
 				waitForStart.await();

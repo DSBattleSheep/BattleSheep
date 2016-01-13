@@ -44,9 +44,13 @@ import game.model.field.OpponentField;
 public class Opponent extends APlayer implements Serializable
 {
 	/**
-	 * l'indirizzo ip dell'host dell'avversario
+	 * l'host dell'host dell'avversario
 	 */
 	private String host;
+	
+	/**
+	 * la porta su cui è in ascolto l'avversario
+	 */
 	private int port;
 	
 	/**
@@ -61,16 +65,17 @@ public class Opponent extends APlayer implements Serializable
 	 * il numero di pecore iniziale e l'indirizzo ip dell'host sul quale
 	 * risiede.
 	 * 
-	 * @param ip - l'indirizzo ip dell'host dell'avversario
+	 * @param host - l'host dell'avversario
+	 * @param port - la porta in ascolto dell'host dell'avversario
 	 * @param username - l'username dell'avversario
 	 * @param rows - il numero di righe del campo di gioco
 	 * @param cols - il numero di colonne del campo di gioco
 	 * @param sheeps - il numero di pecore iniziale nel campo di gioco
 	 */
-	public Opponent(String host,int port, String username, int rows, int cols, int sheeps) {
+	public Opponent(String host, int port, String username, int rows, int cols, int sheeps) {
 		super(username);
 		this.host = host;
-		this.port=port;
+		this.port = port;
 		this.opponentField = new OpponentField(rows, cols, sheeps);
 	}
 	
@@ -90,16 +95,21 @@ public class Opponent extends APlayer implements Serializable
 	
 	
 	/**
-	 * funzione che si occupa di restituire l'indirizzo ip dell'host
+	 * funzione che si occupa di restituire l'host
 	 * dell'avversario
 	 * 
-	 * @return l'indirizzo ip dell'host dell'avversario
+	 * @return l'host dell'avversario
 	 */
 	public String getHost() {
 		return host;
 	}
 	
-	
+	/**
+	 * funzione che si occupa di restituire la porta su cui ha fatto bind
+	 * l'avversario
+	 * 
+	 * @return la porta dell'avversario
+	 */
 	public int getPort() {
 		return port;
 	}

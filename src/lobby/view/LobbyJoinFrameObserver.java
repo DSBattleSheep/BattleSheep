@@ -1,6 +1,6 @@
 package lobby.view;
 
-public interface LobbyFrameObserver {
+public interface LobbyJoinFrameObserver {
 
 	public void onClientJoin(String username, String host, int port);
 	
