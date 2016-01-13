@@ -40,6 +40,8 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 	private JPanel tablePanel;
 	
 	private DefaultTableModel model;
+
+	private LobbyStartObserver observer;
 	
 	public LobbyFrame(String host, int port) {
 		super(LOBBY_FRAME_TITLE + host + ":" + port);
@@ -57,7 +59,7 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		ImageIcon loading = new ImageIcon("imgs/ajax-loader.gif");
 		loadingPanel.add(new JLabel("loading... ", loading, JLabel.CENTER));
 		
-		add(loadingPanel);
+		/*add(loadingPanel);*/
 		
 	    
 		tablePanel = new JPanel();
@@ -73,7 +75,7 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		addButton.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				model.addRow(new Object[] { "Kathy", "127.0.0.1", new Integer(5) });
+				//model.addRow(new Object[] { "Kathy", "127.0.0.1", new Integer(5) });
 			}
 		});
 
@@ -95,18 +97,19 @@ public class LobbyFrame extends JFrame implements LobbyFrameObserver {
 		tablePanel.add(scrollPane, BorderLayout.NORTH);
 		tablePanel.add(addButton, BorderLayout.SOUTH);
 		
-		//add(tablePanel);
+		add(tablePanel);
 		
 		setVisible(true);
 	}
 		
 	
-	
-	
+	public void RegisterOnStart(LobbyStartObserver observer){
+		this.observer=observer;
+	}
 	
 	
 	@Override
-	public void onClientJoin(String username, String host, String port) {
+	public void onClientJoin(String username, String host, int port) {
 		if (model.getRowCount() == 0) {
 			remove(loadingPanel);
 			add(tablePanel);

@@ -24,6 +24,8 @@ package game.model.player;
 
 
 
+import java.io.Serializable;
+
 import game.model.field.OpponentField;
 
 
@@ -38,12 +40,14 @@ import game.model.field.OpponentField;
  * 
  * @author Giulio Biagini
  */
-public class Opponent extends APlayer
+@SuppressWarnings("serial")
+public class Opponent extends APlayer implements Serializable
 {
 	/**
 	 * l'indirizzo ip dell'host dell'avversario
 	 */
-	private String ip;
+	private String host;
+	private int port;
 	
 	/**
 	 * il campo di gioco dell'avversario
@@ -63,9 +67,10 @@ public class Opponent extends APlayer
 	 * @param cols - il numero di colonne del campo di gioco
 	 * @param sheeps - il numero di pecore iniziale nel campo di gioco
 	 */
-	public Opponent(String ip, String username, int rows, int cols, int sheeps) {
+	public Opponent(String host,int port, String username, int rows, int cols, int sheeps) {
 		super(username);
-		this.ip = ip;
+		this.host = host;
+		this.port=port;
 		this.opponentField = new OpponentField(rows, cols, sheeps);
 	}
 	
@@ -90,8 +95,13 @@ public class Opponent extends APlayer
 	 * 
 	 * @return l'indirizzo ip dell'host dell'avversario
 	 */
-	public String getIp() {
-		return ip;
+	public String getHost() {
+		return host;
+	}
+	
+	
+	public int getPort() {
+		return port;
 	}
 	
 	/**

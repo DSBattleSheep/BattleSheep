@@ -45,4 +45,7 @@ public class ModelResources
 	 * costante per il numero di pecore nel campo di gioco
 	 */
 	public static final int SHEEPS_NUMBER = 10;
+	
+	/*lobby port*/
+	public static final int PORT_LOBBY=25099;
 }
