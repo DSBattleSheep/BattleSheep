@@ -27,8 +27,8 @@ package org.sd.battlesheep;
 import javax.swing.JOptionPane;
 
 import org.sd.battlesheep.communication.client.PlayerRegistration;
-import org.sd.battlesheep.model.client.player.Me;
-import org.sd.battlesheep.model.client.player.Opponent;
+import org.sd.battlesheep.model.player.Me;
+import org.sd.battlesheep.model.player.Opponent;
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrame;

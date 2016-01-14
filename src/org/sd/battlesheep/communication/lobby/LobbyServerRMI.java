@@ -1,4 +1,4 @@
-package org.sd.battlesheep.communication.server;
+package org.sd.battlesheep.communication.lobby;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.sd.battlesheep.model.server.NetPlayer;
+import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
 
 @SuppressWarnings("serial")

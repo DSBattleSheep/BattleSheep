@@ -10,8 +10,8 @@ import java.rmi.server.ServerNotActiveException;
 import java.util.List;
 
 import org.sd.battlesheep.Resources;
-import org.sd.battlesheep.communication.server.LobbyJoinRemoteInterface;
-import org.sd.battlesheep.model.server.NetPlayer;
+import org.sd.battlesheep.communication.lobby.LobbyJoinRemoteInterface;
+import org.sd.battlesheep.model.lobby.NetPlayer;
 
 
 

@@ -1,4 +1,4 @@
-package org.sd.battlesheep.communication.server;
+package org.sd.battlesheep.communication.lobby;
 
 public interface LobbyStartObserver {
 

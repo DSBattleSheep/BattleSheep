@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.model.client.field;
+package org.sd.battlesheep.model.field;
 
 
 

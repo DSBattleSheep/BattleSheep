@@ -1,4 +1,4 @@
-package org.sd.battlesheep.model.server;
+package org.sd.battlesheep.model.lobby;
 
 import java.io.Serializable;
 

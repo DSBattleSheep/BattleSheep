@@ -20,13 +20,13 @@
 
 
 
-package org.sd.battlesheep.model.client.player;
+package org.sd.battlesheep.model.player;
 
 
 
 import java.io.Serializable;
 
-import org.sd.battlesheep.model.client.field.OpponentField;
+import org.sd.battlesheep.model.field.OpponentField;
 
 
 

@@ -2,7 +2,7 @@ package org.sd.battlesheep;
 
 
 
-import org.sd.battlesheep.communication.server.LobbyServerRMI;
+import org.sd.battlesheep.communication.lobby.LobbyServerRMI;
 import org.sd.battlesheep.view.lobby.LobbyFrame;
 
 

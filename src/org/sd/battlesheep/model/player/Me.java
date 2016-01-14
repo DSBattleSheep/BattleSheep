@@ -20,11 +20,11 @@
 
 
 
-package org.sd.battlesheep.model.client.player;
+package org.sd.battlesheep.model.player;
 
 
 
-import org.sd.battlesheep.model.client.field.MyField;
+import org.sd.battlesheep.model.field.MyField;
 
 
 

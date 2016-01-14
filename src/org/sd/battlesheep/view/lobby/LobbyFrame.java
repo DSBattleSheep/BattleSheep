@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import org.sd.battlesheep.communication.server.LobbyStartObserver;
+import org.sd.battlesheep.communication.lobby.LobbyStartObserver;
 
 
 /**

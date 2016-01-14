@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.model.client.player;
+package org.sd.battlesheep.model.player;
 
 
 
