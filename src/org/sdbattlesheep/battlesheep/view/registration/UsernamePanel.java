@@ -38,7 +38,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.sdbattlesheep.battlesheep.view.ViewResources;
+import org.sdbattlesheep.Resources;
+import org.sdbattlesheep.battlesheep.view.AFrame;
 
 
 
@@ -98,13 +99,22 @@ public class UsernamePanel extends JPanel
 	
 	
 	/**
+	 * l'osservatore delle azioni compiute sul pannello
+	 */
+	private UsernamePanelObserver observer;
+	
+	
+	
+	/**
 	 * crea un pannello nel quale è richiesto l'username del giocatore ed è
 	 * mostrato, al centro, il logo del programma
 	 * 
 	 * @param observer - l'osservatore delle azioni compiute sul pannello
 	 */
-	public UsernamePanel(final UsernamePanelObserver observer) {
+	public UsernamePanel(UsernamePanelObserver observer) {
 		setLayout(new BorderLayout());
+		
+		this.observer = observer;
 		
 		/*
 		 * north panel
@@ -133,7 +143,7 @@ public class UsernamePanel extends JPanel
 		middlePanel.setBackground(Color.WHITE);
 		middlePanel.setOpaque(true);
 		
-		imageLabel = new JLabel(ViewResources.LOGO);
+		imageLabel = new JLabel(AFrame.LOGO);
 		imageLabel.setBackground(Color.WHITE);
 		imageLabel.setOpaque(true);
 		
@@ -151,17 +161,14 @@ public class UsernamePanel extends JPanel
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {
-				observer.onExitClick();
+				actionExit();
 			}
 		});
 		
 		nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {
-				if (usernameField.getText().isEmpty())
-					JOptionPane.showMessageDialog(UsernamePanel.this, "You have to enter your username before proceeding", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
-				else
-					observer.onNextClick(usernameField.getText());
+				actionNext();
 			}
 		});
 		
@@ -175,5 +182,26 @@ public class UsernamePanel extends JPanel
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	/**
+	 * funzione per l'azione di click sul bottone "exit"
+	 */
+	private void actionExit() {
+		observer.onExitClick();
+	}
+	
+	/**
+	 * funzione per l'azione di click sul bottone "next"
+	 */
+	private void actionNext() {
+		// se non è stato inserito alcun username mostra un messaggio di avviso
+		if (usernameField.getText().isEmpty())
+			JOptionPane.showMessageDialog(this, "You have to enter your username before proceeding", AFrame.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+		// se è stato inserito un username, notifica l'osservatore
+		else
+			observer.onNextClick(usernameField.getText());
 	}
 }

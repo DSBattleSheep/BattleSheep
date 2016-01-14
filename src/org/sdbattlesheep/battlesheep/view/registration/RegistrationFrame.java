@@ -26,10 +26,13 @@ package org.sdbattlesheep.battlesheep.view.registration;
 
 import java.awt.BorderLayout;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.sdbattlesheep.battlesheep.view.ViewResources;
+import org.sdbattlesheep.Resources;
+import org.sdbattlesheep.battlesheep.view.AFrame;
 
 
 
@@ -40,8 +43,20 @@ import org.sdbattlesheep.battlesheep.view.ViewResources;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends JFrame implements UsernamePanelObserver, SheepsPanelObserver
+public class RegistrationFrame extends AFrame implements UsernamePanelObserver, SheepsPanelObserver
 {
+	/**
+	 * costante per la larghezza del frame per la registrazione
+	 */
+	private static final int WIDTH = 800;
+	
+	/**
+	 * costante per l'altezza del frame per la registrazione
+	 */
+	private static final int HEIGHT = 600;
+	
+	
+	
 	/**
 	 * pannello per l'username del giocatore
 	 */
@@ -78,10 +93,7 @@ public class RegistrationFrame extends JFrame implements UsernamePanelObserver, 
 	 * @param observer - l'osservatore delle azioni compiute sul frame
 	 */
 	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
-		super(ViewResources.PROGRAM_NAME);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(ViewResources.REGISTRATION_FRAME_WIDTH, ViewResources.REGISTRATION_FRAME_HEIGHT);
-		setLocationRelativeTo(null);
+		super(WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
 		
 		usernamePanel = new UsernamePanel(this);
@@ -90,6 +102,8 @@ public class RegistrationFrame extends JFrame implements UsernamePanelObserver, 
 		add(usernamePanel, BorderLayout.CENTER);
 		
 		this.observer = observer;
+		
+		pack();
 		
 		setVisible(true);
 	}

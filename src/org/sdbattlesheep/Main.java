@@ -24,46 +24,72 @@ package org.sdbattlesheep;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.sdbattlesheep.battlesheep.Battlesheep;
+import org.sdbattlesheep.lobby.Lobby;
 
 
+
+/**
+ * Classe principale che permette di scegliere in che modalità avviare il
+ * programma: come Lobby, ovvero come server per la registrazione dei client o
+ * come Battlesheep, ovvero come client per il gioco.
+ * 
+ * @author Giulio Biagini
+ */
+@SuppressWarnings("serial")
 public class Main extends JFrame
 {
-	private JLabel label;
+	/**
+	 * label per la stringa che richiede in quale modalità avviare il programma
+	 */
+	private JLabel labelMode;
 	
+	/**
+	 * radiobutton per scegliere di avviare la lobby (server)
+	 */
 	private JRadioButton radioServer;
 	
+	/**
+	 * radiobutton per scegliere di avviare il gioco (client)
+	 */
 	private JRadioButton radioClient;
 	
+	/**
+	 * bottone per uscire dal programma
+	 */
 	private JButton buttonExit;
 	
+	/**
+	 * bottone per avviare il programma nella modalità scelta
+	 */
 	private JButton buttonOk;
 	
 	
 	
+	/**
+	 * crea un frame per la scelta della modalità nella quale avviare il
+	 * programma
+	 */
 	private Main() {
 		super("TODO");
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new GridBagLayout());
 		
-		label = new JLabel("Start the program as");
+		labelMode = new JLabel("Start the program as:");
 		
 		radioServer = new JRadioButton("server", false);
 		radioServer.addActionListener(new ActionListener() {
@@ -95,14 +121,15 @@ public class Main extends JFrame
 		buttonOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 				if (radioServer.isSelected())
-					JOptionPane.showMessageDialog(null, "Server");// TODO
+					new Lobby();
 				else
-					JOptionPane.showMessageDialog(null, "Client");// TODO
+					new Battlesheep();
 			}
 		});
 		
-		add(label, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 5, 10), 0, 0));
+		add(labelMode, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 5, 10), 0, 0));
 		add(radioServer, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 5, 5), 0, 0));
 		add(radioClient, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 10), 0, 0));
 		add(buttonExit, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 10, 5), 0, 0));
@@ -115,7 +142,11 @@ public class Main extends JFrame
 	
 	
 	
-	public static void main(String[] args) throws IOException {
+	/**
+	 * main
+	 */
+	public static void main(String[] args) {
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException ex) {

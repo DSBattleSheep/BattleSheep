@@ -44,12 +44,12 @@ import org.sdbattlesheep.battlesheep.model.field.OpponentField;
 public class Opponent extends APlayer implements Serializable
 {
 	/**
-	 * l'host dell'host dell'avversario
+	 * l'host dell'avversario
 	 */
 	private String host;
 	
 	/**
-	 * la porta su cui è in ascolto l'avversario
+	 * la porta dell'avversario
 	 */
 	private int port;
 	
@@ -62,11 +62,11 @@ public class Opponent extends APlayer implements Serializable
 	
 	/**
 	 * crea un avversario dato un username, le dimensioni del campo di gioco,
-	 * il numero di pecore iniziale e l'indirizzo ip dell'host sul quale
+	 * il numero di pecore iniziale e l'indirizzo e porta dell'host sul quale
 	 * risiede.
 	 * 
 	 * @param host - l'host dell'avversario
-	 * @param port - la porta in ascolto dell'host dell'avversario
+	 * @param port - la porta dell'avversario
 	 * @param username - l'username dell'avversario
 	 * @param rows - il numero di righe del campo di gioco
 	 * @param cols - il numero di colonne del campo di gioco
@@ -95,8 +95,7 @@ public class Opponent extends APlayer implements Serializable
 	
 	
 	/**
-	 * funzione che si occupa di restituire l'host
-	 * dell'avversario
+	 * funzione che si occupa di restituire l'host dell'avversario
 	 * 
 	 * @return l'host dell'avversario
 	 */
@@ -105,8 +104,7 @@ public class Opponent extends APlayer implements Serializable
 	}
 	
 	/**
-	 * funzione che si occupa di restituire la porta su cui ha fatto bind
-	 * l'avversario
+	 * funzione che si occupa di restituire la porta dell'avversario
 	 * 
 	 * @return la porta dell'avversario
 	 */

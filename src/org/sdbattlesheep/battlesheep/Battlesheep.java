@@ -24,17 +24,13 @@ package org.sdbattlesheep.battlesheep;
 
 
 
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
+import org.sdbattlesheep.Resources;
 import org.sdbattlesheep.battlesheep.communication.PlayerRegistration;
-import org.sdbattlesheep.battlesheep.model.ModelResources;
 import org.sdbattlesheep.battlesheep.model.player.Me;
 import org.sdbattlesheep.battlesheep.model.player.Opponent;
-import org.sdbattlesheep.battlesheep.view.ViewResources;
+import org.sdbattlesheep.battlesheep.view.AFrame;
 import org.sdbattlesheep.battlesheep.view.game.GameFrame;
 import org.sdbattlesheep.battlesheep.view.registration.RegistrationFrame;
 import org.sdbattlesheep.battlesheep.view.registration.RegistrationFrameObserver;
@@ -55,11 +51,11 @@ public class Battlesheep implements RegistrationFrameObserver
 	
 	
 	
-	private Battlesheep() {
+	public Battlesheep() {
 		registrationFrame = new RegistrationFrame(
-			ModelResources.FIELD_ROWS,
-			ModelResources.FIELD_COLS,
-			ModelResources.SHEEPS_NUMBER,
+			Resources.FIELD_ROWS,
+			Resources.FIELD_COLS,
+			Resources.SHEEPS_NUMBER,
 			this
 		);
 	}
@@ -92,29 +88,11 @@ public class Battlesheep implements RegistrationFrameObserver
 				// fill "opponents"
 				
 				// gameFrame = new GameFrame();
-				JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", AFrame.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		t.start();
 		
 		
-	}
-	
-	
-	
-	public static void main(String[] args) throws IOException {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException ex) {
-			
-		} catch (InstantiationException ex) {
-			
-		} catch (IllegalAccessException ex) {
-			
-		} catch (UnsupportedLookAndFeelException ex) {
-			
-		}
-		
-		new Battlesheep();
 	}
 }

@@ -38,7 +38,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import org.sdbattlesheep.battlesheep.view.ViewResources;
+import org.sdbattlesheep.Resources;
+import org.sdbattlesheep.battlesheep.view.AFrame;
 
 
 
@@ -93,9 +94,24 @@ public class SheepsPanel extends JPanel
 	
 	
 	/**
+	 * il numero di righe del campo di gioco
+	 */
+	private int rows;
+	
+	/**
+	 * il numero di colonne del campo di gioco
+	 */
+	private int cols;
+	
+	/**
 	 * il numero di pecore inserite nel campo di gioco
 	 */
 	private int sheeps = 0;
+	
+	/**
+	 * l'osservatore delle azioni compiute sul pannello
+	 */
+	private SheepsPanelObserver observer;
 	
 	
 	
@@ -108,7 +124,22 @@ public class SheepsPanel extends JPanel
 	 * @param sheeps - il numero di pecore da inserire nel campo di gioco
 	 * @param observer - l'osservatore delle azioni compiute sul pannello
 	 */
-	public SheepsPanel(final int rows, final int cols, final int sheeps, final SheepsPanelObserver observer) {
+	public SheepsPanel(int rows, int cols, int sheeps, SheepsPanelObserver observer) {
+		
+		/*
+		 * save the inner objects
+		 */
+		
+		this.rows = rows;
+		this.cols = cols;
+		this.sheeps = sheeps;
+		
+		this.observer = observer;
+		
+		/*
+		 * set the panel layout
+		 */
+		
 		setLayout(new BorderLayout());
 		
 		/*
@@ -138,26 +169,20 @@ public class SheepsPanel extends JPanel
 		sheepsPositionButtons = new JToggleButton[rows][cols];
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				sheepsPositionButtons[r][c] = new JToggleButton(ViewResources.GRASS);
+				sheepsPositionButtons[r][c] = new JToggleButton(AFrame.GRASS);
 				sheepsPositionButtons[r][c].addActionListener(new ActionListener() {
 					@Override public void actionPerformed(ActionEvent e) {
-						JToggleButton source = (JToggleButton) e.getSource();
-						if (source.getIcon().equals(ViewResources.GRASS) && SheepsPanel.this.sheeps == sheeps)
-							JOptionPane.showMessageDialog(SheepsPanel.this, "You have already entered all sheeps", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
-						else if (source.getIcon().equals(ViewResources.GRASS)) {
-							source.setIcon(ViewResources.SHEEP);
-							SheepsPanel.this.sheeps++;
-						} else {
-							source.setIcon(ViewResources.GRASS);
-							SheepsPanel.this.sheeps--;
-						}
+						actionButton((JToggleButton) e.getSource());
 					}
 				});
 				
+				// aggiungo un bottone nella prima colonna
 				if (c == 0)
 					middlePanel.add(sheepsPositionButtons[r][c], new GridBagConstraints(c, r, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 10, 0, 0), 0, 0));
+				// aggiungo un bottone nell'ultima colonna
 				else if (c == cols - 1)
 					middlePanel.add(sheepsPositionButtons[r][c], new GridBagConstraints(c, r, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10), 0, 0));
+				// aggiungo un altro bottone
 				else
 					middlePanel.add(sheepsPositionButtons[r][c], new GridBagConstraints(c, r, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			}
@@ -175,22 +200,14 @@ public class SheepsPanel extends JPanel
 		previousButton = new JButton("Previous");
 		previousButton.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {
-				observer.onPreviousClick();
+				actionPrevious();
 			}
 		});
 		
 		registrationButton = new JButton("Registration");
 		registrationButton.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {
-				if (SheepsPanel.this.sheeps != sheeps)
-					JOptionPane.showMessageDialog(SheepsPanel.this, "You have to enter " + sheeps + " sheeps before proceeding", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
-				else {
-					boolean[][] sheeps = new boolean[rows][cols];
-					for (int r = 0; r < rows; r++)
-						for (int c = 0; c < cols; c++)
-							sheeps[r][c] = sheepsPositionButtons[r][c].isSelected() ? true : false;
-					observer.onRegistrationClick(sheeps);
-				}
+				actionRegistration();
 			}
 		});
 		
@@ -204,5 +221,40 @@ public class SheepsPanel extends JPanel
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionButton(JToggleButton source) {
+		// voglio aggiungere una pecora ma ho già raggiunto il numero massimo di pecore
+		if (source.getIcon().equals(AFrame.GRASS) && sheeps == 0)
+			JOptionPane.showMessageDialog(this, "You have already entered all sheeps", AFrame.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+		// voglio aggiungere una pecora e non ho ancora raggiunto il numero massimo di pecore
+		else if (source.getIcon().equals(AFrame.GRASS)) {
+			source.setIcon(AFrame.SHEEP);
+			sheeps--;
+		// voglio togliere una pecora
+		} else {
+			source.setIcon(AFrame.GRASS);
+			sheeps++;
+		}
+	}
+	
+	private void actionPrevious() {
+		observer.onPreviousClick();
+	}
+	
+	private void actionRegistration() {
+		// se non sono state inserite tutte le pecore mostra un messaggio di avviso
+		if (sheeps != 0)
+			JOptionPane.showMessageDialog(this, "You have to enter " + sheeps + " sheeps before proceeding", AFrame.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+		// se snon state inserite tutte le pecore notifica l'osservatore
+		else {
+			boolean[][] sheeps = new boolean[rows][cols];
+			for (int r = 0; r < rows; r++)
+				for (int c = 0; c < cols; c++)
+					sheeps[r][c] = sheepsPositionButtons[r][c].isSelected() ? true : false;
+			observer.onRegistrationClick(sheeps);
+		}
 	}
 }
