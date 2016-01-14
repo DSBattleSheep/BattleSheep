@@ -1,4 +1,3 @@
-package org.sdbattlesheep;
 /*
  * Battlesheep is a funny remake of the famous Battleship game, developed
  * as a distributed system.
@@ -21,80 +20,97 @@ package org.sdbattlesheep;
 
 
 
+package org.sdbattlesheep;
+
+
+
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.sdbattlesheep.battlesheep.communication.PlayerRegistration;
-import org.sdbattlesheep.battlesheep.model.ModelResources;
-import org.sdbattlesheep.battlesheep.model.player.Me;
-import org.sdbattlesheep.battlesheep.model.player.Opponent;
-import org.sdbattlesheep.battlesheep.view.ViewResources;
-import org.sdbattlesheep.battlesheep.view.game.GameFrame;
-import org.sdbattlesheep.battlesheep.view.registration.RegistrationFrame;
-import org.sdbattlesheep.battlesheep.view.registration.RegistrationFrameObserver;
 
 
-
-public class Main implements RegistrationFrameObserver
+public class Main extends JFrame
 {
-	private RegistrationFrame registrationFrame;
+	private JLabel label;
 	
-	private GameFrame gameFrame;
+	private JRadioButton radioServer;
 	
+	private JRadioButton radioClient;
 	
+	private JButton buttonExit;
 	
-	private Me me;
-	
-	private Opponent[] opponents;
+	private JButton buttonOk;
 	
 	
 	
 	private Main() {
-		registrationFrame = new RegistrationFrame(
-			ModelResources.FIELD_ROWS,
-			ModelResources.FIELD_COLS,
-			ModelResources.SHEEPS_NUMBER,
-			this
-		);
-	}
-	
-	
-	
-	@Override
-	public void onRegistrationClick(final String username, boolean[][] sheeps) {
-		me = new Me(username, sheeps);
+		super("TODO");
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(new GridBagLayout());
 		
-		Thread t = new Thread(new Runnable() {			
+		label = new JLabel("Start the program as");
+		
+		radioServer = new JRadioButton("server", false);
+		radioServer.addActionListener(new ActionListener() {
 			@Override
-			public void run() {
-				/*
-				 * FIXME calcolare la porta che bilda il client
-				 * FIXME se ci sono dei problemi nella join (exception) dobbiamo 
-				 * 		 mostrare un messaggio che qualcosa è andato storto,
-				 * 		 altrimenti dobbiamo andare nella schermata di gioco!
-				 * 		 Ma intanto il la view dovrebbe entrare in una fase di waiting!
-				 * 		 Bisogna certamente creare un Observer con almeno 2 metodi: onStart e onError! 
-				 */				
-				try {
-					PlayerRegistration.Join(username, 20000);
-				} catch (Exception e) {
-					e.printStackTrace();	
-				}
-				
-				System.out.println("registrato!");
-				
-				// fill "opponents"
-				
-				// gameFrame = new GameFrame();
-				JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", ViewResources.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
+			public void actionPerformed(ActionEvent e) {
+				radioServer.setSelected(true);
+				radioClient.setSelected(false);
 			}
 		});
-		t.start();
 		
+		radioClient = new JRadioButton("client", true);
+		radioClient.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				radioClient.setSelected(true);
+				radioServer.setSelected(false);
+			}
+		});
 		
+		buttonExit = new JButton("Exit");
+		buttonExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		
+		buttonOk = new JButton("OK");
+		buttonOk.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (radioServer.isSelected())
+					JOptionPane.showMessageDialog(null, "Server");// TODO
+				else
+					JOptionPane.showMessageDialog(null, "Client");// TODO
+			}
+		});
+		
+		add(label, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 5, 10), 0, 0));
+		add(radioServer, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 5, 5), 0, 0));
+		add(radioClient, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 10), 0, 0));
+		add(buttonExit, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 10, 5), 0, 0));
+		add(buttonOk, new GridBagConstraints(1, 2, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 10, 10), 0, 0));
+		
+		pack();
+		
+		setVisible(true);
 	}
 	
 	
