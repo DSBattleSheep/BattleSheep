@@ -25,6 +25,7 @@ package org.sd.battlesheep;
 
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.client.PlayerRegistration;
 import org.sd.battlesheep.model.player.Me;
@@ -78,16 +79,25 @@ public class Battlesheep implements RegistrationFrameObserver
 				 */				
 				try {
 					PlayerRegistration.Join(username, 20000);
+					
+					
+					
 				} catch (Exception e) {
-					e.printStackTrace();	
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Eccezione", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							registrationFrame.unlockGui();
+						}
+					});
 				}
+				
 				
 				System.out.println("registrato!");
 				
 				// fill "opponents"
 				
 				// gameFrame = new GameFrame();
-				JOptionPane.showMessageDialog(null, "Ora dovrebbe partire il gioco!", AFrame.PROGRAM_NAME, JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		t.start();

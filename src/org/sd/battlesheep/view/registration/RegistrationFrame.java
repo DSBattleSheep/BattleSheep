@@ -106,6 +106,20 @@ public class RegistrationFrame extends AFrame implements UsernamePanelObserver, 
 		pack();
 		
 		setVisible(true);
+	}	
+	
+	
+	
+	/**
+	 * questa funzione viene richiamata in caso di errore nella registrazione 
+	 * dal thread incaricato di connettersi alla lobby. 
+	 * I casi di errori possono essere:
+	 * 1) non è stato possibile connettersi alla lobby (host unreachable)
+	 * 2) la lobby è crashata 
+	 * 3) lo username scelto è già in uso
+	 */
+	public void unlockGui() {
+		// unlock gui
 	}
 	
 	
