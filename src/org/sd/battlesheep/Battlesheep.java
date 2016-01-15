@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.client.PlayerRegistration;
+import org.sd.battlesheep.model.ModelConst;
 import org.sd.battlesheep.model.player.Me;
 import org.sd.battlesheep.model.player.Opponent;
 import org.sd.battlesheep.view.AFrame;
@@ -37,6 +38,11 @@ import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
 
 
 
+/**
+ * Classe principale per il client (gioco).
+ * 
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
+ */
 public class Battlesheep implements RegistrationFrameObserver
 {
 	private RegistrationFrame registrationFrame;
@@ -53,9 +59,9 @@ public class Battlesheep implements RegistrationFrameObserver
 	
 	public Battlesheep() {
 		registrationFrame = new RegistrationFrame(
-			Resources.FIELD_ROWS,
-			Resources.FIELD_COLS,
-			Resources.SHEEPS_NUMBER,
+			ModelConst.FIELD_ROWS,
+			ModelConst.FIELD_COLS,
+			ModelConst.SHEEPS_NUMBER,
 			this
 		);
 	}
@@ -63,8 +69,13 @@ public class Battlesheep implements RegistrationFrameObserver
 	
 	
 	@Override
-	public void onRegistrationClick(final String username, boolean[][] sheeps) {
-		me = new Me(username, sheeps);
+	public void onRegistrationFrameExitClick() {
+		registrationFrame.dispose();
+	}
+	
+	@Override
+	public void onRegistrationFrameOkClick(final String username, boolean[][] sheeps) {
+		// me = new Me(username, sheeps);// <--- TODO settare la porta 
 		
 		Thread t = new Thread(new Runnable() {			
 			@Override
@@ -80,8 +91,6 @@ public class Battlesheep implements RegistrationFrameObserver
 				try {
 					PlayerRegistration.Join(username, 20000);
 					
-					
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Eccezione", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
@@ -92,7 +101,6 @@ public class Battlesheep implements RegistrationFrameObserver
 					});
 				}
 				
-				
 				System.out.println("registrato!");
 				
 				// fill "opponents"
@@ -101,7 +109,5 @@ public class Battlesheep implements RegistrationFrameObserver
 			}
 		});
 		t.start();
-		
-		
 	}
 }

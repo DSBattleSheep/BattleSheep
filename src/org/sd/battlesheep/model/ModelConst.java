@@ -1,38 +1,14 @@
-package org.sd.battlesheep;
-
-
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+package org.sd.battlesheep.model;
 
 
 
 /**
- * Classe per le costanti.
+ * Classe per le costanti della comunicazione.
  * 
  * @author Giulio Biagini
  */
-public class Resources
+public class ModelConst
 {
-	/*
-	 * COMMUNICATION
-	 */
-	
-	
-	
-	/**
-	 * la porta della lobby
-	 */
-	public static final int PORT_LOBBY = 25099;
-	
-	
-	
-	/*
-	 * MODEL
-	 */
-	
-	
-	
 	/**
 	 * costante per il numero di righe del campo di gioco
 	 */

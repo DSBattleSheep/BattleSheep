@@ -27,7 +27,9 @@ package org.sd.battlesheep.model.player;
 /**
  * Classe per il giocatore.
  * 
- * Il giocatore è caratterizzato da un username.
+ * Il giocatore è costituito da un username ed una porta sulla quale è in
+ * ascolto in attesa di una connessione da parte di altri giocatori per la
+ * comunicazione.
  * 
  * @author Giulio Biagini
  */
@@ -38,15 +40,22 @@ public abstract class APlayer
 	 */
 	private String username;
 	
+	/**
+	 * la porta per la comunicazione con gli altri giocatori
+	 */
+	private int port;
+	
 	
 	
 	/**
-	 * crea un giocatore con username in input
+	 * crea un giocatore con username e porta per la comunicazione in input
 	 * 
 	 * @param username - l'username del giocatore
+	 * @param port - la porta per la comunicazione con gli altri giocatori
 	 */
-	public APlayer(String username) {
+	public APlayer(String username, int port) {
 		this.username = username;
+		this.port = port;
 	}
 	
 	
@@ -68,5 +77,15 @@ public abstract class APlayer
 	 */
 	public String getUsername() {
 		return username;
+	}
+	
+	/**
+	 * funzione che si occupa di restituire la porta per la comunicazione con
+	 * gli altri giocatori
+	 * 
+	 * @return la porta per la comunicazione con gli altri giocatori
+	 */
+	public int getPort() {
+		return port;
 	}
 }

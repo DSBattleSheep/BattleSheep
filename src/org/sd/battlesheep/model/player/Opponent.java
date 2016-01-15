@@ -27,16 +27,18 @@ package org.sd.battlesheep.model.player;
 import java.io.Serializable;
 
 import org.sd.battlesheep.model.field.OpponentField;
+import org.sd.battlesheep.model.lobby.NetPlayer;
 
 
 
 /**
  * Classe per l'avversario.
  * 
- * L'avversario è caratterizzato da un username ed un proprio campo di gioco
- * nel quale inizialmente è memorizzata la sola erba e progressivamente viene
- * aggiornato con le celle colpite (con successo o meno) dagli avversari e dal
- * giocatore.
+ * L'avversario è costituito da un username, un host ed una porta sulla quale è
+ * in ascolto in attesa di una connessione da parte di altri giocatori per la
+ * comunicazione. L'avversario ha poi un proprio campo di gioco nel quale
+ * inizialmente è memorizzata la sola erba e progressivamente viene aggiornato
+ * con le celle colpite (con successo o meno) dagli avversari e dal giocatore.
  * 
  * @author Giulio Biagini
  */
@@ -47,11 +49,6 @@ public class Opponent extends APlayer implements Serializable
 	 * l'host dell'avversario
 	 */
 	private String host;
-	
-	/**
-	 * la porta dell'avversario
-	 */
-	private int port;
 	
 	/**
 	 * il campo di gioco dell'avversario
@@ -65,17 +62,14 @@ public class Opponent extends APlayer implements Serializable
 	 * il numero di pecore iniziale e l'indirizzo e porta dell'host sul quale
 	 * risiede.
 	 * 
-	 * @param host - l'host dell'avversario
-	 * @param port - la porta dell'avversario
-	 * @param username - l'username dell'avversario
+	 * @param netPlayer - un oggetto contenente username, host e porta
 	 * @param rows - il numero di righe del campo di gioco
 	 * @param cols - il numero di colonne del campo di gioco
 	 * @param sheeps - il numero di pecore iniziale nel campo di gioco
 	 */
-	public Opponent(String host, int port, String username, int rows, int cols, int sheeps) {
-		super(username);
-		this.host = host;
-		this.port = port;
+	public Opponent(NetPlayer netPlayer, int rows, int cols, int sheeps) {
+		super(netPlayer.getUsername(), netPlayer.getPort());
+		this.host = netPlayer.getHost();
 		this.opponentField = new OpponentField(rows, cols, sheeps);
 	}
 	
@@ -101,15 +95,6 @@ public class Opponent extends APlayer implements Serializable
 	 */
 	public String getHost() {
 		return host;
-	}
-	
-	/**
-	 * funzione che si occupa di restituire la porta dell'avversario
-	 * 
-	 * @return la porta dell'avversario
-	 */
-	public int getPort() {
-		return port;
 	}
 	
 	/**

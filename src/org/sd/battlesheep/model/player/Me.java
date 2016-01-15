@@ -31,9 +31,11 @@ import org.sd.battlesheep.model.field.MyField;
 /**
  * Classe per il giocatore.
  * 
- * Il giocatore è caratterizzato da un username ed un proprio campo di gioco
- * nel quale è memorizzata la posizione dell'erba, delle pecore e le celle
- * colpite (con successo o meno) dagli avversari.
+ * Il giocatore è costituito da un username ed una porta sulla quale è in
+ * ascolto in attesa di una connessione da parte di altri giocatori per la
+ * comunicazione. Il giocatore ha poi un proprio campo di gioco nel quale è
+ * memorizzata la posizione dell'erba, delle pecore e le celle colpite (con
+ * successo o meno) dagli avversari.
  * 
  * @author Giulio Biagini
  */
@@ -51,12 +53,11 @@ public class Me extends APlayer
 	 * la posizione iniziale delle pecore
 	 * 
 	 * @param username - l'username del giocatore
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
+	 * @param port - la porta per la comunicazione con gli altri giocatori
 	 * @param sheeps - la poszione iniziale delle pecore nel campo di gioco
 	 */
-	public Me(String username, boolean[][] sheeps) {
-		super(username);
+	public Me(String username, int port, boolean[][] sheeps) {
+		super(username, port);
 		this.myField = new MyField(sheeps);
 	}
 	

@@ -31,6 +31,8 @@ package org.sd.battlesheep.view.registration;
  */
 public interface RegistrationFrameObserver
 {
+	public void onRegistrationFrameExitClick();
+	
 	/**
 	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
 	 * al click sul bottone "registration"
@@ -38,5 +40,5 @@ public interface RegistrationFrameObserver
 	 * @param username - l'username del giocatore
 	 * @param sheeps - la posizione delle pecore nel campo di gioco
 	 */
-	public void onRegistrationClick(String username, boolean[][] sheeps);
+	public void onRegistrationFrameOkClick(String username, boolean[][] sheeps);
 }

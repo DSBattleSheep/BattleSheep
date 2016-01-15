@@ -2,6 +2,8 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.LayoutManager;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -57,10 +59,18 @@ public abstract class AFrame extends JFrame
 	
 	
 	
-	public AFrame(int width, int height) {
+	public AFrame(LayoutManager layout) {
+		super(PROGRAM_NAME);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setLayout(layout);
+	}
+	
+	public AFrame(int width, int height, LayoutManager layout) {
 		super(PROGRAM_NAME);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(width, height);
 		setLocationRelativeTo(null);
+		setLayout(layout);
 	}
 }

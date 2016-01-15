@@ -38,7 +38,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import org.sd.battlesheep.Resources;
 import org.sd.battlesheep.view.AFrame;
 
 

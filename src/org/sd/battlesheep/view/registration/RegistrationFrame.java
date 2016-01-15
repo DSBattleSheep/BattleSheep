@@ -31,7 +31,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.sd.battlesheep.Resources;
 import org.sd.battlesheep.view.AFrame;
 
 
@@ -93,8 +92,7 @@ public class RegistrationFrame extends AFrame implements UsernamePanelObserver, 
 	 * @param observer - l'osservatore delle azioni compiute sul frame
 	 */
 	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
-		super(WIDTH, HEIGHT);
-		setLayout(new BorderLayout());
+		super(WIDTH, HEIGHT, new BorderLayout());
 		
 		usernamePanel = new UsernamePanel(this);
 		sheepsPanel = new SheepsPanel(rows, cols, sheeps, this);
@@ -146,6 +144,6 @@ public class RegistrationFrame extends AFrame implements UsernamePanelObserver, 
 	
 	@Override
 	public void onRegistrationClick(boolean[][] sheeps) {
-		observer.onRegistrationClick(username, sheeps);
+		observer.onRegistrationFrameOkClick(username, sheeps);
 	}
 }
