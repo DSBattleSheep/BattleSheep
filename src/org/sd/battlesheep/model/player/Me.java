@@ -23,7 +23,6 @@
 package org.sd.battlesheep.model.player;
 
 
-
 import org.sd.battlesheep.model.field.MyField;
 
 

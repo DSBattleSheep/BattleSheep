@@ -25,8 +25,8 @@ public class Lobby
 		try {
 			String currHost = Utils.getLocalAddress().getHostAddress();
 		
-			lobbyServer = new LobbyServerRMI(CommunicationConst.PORT_LOBBY);
-			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.PORT_LOBBY);
+			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT);
+			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT);
 			
 			lobbyFrame.setOnStartObserver(lobbyServer);
 			lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);

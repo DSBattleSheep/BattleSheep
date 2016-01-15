@@ -24,12 +24,24 @@ package org.sd.battlesheep;
 
 
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.sd.battlesheep.communication.client.PlayerClient;
 import org.sd.battlesheep.communication.client.PlayerRegistration;
+import org.sd.battlesheep.communication.client.PlayerServer;
+import org.sd.battlesheep.model.MaxPortRetryException;
 import org.sd.battlesheep.model.ModelConst;
+import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.model.player.Me;
+import org.sd.battlesheep.model.player.MeFactory;
 import org.sd.battlesheep.model.player.Opponent;
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.game.GameFrame;
@@ -74,24 +86,33 @@ public class Battlesheep implements RegistrationFrameObserver
 	}
 	
 	@Override
-	public void onRegistrationFrameOkClick(final String username, boolean[][] sheeps) {
-		// me = new Me(username, sheeps);// <--- TODO settare la porta 
+	public void onRegistrationFrameOkClick(final String username, final boolean[][] sheeps) {
+		 
 		
 		Thread t = new Thread(new Runnable() {			
 			@Override
 			public void run() {
 				/*
-				 * FIXME calcolare la porta che bilda il client
 				 * FIXME se ci sono dei problemi nella join (exception) dobbiamo 
 				 * 		 mostrare un messaggio che qualcosa è andato storto,
 				 * 		 altrimenti dobbiamo andare nella schermata di gioco!
 				 * 		 Ma intanto il la view dovrebbe entrare in una fase di waiting!
 				 * 		 Bisogna certamente creare un Observer con almeno 2 metodi: onStart e onError! 
-				 */				
+				 */	
+				
+				PlayerServer playersServer = null;
+								
+				Map<String, NetPlayer> players = null;
+				
 				try {
-					PlayerRegistration.Join(username, 20000);
-					
-				} catch (Exception e) {
+					playersServer = new PlayerServer();
+					me = MeFactory.NewMe(username, sheeps, playersServer);
+					playersServer.setMe(me);
+					players = PlayerRegistration.Join(username, me.getPort());
+				} catch (MaxPortRetryException | MalformedURLException e) {
+					JOptionPane.showMessageDialog(null, "MaxPortRetryException", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					System.exit(1);
+				} catch (RemoteException | ServerNotActiveException | NotBoundException e) {
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Eccezione", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
 					SwingUtilities.invokeLater(new Runnable() {
@@ -99,7 +120,12 @@ public class Battlesheep implements RegistrationFrameObserver
 							registrationFrame.unlockGui();
 						}
 					});
+					return;
 				}
+				
+				// Abbiamo joinato e la lobby ci ha restituito tutti i player
+				
+				List<String> turnList = PlayerClient.getOrder(username, playersServer.getValueRandom(), players);
 				
 				System.out.println("registrato!");
 				

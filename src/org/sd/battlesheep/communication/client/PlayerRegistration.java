@@ -7,7 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
-import java.util.List;
+import java.util.Map;
 
 import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.communication.lobby.LobbyJoinRemoteInterface;
@@ -17,12 +17,16 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 public class PlayerRegistration
 {
-	public static List<NetPlayer> Join(String username, int port) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
-		List<NetPlayer> playerList;
+	public static Map<String, NetPlayer> Join(String username, int port) 
+			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
+		
+		Map<String, NetPlayer> playerMap;
 		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface) Naming
-				.lookup("rmi://127.0.0.1:" + CommunicationConst.PORT_LOBBY + "/lobby"); // FIXME: static final room name
-		playerList = serverInterface.JoinLobby(username, port);
-		System.out.println(playerList.get(0).getUsername());
-		return playerList;	
+				.lookup("rmi://127.0.0.1:" + CommunicationConst.LOBBY_PORT + "/" + CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
+		playerMap = serverInterface.JoinLobby(username, port);
+		
+		playerMap.remove(username);
+		
+		return playerMap;	
 	}
 }

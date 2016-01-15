@@ -6,11 +6,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
 
@@ -18,7 +19,7 @@ import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
 public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemoteInterface, LobbyStartObserver
 {
 
-	private List<NetPlayer> playerList;
+	private Map<String, NetPlayer> playerMap;
 	
 	private LobbyJoinFrameObserver lobbyJoinFrameObserver;
 	
@@ -30,9 +31,9 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	
 	public LobbyServerRMI(int port) throws RemoteException, AlreadyBoundException {
 		super();
-		playerList = new ArrayList<NetPlayer>();
+		playerMap = new HashMap<String, NetPlayer>();
 		Registry registry = LocateRegistry.createRegistry(port);
-		registry.bind("lobby", this); //FIXME static final room name
+		registry.bind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME, this); //FIXME static final room name
 		plock = new ReentrantLock();
 		waitForStart = plock.newCondition();
 	}
@@ -42,13 +43,13 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	}
 
 	@Override
-	public List<NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
+	public Map<String, NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
 			String host = getClientHost();
 			System.out.println("ip is "+host);
 			NetPlayer player = new NetPlayer(username, host, port);
 			plock.lock();
 			System.out.println("ip is "+host);
-			playerList.add(player);
+			playerMap.put(username, player);
 			lobbyJoinFrameObserver.onClientJoin(username, host, port);
 			System.out.println("sono denter");
 			try {
@@ -59,7 +60,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 				plock.unlock();
 			}
 			
-			return playerList;
+			return playerMap;
 			
 	}
 
