@@ -88,13 +88,12 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 			}
 			
 			return playerMap;
-			
 	}
 
 	@Override
 	public void onLobbyStartClick() {
 		plock.lock();
-		waitForStart.signal();
+		waitForStart.signalAll();
 		plock.unlock();
 	}
 	
