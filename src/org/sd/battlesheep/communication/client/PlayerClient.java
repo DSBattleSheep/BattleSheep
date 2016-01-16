@@ -42,6 +42,7 @@ public class PlayerClient {
 				 *  in caso si Exception è sicuramente colpa della connessione perciò possiamo eliminare il client
 				 *  dalla lista dei giocatori 
 				 */
+				System.out.println("deleteList.add: " + playerName);
 				deleteList.add(playerName);
 			}
 		}

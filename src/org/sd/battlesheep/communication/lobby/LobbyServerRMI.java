@@ -14,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.CommunicationConst;
+import org.sd.battlesheep.model.UsernameAlreadyTakenException;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
 
@@ -70,12 +71,15 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	}
 
 	@Override
-	public Map<String, NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException {
+	public Map<String, NetPlayer> JoinLobby(String username, int port) throws RemoteException, ServerNotActiveException, UsernameAlreadyTakenException {
 			String host = getClientHost();
-			System.out.println("ip is "+host);
-			NetPlayer player = new NetPlayer(username, host, port);
 			plock.lock();
 			System.out.println("ip is "+host);
+			
+			if (playerMap.containsKey(username))
+				throw new UsernameAlreadyTakenException("\"" + username + "\" has aready been taken! Please change it and try again..");
+			
+			NetPlayer player = new NetPlayer(username, host, port);
 			playerMap.put(username, player);
 			SwingUtilities.invokeLater(new UpdateGuiThread(lobbyJoinFrameObserver, username, host, port));
 			System.out.println("sono denter");

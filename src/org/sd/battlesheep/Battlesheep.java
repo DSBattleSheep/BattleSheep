@@ -25,8 +25,10 @@ package org.sd.battlesheep;
 
 
 import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.UnmarshalException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import org.sd.battlesheep.communication.client.PlayerRegistration;
 import org.sd.battlesheep.communication.client.PlayerServer;
 import org.sd.battlesheep.model.MaxPortRetryException;
 import org.sd.battlesheep.model.ModelConst;
+import org.sd.battlesheep.model.UsernameAlreadyTakenException;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.model.player.Me;
 import org.sd.battlesheep.model.player.MeFactory;
@@ -47,6 +50,7 @@ import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
+import org.sd.battlesheep.view.registration.UsernamePanel;
 
 
 
@@ -73,7 +77,7 @@ public class Battlesheep implements RegistrationFrameObserver
 		registrationFrame = new RegistrationFrame(
 			ModelConst.FIELD_ROWS,
 			ModelConst.FIELD_COLS,
-			ModelConst.SHEEPS_NUMBER,
+			1, // FIXME: ModelConst.SHEEPS_NUMBER,
 			this
 		);
 	}
@@ -106,22 +110,28 @@ public class Battlesheep implements RegistrationFrameObserver
 				
 				try {
 					playersServer = new PlayerServer();
-					me = MeFactory.NewMe(username, sheeps, playersServer);
+					me = MeFactory.NewMe(username, sheeps, playersServer); // devo crearlo solo la prima volta, al massimo potro cambiare lo username!
 					playersServer.setMe(me);
 					players = PlayerRegistration.Join(username, me.getPort());
-				} catch (MaxPortRetryException | MalformedURLException e) {
-					JOptionPane.showMessageDialog(null, "MaxPortRetryException", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
-					System.exit(1);
-				} catch (RemoteException | ServerNotActiveException | NotBoundException e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Eccezione", AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+				} catch (UsernameAlreadyTakenException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							registrationFrame.unlockGui();
 						}
 					});
 					return;
+				} catch (MaxPortRetryException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					System.exit(1);
+				} catch (NotBoundException | ServerNotActiveException | ConnectException | UnmarshalException | MalformedURLException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					return;
+				} catch (RemoteException e) {
+					e.printStackTrace();					
+					return;
 				}
+			
 				
 				// Abbiamo joinato e la lobby ci ha restituito tutti i player
 				
