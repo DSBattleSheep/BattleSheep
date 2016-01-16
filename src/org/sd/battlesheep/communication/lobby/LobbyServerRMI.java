@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.SwingUtilities;
+
 import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
@@ -27,6 +29,31 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	
 	private Condition waitForStart;
 	
+	
+	private class UpdateGuiThread implements Runnable {
+
+		private LobbyJoinFrameObserver lobbyJoinFrameObserver;
+		
+		private String username;
+		
+		private String host;
+		
+		private int port;
+		
+
+		public UpdateGuiThread(LobbyJoinFrameObserver lobbyJoinFrameObserver, String username, String host, int port) {
+			this.lobbyJoinFrameObserver = lobbyJoinFrameObserver;
+			this.username = username;
+			this.host = host;
+			this.port = port;
+		}
+		
+		@Override
+		public void run() {
+			lobbyJoinFrameObserver.onClientJoin(username, host, port);
+		}
+		
+	}
 	
 	
 	public LobbyServerRMI(int port) throws RemoteException, AlreadyBoundException {
@@ -50,7 +77,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 			plock.lock();
 			System.out.println("ip is "+host);
 			playerMap.put(username, player);
-			lobbyJoinFrameObserver.onClientJoin(username, host, port);
+			SwingUtilities.invokeLater(new UpdateGuiThread(lobbyJoinFrameObserver, username, host, port));
 			System.out.println("sono denter");
 			try {
 				waitForStart.await();
