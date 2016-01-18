@@ -44,13 +44,11 @@ import org.sd.battlesheep.model.ModelConst;
 import org.sd.battlesheep.model.UsernameAlreadyTakenException;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.model.player.Me;
-import org.sd.battlesheep.model.player.MeFactory;
 import org.sd.battlesheep.model.player.Opponent;
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
-import org.sd.battlesheep.view.registration.UsernamePanel;
 
 
 
@@ -66,6 +64,7 @@ public class Battlesheep implements RegistrationFrameObserver
 	private GameFrame gameFrame;
 	
 	
+	private PlayerServer playersServer;
 	
 	private Me me;
 	
@@ -104,15 +103,18 @@ public class Battlesheep implements RegistrationFrameObserver
 				 * 		 Bisogna certamente creare un Observer con almeno 2 metodi: onStart e onError! 
 				 */	
 				
-				PlayerServer playersServer = null;
 								
 				Map<String, NetPlayer> players = null;
 				
+				System.out.println("Console di: " + username);
+				
 				try {
-					playersServer = new PlayerServer();
-					me = MeFactory.NewMe(username, sheeps, playersServer); // devo crearlo solo la prima volta, al massimo potro cambiare lo username!
+					me = new Me(username, sheeps);
+					if (playersServer == null)
+						playersServer = new PlayerServer();
 					playersServer.setMe(me);
-					players = PlayerRegistration.Join(username, me.getPort());
+					players = PlayerRegistration.Join(username, playersServer.getPort());
+					
 				} catch (UsernameAlreadyTakenException e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
 					SwingUtilities.invokeLater(new Runnable() {

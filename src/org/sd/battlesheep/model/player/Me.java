@@ -55,8 +55,8 @@ public class Me extends APlayer
 	 * @param port - la porta per la comunicazione con gli altri giocatori
 	 * @param sheeps - la poszione iniziale delle pecore nel campo di gioco
 	 */
-	public Me(String username, int port, boolean[][] sheeps) {
-		super(username, port);
+	public Me(String username, boolean[][] sheeps) {
+		super(username);
 		this.myField = new MyField(sheeps);
 	}
 	

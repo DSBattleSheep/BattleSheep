@@ -32,10 +32,11 @@ public class PlayerClient {
 			 *  La orderMap è una TreeMap e tiene gli elementi in ordine alfabetico! ( FIXME : ne siamo sicuri? )
 			 */
 			try {
+				System.out.println(player.getHost() + ":" + player.getPort());
 				OrderInterface orderInterface = (OrderInterface) Naming
 						.lookup("rmi://" + player.getHost() + ":" + player.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
 				
-				orderMap.put(orderInterface.getValueRandom() + playerName, player.getUsername());
+				orderMap.put(orderInterface.getValueRandom() + playerName, playerName);
 				
 			} catch (MalformedURLException | ServerNotActiveException | RemoteException | NotBoundException e) {
 				/**
@@ -43,6 +44,7 @@ public class PlayerClient {
 				 *  dalla lista dei giocatori 
 				 */
 				System.out.println("deleteList.add: " + playerName);
+				System.out.println(e.getMessage());
 				deleteList.add(playerName);
 			}
 		}

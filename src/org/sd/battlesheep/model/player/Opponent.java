@@ -49,6 +49,12 @@ public class Opponent extends APlayer implements Serializable
 	 * l'host dell'avversario
 	 */
 	private String host;
+
+	
+	/**
+	 * la porta per la comunicazione con gli altri giocatori
+	 */
+	private int port;
 	
 	/**
 	 * il campo di gioco dell'avversario
@@ -68,8 +74,9 @@ public class Opponent extends APlayer implements Serializable
 	 * @param sheeps - il numero di pecore iniziale nel campo di gioco
 	 */
 	public Opponent(NetPlayer netPlayer, int rows, int cols, int sheeps) {
-		super(netPlayer.getUsername(), netPlayer.getPort());
+		super(netPlayer.getUsername());
 		this.host = netPlayer.getHost();
+		this.port = netPlayer.getPort();
 		this.opponentField = new OpponentField(rows, cols, sheeps);
 	}
 	
@@ -95,6 +102,16 @@ public class Opponent extends APlayer implements Serializable
 	 */
 	public String getHost() {
 		return host;
+	}
+	
+	/**
+	 * funzione che si occupa di restituire la porta per la comunicazione 
+	 * del player 
+	 * 
+	 * @return la porta per la comunicazione del player
+	 */
+	public int getPort() {
+		return port;
 	}
 	
 	/**

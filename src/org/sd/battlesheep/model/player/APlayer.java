@@ -40,22 +40,15 @@ public abstract class APlayer
 	 */
 	private String username;
 	
-	/**
-	 * la porta per la comunicazione con gli altri giocatori
-	 */
-	private int port;
-	
 	
 	
 	/**
 	 * crea un giocatore con username e porta per la comunicazione in input
 	 * 
 	 * @param username - l'username del giocatore
-	 * @param port - la porta per la comunicazione con gli altri giocatori
 	 */
-	public APlayer(String username, int port) {
+	public APlayer(String username) {
 		this.username = username;
-		this.port = port;
 	}
 	
 	
@@ -77,15 +70,5 @@ public abstract class APlayer
 	 */
 	public String getUsername() {
 		return username;
-	}
-	
-	/**
-	 * funzione che si occupa di restituire la porta per la comunicazione con
-	 * gli altri giocatori
-	 * 
-	 * @return la porta per la comunicazione con gli altri giocatori
-	 */
-	public int getPort() {
-		return port;
 	}
 }

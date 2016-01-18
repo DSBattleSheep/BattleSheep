@@ -61,7 +61,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		super();
 		playerMap = new HashMap<String, NetPlayer>();
 		Registry registry = LocateRegistry.createRegistry(port);
-		registry.bind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME, this); //FIXME static final room name
+		registry.bind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME, this);
 		plock = new ReentrantLock();
 		waitForStart = plock.newCondition();
 	}
@@ -76,9 +76,10 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 			plock.lock();
 			System.out.println("ip is "+host);
 			
-			if (playerMap.containsKey(username))
+			if (playerMap.containsKey(username)) {
+				plock.unlock();
 				throw new UsernameAlreadyTakenException("\"" + username + "\" has aready been taken! Please change it and try again..");
-			
+			}
 			NetPlayer player = new NetPlayer(username, host, port);
 			playerMap.put(username, player);
 			SwingUtilities.invokeLater(new UpdateGuiThread(lobbyJoinFrameObserver, username, host, port));
