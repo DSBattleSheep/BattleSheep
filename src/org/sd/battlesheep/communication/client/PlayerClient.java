@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.sd.battlesheep.communication.CommunicationConst;
+import org.sd.battlesheep.model.field.Move;
 import org.sd.battlesheep.model.lobby.NetPlayer;
+import org.sd.battlesheep.model.player.Opponent;
 
 public class PlayerClient {
 
@@ -64,6 +66,12 @@ public class PlayerClient {
 		
 		return orderedPlayers;
 		
+	}
+	
+	public static Move connectToPlayer(Opponent turnOwner, String myUser) throws MalformedURLException, RemoteException, NotBoundException {
+		MyTurnInterface turnInterface = (MyTurnInterface) Naming
+				.lookup("rmi://" + turnOwner.getHost() + ":" + turnOwner.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
+		return turnInterface.connectCurrentPlayer(myUser);
 	}
 	
 }

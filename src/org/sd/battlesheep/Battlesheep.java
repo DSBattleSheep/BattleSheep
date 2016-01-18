@@ -43,6 +43,7 @@ import org.sd.battlesheep.model.MaxPortRetryException;
 import org.sd.battlesheep.model.ModelConst;
 import org.sd.battlesheep.model.UsernameAlreadyTakenException;
 import org.sd.battlesheep.model.lobby.NetPlayer;
+import org.sd.battlesheep.model.player.APlayer;
 import org.sd.battlesheep.model.player.Me;
 import org.sd.battlesheep.model.player.Opponent;
 import org.sd.battlesheep.view.AFrame;
@@ -64,11 +65,11 @@ public class Battlesheep implements RegistrationFrameObserver
 	private GameFrame gameFrame;
 	
 	
-	private PlayerServer playersServer;
+	private PlayerServer playerServer;
 	
 	private Me me;
 	
-	private Opponent[] opponents;
+	private List<APlayer> playerList;
 	
 	
 	
@@ -110,10 +111,10 @@ public class Battlesheep implements RegistrationFrameObserver
 				
 				try {
 					me = new Me(username, sheeps);
-					if (playersServer == null)
-						playersServer = new PlayerServer();
-					playersServer.setMe(me);
-					players = PlayerRegistration.Join(username, playersServer.getPort());
+					if (playerServer == null)
+						playerServer = new PlayerServer();
+					playerServer.setMe(me);
+					players = PlayerRegistration.Join(username, playerServer.getPort());
 					
 				} catch (UsernameAlreadyTakenException e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
@@ -137,15 +138,51 @@ public class Battlesheep implements RegistrationFrameObserver
 				
 				// Abbiamo joinato e la lobby ci ha restituito tutti i player
 				
-				List<String> turnList = PlayerClient.getOrder(username, playersServer.getValueRandom(), players);
+				List<String> turnList = PlayerClient.getOrder(username, playerServer.getValueRandom(), players);
 				
 				System.out.println("registrato!");
 				
+				for(String pUsername : turnList) {
+					if(pUsername!=username) {
+						NetPlayer currPlayer = players.get(pUsername);
+						playerList.add(new Opponent(currPlayer, ModelConst.FIELD_ROWS, ModelConst.FIELD_COLS,
+													ModelConst.SHEEPS_NUMBER));
+					}
+					else {
+						playerList.add(me);
+					}
+				}
 				// fill "opponents"
 				
 				// gameFrame = new GameFrame();
+				
+				
 			}
 		});
 		t.start();
 	}
+	
+	private void gameLoop() {
+		boolean ended=false;
+		int currPlayerIndex=0;
+		while(!ended) {
+			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
+			if(playerList.get(currPlayerIndex) instanceof Me) {
+				playerServer.setPlayerNum(playerList.size());
+			} else {
+				try {
+					PlayerClient.connectToPlayer((Opponent) playerList.get(currPlayerIndex), me.getUsername());
+				} catch (MalformedURLException | RemoteException | NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					//il tizio col turno è morto, ricomincio
+					continue;
+				}
+			}
+			currPlayerIndex=(currPlayerIndex+1)%playerList.size();
+			//se non è il mio turno, chiedo la mossa al player che ha il turno
+			
+		}
+	}
+	
 }
