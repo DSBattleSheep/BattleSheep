@@ -15,41 +15,49 @@ import org.sd.battlesheep.model.MaxPortRetryException;
 import org.sd.battlesheep.model.field.Move;
 import org.sd.battlesheep.model.player.Me;
 
-
 @SuppressWarnings("serial")
-public class PlayerServer extends UnicastRemoteObject implements OrderInterface, MyTurnInterface  {
-	
-	
+public class PlayerServer extends UnicastRemoteObject implements OrderInterface, MyTurnInterface {
+
 	private int myValueRandom;
-	
+
 	private Me me;
-	private ReentrantLock pLock;
-	private Condition moveSelectedCondition, itsMyTUrn;
-	private boolean myTurnStarted;
 	
-	private int playerNum=-1;
-	private int port;
+	private ReentrantLock pLock;
+	
+	private Condition moveSelectedCondition;
+	
+	private Condition itsMyTurn;
+	
+	private boolean myTurnStarted;
+
+	private int playerCount = -1;
+	
+	private int boundPort;
+	
 	private int countConnected;
 	
+	
+	
+
 	public PlayerServer() throws RemoteException, MaxPortRetryException {
 		super();
-		
+
 		int retry = 0;
-		countConnected=0;
-		myTurnStarted=false;
-		pLock=new ReentrantLock();
-		moveSelectedCondition=pLock.newCondition();
-		itsMyTUrn=pLock.newCondition();
+		countConnected = 0;
+		myTurnStarted = false;
+		pLock = new ReentrantLock();
+		moveSelectedCondition = pLock.newCondition();
+		itsMyTurn = pLock.newCondition();
 		int port = CommunicationConst.DEFAULT_PORT;
 		boolean notBound = true;
 		Random randomGenerator = new Random();
-		
+
 		while (retry < CommunicationConst.MAX_RETRY && notBound) {
 			try {
 				Registry registry = LocateRegistry.createRegistry(port);
 				registry.bind(CommunicationConst.GAME_SERVICE_NAME, this);
 				notBound = false;
-				this.port = port;
+				this.boundPort = port;
 			} catch (AlreadyBoundException | ExportException e) {
 				retry++;
 				port = 20000 + randomGenerator.nextInt(45535);
@@ -57,25 +65,24 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 					throw new MaxPortRetryException("MaxPortRetryException");
 			}
 		}
-		
+
 		System.out.println("bindato su porta: " + port);
-		
+
 		myValueRandom = randomGenerator.nextInt();
 	}
 
-	
 	public void setMe(Me me) {
 		this.me = me;
 	}
 
 	public void setPlayerNum(int playerNum) {
 		pLock.lock();
-		this.playerNum=playerNum;
-		this.myTurnStarted=true;
-		itsMyTUrn.signalAll();
+		this.playerCount = playerNum;
+		this.myTurnStarted = true;
+		itsMyTurn.signalAll();
 		pLock.unlock();
 	}
-	
+
 	/**
 	 * funzione che si occupa di restituire la porta per la comunicazione con
 	 * gli altri giocatori
@@ -83,32 +90,31 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	 * @return la porta per la comunicazione con gli altri giocatori
 	 */
 	public int getPort() {
-		return port;
+		return boundPort;
 	}
-	
 
 	@Override
 	public int getValueRandom() {
 		return myValueRandom;
 	}
-	
+
 	@Override
-	public Move connectCurrentPlayer(String username){
+	public Move connectCurrentPlayer(String username) {
 		pLock.lock();
-		if(this.myTurnStarted)
-			try{
-				itsMyTUrn.wait();
-			}
-			catch (InterruptedException e) {
+		if (this.myTurnStarted) {
+			try {
+				itsMyTurn.wait();
+			} catch (InterruptedException e) {
 				System.out.println("Qui siamo messi malino");
 				e.printStackTrace();
 			}
+		}
 		countConnected++;
-		if(countConnected==playerNum)
-			//segnala che posso scegliere la mossa, SBLOCCATIIII
-		pLock.unlock();
-		//FIXME
+		if (countConnected == playerCount)
+			// segnala che posso scegliere la mossa, SBLOCCATIIII
+			pLock.unlock();
+		// FIXME
 		return null;
 	}
-	
+
 }

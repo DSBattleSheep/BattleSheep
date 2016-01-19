@@ -13,8 +13,7 @@ public class CommunicationConst
 	 * la porta della lobby
 	 */
 	public static final int LOBBY_PORT = 25099;
-	
-	
+		
 	/**
 	 * il nome della stanza della lobby
 	 */

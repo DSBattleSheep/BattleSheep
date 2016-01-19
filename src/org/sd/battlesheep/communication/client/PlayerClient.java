@@ -68,7 +68,7 @@ public class PlayerClient {
 		
 	}
 	
-	public static Move connectToPlayer(Opponent turnOwner, String myUser) throws MalformedURLException, RemoteException, NotBoundException {
+	public static Move connectToPlayer(Opponent turnOwner, String myUser) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
 		MyTurnInterface turnInterface = (MyTurnInterface) Naming
 				.lookup("rmi://" + turnOwner.getHost() + ":" + turnOwner.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
 		return turnInterface.connectCurrentPlayer(myUser);

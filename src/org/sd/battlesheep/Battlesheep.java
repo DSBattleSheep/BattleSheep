@@ -30,6 +30,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.UnmarshalException;
 import java.rmi.server.ServerNotActiveException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class Battlesheep implements RegistrationFrameObserver
 		registrationFrame = new RegistrationFrame(
 			ModelConst.FIELD_ROWS,
 			ModelConst.FIELD_COLS,
-			1, // FIXME: ModelConst.SHEEPS_NUMBER,
+			ModelConst.SHEEPS_NUMBER,
 			this
 		);
 	}
@@ -142,21 +143,28 @@ public class Battlesheep implements RegistrationFrameObserver
 				
 				System.out.println("registrato!");
 				
+				playerList = new ArrayList<APlayer>();
+				
 				for(String pUsername : turnList) {
 					if(pUsername!=username) {
 						NetPlayer currPlayer = players.get(pUsername);
 						playerList.add(new Opponent(currPlayer, ModelConst.FIELD_ROWS, ModelConst.FIELD_COLS,
 													ModelConst.SHEEPS_NUMBER));
-					}
-					else {
+					} else {
 						playerList.add(me);
 					}
 				}
 				// fill "opponents"
 				
-				// gameFrame = new GameFrame();
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						registrationFrame.dispose();
+						gameFrame = new GameFrame();
+						gameFrame.setVisible(true);
+					}
+				});
 				
-				
+				//gameLoop();
 			}
 		});
 		t.start();
@@ -172,14 +180,14 @@ public class Battlesheep implements RegistrationFrameObserver
 			} else {
 				try {
 					PlayerClient.connectToPlayer((Opponent) playerList.get(currPlayerIndex), me.getUsername());
-				} catch (MalformedURLException | RemoteException | NotBoundException e) {
+				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					//il tizio col turno è morto, ricomincio
 					continue;
 				}
 			}
-			currPlayerIndex=(currPlayerIndex+1)%playerList.size();
+			currPlayerIndex = (currPlayerIndex + 1) % playerList.size();
 			//se non è il mio turno, chiedo la mossa al player che ha il turno
 			
 		}

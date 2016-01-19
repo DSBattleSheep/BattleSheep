@@ -88,6 +88,7 @@ public class LobbyFrame extends JFrame implements LobbyJoinFrameObserver
 				new Thread(new Runnable() {			
 					@Override
 					public void run() {
+						System.out.println("click: Start Game");
 						onStartObserver.onLobbyStartClick();				
 					}
 				}).start();		

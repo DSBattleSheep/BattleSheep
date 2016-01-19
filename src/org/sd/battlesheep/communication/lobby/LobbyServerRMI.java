@@ -52,8 +52,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		@Override
 		public void run() {
 			lobbyJoinFrameObserver.onClientJoin(username, host, port);
-		}
-		
+		}	
 	}
 	
 	
