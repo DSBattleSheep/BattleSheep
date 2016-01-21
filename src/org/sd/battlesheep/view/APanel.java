@@ -24,6 +24,7 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.LayoutManager;
@@ -66,6 +67,14 @@ public abstract class APanel extends JPanel
 	
 	public APanel(LayoutManager layout) {
 		super(layout);
+		
+		this.background = null;
+	}
+	
+	public APanel(Color background, LayoutManager manager) {
+		super(manager);
+		setBackground(background);
+		setOpaque(true);
 		
 		this.background = null;
 	}

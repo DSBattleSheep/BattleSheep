@@ -214,11 +214,17 @@ public class RegistrationFrame extends AFrame
 	}
 	
 	private void actionRegistration() {
-		observer.onRegistrationFrameRegistrationClick(
-			lobbyAddressPanel.getAddress(),
-			usernamePanel.getUsername(),
-			sheepsPositionPanel.getPositions()
-		);
+		int remainingSheeps = sheepsPositionPanel.getRemainingSheeps();
+		if (remainingSheeps == 1)
+			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheep");
+		else if (remainingSheeps != 0)
+			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheeps");
+		else
+			observer.onRegistrationFrameRegistrationClick(
+				lobbyAddressPanel.getAddress(),
+				usernamePanel.getUsername(),
+				sheepsPositionPanel.getPositions()
+			);
 	}
 	
 	

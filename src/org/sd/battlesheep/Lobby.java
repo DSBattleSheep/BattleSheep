@@ -5,6 +5,7 @@ package org.sd.battlesheep;
 import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.communication.lobby.LobbyServerRMI;
 import org.sd.battlesheep.view.lobby.LobbyFrame;
+import org.sd.battlesheep.view.lobby.LobbyFrame2;
 
 
 
@@ -27,11 +28,14 @@ public class Lobby
 			if (currHost == null)
 				currHost = "127.0.0.1";
 			
-			//lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT);
+			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT);
 			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT);
 			
 			lobbyFrame.setOnStartObserver(lobbyServer);
-			//lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);
+			lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);
+			
+			// new LobbyFrame2();
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

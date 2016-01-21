@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.lobby;
 
 
 
@@ -28,51 +28,43 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.TransparentPanel;
 
 
 
-/**
- * Classe per il pannello che richiede al giocatore di inserire l'indirizzo ip
- * del server (lobby).
- * 
- * @author Giulio Biagini
- */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends APanel
+public class TablePanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
-	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
-	
-	
-	
 	/*
 	 * graphic
 	 */
 	
-	private TransparentPanel northPanel;
+	private TransparentPanel middlePanel;
 	
-	private JLabel addressLabel;
+	private JTable clientsTable;
 	
-	private JTextField addressTextField;
+	private JScrollPane clientsScrollPane;
 	
 	private TransparentPanel southPanel;
 	
 	private JButton exitButton;
 	
-	private JButton nextButton;
+	private JButton startButton;
+	
+	
+	
+	/*
+	 * model
+	 */
+	
+	
 	
 	
 	
@@ -80,33 +72,23 @@ public class LobbyAddressPanel extends APanel
 	 * constructor
 	 */
 	
-	public LobbyAddressPanel(int width, int height) {
-		super(BATTLESHIP, width, height, new BorderLayout());
+	public TablePanel() {
+		super(Color.WHITE, new BorderLayout());
 		
-		/* north panel */
+		/* middle panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new TransparentPanel(new GridBagLayout());
 		
-		addressLabel = new JLabel("Lobby Ip Address:");
-		addressLabel.setForeground(Color.WHITE);
+		clientsTable = new JTable();
+		// TODO
+		clientsScrollPane = new JScrollPane(clientsTable);
 		
-		addressTextField = new JTextField("127.0.0.1");
-		
-		northPanel.add(
-			addressLabel,
+		middlePanel.add(
+			clientsScrollPane,
 			new GridBagConstraints(
-				0, 0, 1, 1, 0.2, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 5),
-				0, 0
-			)
-		);
-		northPanel.add(
-			addressTextField,
-			new GridBagConstraints(
-				1, 0, 1, 1, 0.8, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 5, 10),
+				new Insets(10, 10, 10, 10),
 				0, 0
 			)
 		);
@@ -117,30 +99,30 @@ public class LobbyAddressPanel extends APanel
 		
 		exitButton = new JButton("Exit");
 		
-		nextButton = new JButton("Next");
+		startButton = new JButton("Start");
 		
 		southPanel.add(
 			exitButton,
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
+				new Insets(10, 10, 10, 10),
 				0, 0
 			)
 		);
 		southPanel.add(
-			nextButton,
+			startButton,
 			new GridBagConstraints(
 				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
+				new Insets(10, 10, 10, 10),
 				0, 0
 			)
 		);
 		
 		/* this panel */
 		
-		add(northPanel, BorderLayout.NORTH);
+		// add(middlePanel, BorderLayout.NORTH);
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
@@ -152,26 +134,12 @@ public class LobbyAddressPanel extends APanel
 	
 	@Override
 	public void lock() {
-		addressTextField.setEnabled(false);
+		
 	}
-	
+
 	@Override
 	public void unlock() {
-		addressTextField.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public boolean isAddressEmpty() {
-		return addressTextField.getText().isEmpty();
-	}
-	
-	public String getAddress() {
-		return addressTextField.getText();
+		
 	}
 	
 	
@@ -184,7 +152,7 @@ public class LobbyAddressPanel extends APanel
 		return exitButton;
 	}
 	
-	public JButton getNextButton() {
-		return nextButton;
+	public JButton getStartButton() {
+		return startButton;
 	}
 }

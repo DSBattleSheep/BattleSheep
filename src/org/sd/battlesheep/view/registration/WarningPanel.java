@@ -91,9 +91,9 @@ public class WarningPanel extends APanel
 		northPanel.add(
 			warningLabel,
 			new GridBagConstraints(
-				0, 1, 1, 1, 1, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 5),
+				new Insets(10, 10, 5, 10),
 				0, 0
 			)
 		);
@@ -109,17 +109,18 @@ public class WarningPanel extends APanel
 		southPanel.add(
 			previousButton,
 			new GridBagConstraints(
-				0, 1, 1, 1, 1, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 10, 10, 5),
 				0, 0
 			)
 		);
 		southPanel.add(
 			nextButton,
-			new GridBagConstraints(1, 1, 1, 1, 1, 1,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 5, 10, 10),
 				0, 0
 			)
 		);

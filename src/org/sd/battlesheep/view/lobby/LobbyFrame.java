@@ -1,5 +1,7 @@
 package org.sd.battlesheep.view.lobby;
 
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,7 +30,6 @@ import org.sd.battlesheep.communication.lobby.LobbyStartObserver;
 @SuppressWarnings("serial")
 public class LobbyFrame extends JFrame implements LobbyJoinFrameObserver 
 {
-
 	private final static String LOBBY_FRAME_TITLE = "Lobby @ ";
 	
 	private final static int LOBBY_FRAME_WIDTH = 400;

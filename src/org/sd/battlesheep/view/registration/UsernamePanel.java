@@ -95,18 +95,18 @@ public class UsernamePanel extends APanel
 		northPanel.add(
 			usernameLabel,
 			new GridBagConstraints(
-				0, 1, 1, 1, 0.2, 1,
+				0, 0, 1, 1, 0.2, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 5),
+				new Insets(10, 10, 5, 5),
 				0, 0
 			)
 		);
 		northPanel.add(
 			usernameTextField,
 			new GridBagConstraints(
-				1, 1, 1, 1, 0.8, 1,
+				1, 0, 1, 1, 0.8, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 10, 10),
+				new Insets(10, 5, 5, 10),
 				0, 0
 			)
 		);
@@ -124,15 +124,16 @@ public class UsernamePanel extends APanel
 			new GridBagConstraints(
 				0, 1, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 10, 10, 5),
 				0, 0
 			)
 		);
 		southPanel.add(
 			nextButton,
-			new GridBagConstraints(1, 1, 1, 1, 1, 1,
+			new GridBagConstraints(
+				1, 1, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 5, 10, 10),
 				0, 0
 			)
 		);

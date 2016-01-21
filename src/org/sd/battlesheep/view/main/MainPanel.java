@@ -24,6 +24,7 @@ package org.sd.battlesheep.view.main;
 
 
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -35,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.TransparentPanel;
 
 
 
@@ -53,15 +55,21 @@ public class MainPanel extends APanel
 	 * graphic
 	 */
 	
-	private JLabel labelMode;
+	private TransparentPanel northPanel;
 	
-	private JRadioButton radioServer;
+	private JLabel modeLabel;
 	
-	private JRadioButton radioClient;
+	private TransparentPanel middlePanel;
 	
-	private JButton buttonExit;
+	private JRadioButton serverRadioButton;
 	
-	private JButton buttonOk;
+	private JRadioButton clientRadioButton;
+	
+	private TransparentPanel southPanel;
+	
+	private JButton exitButton;
+	
+	private JButton startButton;
 	
 	
 	
@@ -70,35 +78,95 @@ public class MainPanel extends APanel
 	 */
 	
 	public MainPanel() {
-		super(new GridBagLayout());
+		super(new BorderLayout());
 		
-		labelMode = new JLabel("Start the program as:");
+		/* north panel */
 		
-		radioServer = new JRadioButton("server", false);
-		radioServer.addActionListener(new ActionListener() {
+		northPanel = new TransparentPanel(new GridBagLayout());
+		
+		modeLabel = new JLabel("Start the program as:");
+		
+		northPanel.add(
+			modeLabel,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 5, 10),
+				0, 0
+			)
+		);
+		
+		/* middle panel */
+		
+		middlePanel = new TransparentPanel(new GridBagLayout());
+		
+		serverRadioButton = new JRadioButton("server", false);
+		serverRadioButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionServer();
 			}
 		});
 		
-		radioClient = new JRadioButton("client", true);
-		radioClient.addActionListener(new ActionListener() {
+		clientRadioButton = new JRadioButton("client", true);
+		clientRadioButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionClient();
 			}
 		});
 		
-		buttonExit = new JButton("Exit");
+		middlePanel.add(
+			serverRadioButton,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 5),
+				0, 0
+			)
+		);
+		middlePanel.add(
+			clientRadioButton,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 5, 10),
+				0, 0
+			)
+		);
 		
-		buttonOk = new JButton("OK");
+		/* south panel */
 		
-		add(labelMode, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 10, 5, 10), 0, 0));
-		add(radioServer, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 5, 5), 0, 0));
-		add(radioClient, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 10), 0, 0));
-		add(buttonExit, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 10, 5), 0, 0));
-		add(buttonOk, new GridBagConstraints(1, 2, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 10, 10), 0, 0));
+		southPanel = new TransparentPanel(new GridBagLayout());
+		
+		exitButton = new JButton("Exit");
+		
+		startButton = new JButton("Start");
+		
+		southPanel.add(
+			exitButton,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 10, 5),
+				0, 0
+			)
+		);
+		southPanel.add(
+			startButton,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 10, 10),
+				0, 0
+			)
+		);
+		
+		/* this panel */
+		
+		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
+		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	
@@ -108,13 +176,13 @@ public class MainPanel extends APanel
 	 */
 	
 	private void actionServer() {
-		radioServer.setSelected(true);
-		radioClient.setSelected(false);
+		serverRadioButton.setSelected(true);
+		clientRadioButton.setSelected(false);
 	}
 	
 	private void actionClient() {
-		radioClient.setSelected(true);
-		radioServer.setSelected(false);
+		clientRadioButton.setSelected(true);
+		serverRadioButton.setSelected(false);
 	}
 	
 	
@@ -125,14 +193,14 @@ public class MainPanel extends APanel
 	
 	@Override
 	public void lock() {
-		radioServer.setEnabled(false);
-		radioClient.setEnabled(false);
+		serverRadioButton.setEnabled(false);
+		clientRadioButton.setEnabled(false);
 	}
 	
 	@Override
 	public void unlock() {
-		radioServer.setEnabled(true);
-		radioClient.setEnabled(true);
+		serverRadioButton.setEnabled(true);
+		clientRadioButton.setEnabled(true);
 	}
 	
 	
@@ -142,11 +210,11 @@ public class MainPanel extends APanel
 	 */
 	
 	public boolean isServerSelected() {
-		return radioServer.isSelected();
+		return serverRadioButton.isSelected();
 	}
 	
 	public boolean isClientSelected() {
-		return radioClient.isSelected();
+		return clientRadioButton.isSelected();
 	}
 	
 	
@@ -155,11 +223,11 @@ public class MainPanel extends APanel
 	 * graphic
 	 */
 	
-	public JButton getButtonExit() {
-		return buttonExit;
+	public JButton getExitButton() {
+		return exitButton;
 	}
 	
-	public JButton getButtonOk() {
-		return buttonOk;
+	public JButton getStartButton() {
+		return startButton;
 	}
 }

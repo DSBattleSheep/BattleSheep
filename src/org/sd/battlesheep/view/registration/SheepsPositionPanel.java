@@ -60,9 +60,9 @@ public class SheepsPositionPanel extends APanel
 	
 	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
 	
-	public static final Icon GRASS = new ImageIcon(IMGS_PATH + "grass.png");
+	private static final Icon GRASS = new ImageIcon(IMGS_PATH + "grass.png");
 	
-	public static final Icon SHEEP = new ImageIcon(IMGS_PATH + "sheep.png");
+	private static final Icon SHEEP = new ImageIcon(IMGS_PATH + "sheep.png");
 	
 	
 	
@@ -126,16 +126,16 @@ public class SheepsPositionPanel extends APanel
 		northPanel.add(
 			positionLabel,
 			new GridBagConstraints(
-				0, 1, 1, 1, 0.9, 1,
+				0, 0, 1, 1, 0.9, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 10, 10, 5),
 				0, 0
 			)
 		);
 		northPanel.add(
-				remainingLabel,
+			remainingLabel,
 			new GridBagConstraints(
-				1, 1, 1, 1, 0.1, 1,
+				1, 0, 1, 1, 0.1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 5, 10, 10),
 				0, 0
@@ -206,17 +206,18 @@ public class SheepsPositionPanel extends APanel
 		southPanel.add(
 			previousButton,
 			new GridBagConstraints(
-				0, 1, 1, 1, 1, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(10, 10, 10, 5),
 				0, 0
 			)
 		);
 		southPanel.add(
 			registrationButton,
-			new GridBagConstraints(1, 1, 1, 1, 1, 1,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(10, 5, 10, 10),
 				0, 0
 			)
 		);

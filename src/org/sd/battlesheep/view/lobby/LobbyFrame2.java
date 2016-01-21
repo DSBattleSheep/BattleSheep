@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.lobby;
 
 
 
@@ -32,30 +32,26 @@ import org.sd.battlesheep.view.AFrame;
 
 
 
-/**
- * Classe per il frame principale che chiede in quale modalità avviare il
- * programma:
- * - come server per la lobby;
- * - come client per il gioco.
- * 
- * @author Giulio Biagini
- */
 @SuppressWarnings("serial")
-public class MainFrame extends AFrame
+public class LobbyFrame2 extends AFrame
 {
+	/*
+	 * constants
+	 */
+	
+	private static final int WIDTH = 400;
+	
+	private static final int HEIGHT = 400;
+	
+	
+	
 	/*
 	 * graphic
 	 */
 	
-	private MainPanel mainPanel;
+	private WaitingPanel waitingPanel;
 	
-	
-	
-	/*
-	 * model
-	 */
-	
-	private MainFrameObserver observer;
+	private TablePanel tablePanel;
 	
 	
 	
@@ -63,27 +59,32 @@ public class MainFrame extends AFrame
 	 * constructor
 	 */
 	
-	public MainFrame(MainFrameObserver observer) {
-		super(new BorderLayout());
+	public LobbyFrame2() {
+		super(WIDTH, HEIGHT, new BorderLayout());
 		
-		this.observer = observer;
+		/* waiting panel */
 		
-		mainPanel = new MainPanel();
-		mainPanel.getExitButton().addActionListener(new ActionListener() {
+		waitingPanel = new WaitingPanel();
+		
+		/* table panel */
+		
+		tablePanel = new TablePanel();
+		tablePanel.getExitButton().addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				actionExit();
 			}
 		});
-		mainPanel.getStartButton().addActionListener(new ActionListener() {
+		tablePanel.getStartButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionStart();
 			}
 		});
 		
-		add(mainPanel, BorderLayout.CENTER);
-		pack();
+		/* this frame */
+		
+		add(tablePanel, BorderLayout.CENTER);
 		setVisible(true);
 	}
 	
@@ -94,11 +95,11 @@ public class MainFrame extends AFrame
 	 */
 	
 	private void actionExit() {
-		observer.onMainFrameExitClick();
+		
 	}
 	
 	private void actionStart() {
-		observer.onMainFrameStartClick(mainPanel.isServerSelected());
+		
 	}
 	
 	
@@ -109,11 +110,11 @@ public class MainFrame extends AFrame
 	
 	@Override
 	public void lock() {
-		mainPanel.lock();
+		
 	}
 	
 	@Override
 	public void unlock() {
-		mainPanel.unlock();
+		
 	}
 }
