@@ -34,23 +34,17 @@ import org.sd.battlesheep.view.main.MainFrameObserver;
 
 
 /**
- * Classe principale che avvia il programma.
+ * Classe principale che avvia il programma mostrando il frame principale che
+ * permette di scegliere la modalità server (lobby) o client (gioco).
  * 
  * @author Giulio Biagini
  */
 public class Main implements MainFrameObserver
 {
-	/**
-	 * il frame principale
-	 */
 	private MainFrame mainFrame;
 	
 	
 	
-	/**
-	 * mostra il frame che permette di scegliere in che modalità avviare il
-	 * programma: come server per la lobby o come client per il gioco
-	 */
 	private Main() {
 		mainFrame = new MainFrame(this);
 	}
@@ -63,9 +57,9 @@ public class Main implements MainFrameObserver
 	}
 	
 	@Override
-	public void onMainFrameOkClick(boolean server) {
+	public void onMainFrameStartClick(boolean serverMode) {
 		mainFrame.dispose();
-		if (server) 
+		if (serverMode) 
 			new Lobby();
 		else
 			new Battlesheep();
@@ -73,9 +67,6 @@ public class Main implements MainFrameObserver
 	
 	
 	
-	/**
-	 * main
-	 */
 	public static void main(String[] args) {
 		
 		try {

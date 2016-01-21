@@ -42,19 +42,19 @@ import org.sd.battlesheep.view.TransparentPanel;
 
 
 /**
- * Classe per il pannello che richiede al giocatore di inserire il proprio
- * username.
+ * Classe per il pannello che richiede al giocatore di inserire l'indirizzo ip
+ * del server (lobby).
  * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class UsernamePanel extends APanel
+public class LobbyAddressPanel extends APanel
 {
 	/*
 	 * constants
 	 */
 	
-	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
+	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	
 	
@@ -64,13 +64,13 @@ public class UsernamePanel extends APanel
 	
 	private TransparentPanel northPanel;
 	
-	private JLabel usernameLabel;
+	private JLabel addressLabel;
 	
-	private JTextField usernameTextField;
+	private JTextField addressTextField;
 	
 	private TransparentPanel southPanel;
 	
-	private JButton previousButton;
+	private JButton exitButton;
 	
 	private JButton nextButton;
 	
@@ -80,20 +80,20 @@ public class UsernamePanel extends APanel
 	 * constructor
 	 */
 	
-	public UsernamePanel(int width, int height) {
-		super(BATTLESHEEP, width, height, new BorderLayout());
+	public LobbyAddressPanel(int width, int height) {
+		super(BATTLESHIP, width, height, new BorderLayout());
 		
 		/* north panel */
 		
 		northPanel = new TransparentPanel(new GridBagLayout());
 		
-		usernameLabel = new JLabel("Username:");
-		usernameLabel.setForeground(Color.WHITE);
+		addressLabel = new JLabel("Lobby Ip Address:");
+		addressLabel.setForeground(Color.WHITE);
 		
-		usernameTextField = new JTextField();
+		addressTextField = new JTextField("127.0.0.1");
 		
 		northPanel.add(
-			usernameLabel,
+			addressLabel,
 			new GridBagConstraints(
 				0, 1, 1, 1, 0.2, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -102,7 +102,7 @@ public class UsernamePanel extends APanel
 			)
 		);
 		northPanel.add(
-			usernameTextField,
+			addressTextField,
 			new GridBagConstraints(
 				1, 1, 1, 1, 0.8, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -115,12 +115,12 @@ public class UsernamePanel extends APanel
 		
 		southPanel = new TransparentPanel(new GridBagLayout());
 		
-		previousButton = new JButton("Prevoius");
+		exitButton = new JButton("Exit");
 		
 		nextButton = new JButton("Next");
 		
 		southPanel.add(
-			previousButton,
+			exitButton,
 			new GridBagConstraints(
 				0, 1, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -151,12 +151,12 @@ public class UsernamePanel extends APanel
 	
 	@Override
 	public void lock() {
-		usernameTextField.setEnabled(false);
+		addressTextField.setEnabled(false);
 	}
 	
 	@Override
 	public void unlock() {
-		usernameTextField.setEnabled(true);
+		addressTextField.setEnabled(true);
 	}
 	
 	
@@ -165,12 +165,12 @@ public class UsernamePanel extends APanel
 	 * model
 	 */
 	
-	public boolean isUsernameEmpty() {
-		return usernameTextField.getText().isEmpty();
+	public boolean isAddressEmpty() {
+		return addressTextField.getText().isEmpty();
 	}
 	
-	public String getUsername() {
-		return usernameTextField.getText();
+	public String getAddress() {
+		return addressTextField.getText();
 	}
 	
 	
@@ -179,8 +179,8 @@ public class UsernamePanel extends APanel
 	 * graphic
 	 */
 	
-	public JButton getPreviousButton() {
-		return previousButton;
+	public JButton getExitButton() {
+		return exitButton;
 	}
 	
 	public JButton getNextButton() {

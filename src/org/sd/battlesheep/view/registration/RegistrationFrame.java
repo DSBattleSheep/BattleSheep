@@ -25,125 +25,219 @@ package org.sd.battlesheep.view.registration;
 
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.MessageFactory;
 
 
 
 /**
- * Classe per il frame che richiede username e posizione delle pecore nel campo
- * di gioco al giocatore ed effettua la registrazione al server.
+ * Classe per il frame della registrazione che richiede al giocatore:
+ * - l'indirizzo ip del server (lobby);
+ * - il proprio username;
+ * - la posizione delle proprie pecore nel campo di gioco.
  * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends AFrame implements UsernamePanelObserver, SheepsPanelObserver
+public class RegistrationFrame extends AFrame
 {
-	/**
-	 * costante per la larghezza del frame per la registrazione
+	/*
+	 * constants
 	 */
-	private static final int WIDTH = 800;
 	
-	/**
-	 * costante per l'altezza del frame per la registrazione
+	private static final int WIDTH = 500;
+	
+	private static final int HEIGHT = 700;
+	
+	
+	
+	/*
+	 * graphic
 	 */
-	private static final int HEIGHT = 600;
 	
+	private LobbyAddressPanel lobbyAddressPanel;
 	
+	private WarningPanel warningPanel;
 	
-	/**
-	 * pannello per l'username del giocatore
-	 */
 	private UsernamePanel usernamePanel;
 	
-	/**
-	 * pannello per la posizione delle pecore nel campo di gioco
+	private SheepsPositionPanel sheepsPositionPanel;
+	
+	
+	
+	/*
+	 * model
 	 */
-	private SheepsPanel sheepsPanel;
 	
-	
-	
-	/**
-	 * l'osservatore delle azioni compiute sul frame
-	 */
 	private RegistrationFrameObserver observer;
 	
 	
 	
-	/**
-	 * l'username del giocatore
+	/*
+	 * constructor
 	 */
-	private String username;
 	
-	
-	
-	/**
-	 * crea un frame che richiede username e posizione delle pecore nel campo
-	 * di gioco al giocatore ed effettua la registrazione al server
-	 * 
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
-	 * @param sheeps - il numero di pecore da inserire nel campo di gioco
-	 * @param observer - l'osservatore delle azioni compiute sul frame
-	 */
 	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
 		super(WIDTH, HEIGHT, new BorderLayout());
 		
-		usernamePanel = new UsernamePanel(this);
-		sheepsPanel = new SheepsPanel(rows, cols, sheeps, this);
-		
-		add(usernamePanel, BorderLayout.CENTER);
+		/* model */
 		
 		this.observer = observer;
 		
-		pack();
+		/* lobby address panel */
 		
+		lobbyAddressPanel = new LobbyAddressPanel(WIDTH, HEIGHT);
+		lobbyAddressPanel.getExitButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionExit();
+			}
+		});
+		lobbyAddressPanel.getNextButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToWarningPanel();
+			}
+		});
+		
+		/* warning panel */
+		
+		warningPanel = new WarningPanel(WIDTH, HEIGHT);
+		warningPanel.getPreviousButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionPreviousToLobbyAddressPanel();
+			}
+		});
+		warningPanel.getNextButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToUsernamePanel();
+			}
+		});
+		
+		/* username panel */
+		
+		usernamePanel = new UsernamePanel(WIDTH, HEIGHT);
+		usernamePanel.getPreviousButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionPreviousToWarningPanel();
+			}
+		});
+		usernamePanel.getNextButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToSheepsPositionPanel();
+			}
+		});
+		
+		/* sheeps position panel */
+		
+		sheepsPositionPanel = new SheepsPositionPanel(rows, cols, sheeps, WIDTH, HEIGHT);
+		sheepsPositionPanel.getPreviousButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionPreviousToUsernamePanel();
+			}
+		});
+		sheepsPositionPanel.getRegistrationButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionRegistration();
+			}
+		});
+		
+		/* this frame */
+		
+		add(lobbyAddressPanel, BorderLayout.CENTER);
 		setVisible(true);
-	}	
+	}
 	
 	
 	
-	/**
-	 * questa funzione viene richiamata in caso di errore nella registrazione 
-	 * dal thread incaricato di connettersi alla lobby. 
-	 * I casi di errori possono essere:
-	 * 1) non è stato possibile connettersi alla lobby (host unreachable)
-	 * 2) la lobby è crashata 
-	 * 3) lo username scelto è già in uso
+	/*
+	 * actions
 	 */
-	public void unlockGui() {
-		// unlock gui
+	
+	private void actionExit() {
+		observer.onRegistrationFrameExitClick();
+	}
+
+	private void actionNextToWarningPanel() {
+		if (lobbyAddressPanel.isAddressEmpty())
+			MessageFactory.informationDialog(this, "Please, fill the address field");
+		else {
+			remove(lobbyAddressPanel);
+			add(warningPanel, BorderLayout.CENTER);
+			SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		}
 	}
 	
-	
-	
-	@Override
-	public void onExitClick() {
-		dispose();
+	private void actionPreviousToLobbyAddressPanel() {
+		remove(warningPanel);
+		add(lobbyAddressPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
 	}
 	
-	@Override
-	public void onNextClick(String username) {
-		this.username = username;
-		remove(usernamePanel);
-		add(sheepsPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-	}
-	
-	@Override
-	public void onPreviousClick() {
-		remove(sheepsPanel);
+	private void actionNextToUsernamePanel() {
+		remove(warningPanel);
 		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
 	}
 	
-	@Override
-	public void onRegistrationClick(boolean[][] sheeps) {
-		observer.onRegistrationFrameOkClick(username, sheeps);
+	private void actionPreviousToWarningPanel() {
+		remove(usernamePanel);
+		add(warningPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+	}
+	
+	private void actionNextToSheepsPositionPanel() {
+		if (usernamePanel.isUsernameEmpty())
+			MessageFactory.informationDialog(this, "Please, fill the username field");
+		else {
+			remove(usernamePanel);
+			add(sheepsPositionPanel, BorderLayout.CENTER);
+			SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		}
+	}
+	
+	private void actionPreviousToUsernamePanel() {
+		remove(sheepsPositionPanel);
+		add(usernamePanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+	}
+	
+	private void actionRegistration() {
+		observer.onRegistrationFrameRegistrationClick(
+			lobbyAddressPanel.getAddress(),
+			usernamePanel.getUsername(),
+			sheepsPositionPanel.getPositions()
+		);
+	}
+	
+	
+	
+	/*
+	 * abstract
+	 */
+	
+	public void lock() {
+		lobbyAddressPanel.lock();
+		warningPanel.lock();
+		usernamePanel.lock();
+		sheepsPositionPanel.lock();
+	}
+	
+	public void unlock() {
+		lobbyAddressPanel.unlock();
+		warningPanel.unlock();
+		usernamePanel.unlock();
+		sheepsPositionPanel.unlock();
 	}
 }

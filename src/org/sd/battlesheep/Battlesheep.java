@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.client.PlayerClient;
@@ -47,7 +46,7 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 import org.sd.battlesheep.model.player.APlayer;
 import org.sd.battlesheep.model.player.Me;
 import org.sd.battlesheep.model.player.Opponent;
-import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
@@ -64,6 +63,7 @@ public class Battlesheep implements RegistrationFrameObserver
 	private RegistrationFrame registrationFrame;
 	
 	private GameFrame gameFrame;
+	
 	
 	
 	private PlayerServer playerServer;
@@ -91,9 +91,7 @@ public class Battlesheep implements RegistrationFrameObserver
 	}
 	
 	@Override
-	public void onRegistrationFrameOkClick(final String username, final boolean[][] sheeps) {
-		 
-		
+	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String username, final boolean[][] sheepsPosition) {
 		Thread t = new Thread(new Runnable() {			
 			@Override
 			public void run() {
@@ -111,25 +109,25 @@ public class Battlesheep implements RegistrationFrameObserver
 				System.out.println("Console di: " + username);
 				
 				try {
-					me = new Me(username, sheeps);
+					me = new Me(username, sheepsPosition);
 					if (playerServer == null)
 						playerServer = new PlayerServer();
 					playerServer.setMe(me);
 					players = PlayerRegistration.Join(username, playerServer.getPort());
 					
 				} catch (UsernameAlreadyTakenException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					MessageFactory.errorDialog(null, e.getMessage());
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							registrationFrame.unlockGui();
+							registrationFrame.unlock();
 						}
 					});
 					return;
 				} catch (MaxPortRetryException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					MessageFactory.errorDialog(null, e.getMessage());
 					System.exit(1);
 				} catch (NotBoundException | ServerNotActiveException | ConnectException | UnmarshalException | MalformedURLException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage(), AFrame.PROGRAM_NAME, JOptionPane.ERROR_MESSAGE);
+					MessageFactory.errorDialog(null, e.getMessage());
 					return;
 				} catch (RemoteException e) {
 					e.printStackTrace();					
@@ -167,8 +165,11 @@ public class Battlesheep implements RegistrationFrameObserver
 				//gameLoop();
 			}
 		});
+		
 		t.start();
 	}
+	
+	
 	
 	private void gameLoop() {
 		boolean ended=false;
@@ -192,5 +193,4 @@ public class Battlesheep implements RegistrationFrameObserver
 			
 		}
 	}
-	
 }

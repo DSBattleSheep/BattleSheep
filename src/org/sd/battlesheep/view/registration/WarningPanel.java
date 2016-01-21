@@ -26,6 +26,7 @@ package org.sd.battlesheep.view.registration;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -34,7 +35,6 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.TransparentPanel;
@@ -42,19 +42,18 @@ import org.sd.battlesheep.view.TransparentPanel;
 
 
 /**
- * Classe per il pannello che richiede al giocatore di inserire il proprio
- * username.
+ * Classe per il pannello che informa il giocatore dell'hack delle pecore.
  * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class UsernamePanel extends APanel
+public class WarningPanel extends APanel
 {
 	/*
 	 * constants
 	 */
 	
-	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
+	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	
 	
@@ -64,9 +63,7 @@ public class UsernamePanel extends APanel
 	
 	private TransparentPanel northPanel;
 	
-	private JLabel usernameLabel;
-	
-	private JTextField usernameTextField;
+	private JLabel warningLabel;
 	
 	private TransparentPanel southPanel;
 	
@@ -80,33 +77,23 @@ public class UsernamePanel extends APanel
 	 * constructor
 	 */
 	
-	public UsernamePanel(int width, int height) {
-		super(BATTLESHEEP, width, height, new BorderLayout());
+	public WarningPanel(int width, int height) {
+		super(BATTLESHIP, width, height, new BorderLayout());
 		
 		/* north panel */
 		
 		northPanel = new TransparentPanel(new GridBagLayout());
 		
-		usernameLabel = new JLabel("Username:");
-		usernameLabel.setForeground(Color.WHITE);
-		
-		usernameTextField = new JTextField();
+		warningLabel = new JLabel("Warning: The game is being hacked!", JLabel.CENTER);
+		warningLabel.setFont(getFont().deriveFont(Font.BOLD));
+		warningLabel.setForeground(Color.RED);
 		
 		northPanel.add(
-			usernameLabel,
+			warningLabel,
 			new GridBagConstraints(
-				0, 1, 1, 1, 0.2, 1,
+				0, 1, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(10, 10, 10, 5),
-				0, 0
-			)
-		);
-		northPanel.add(
-			usernameTextField,
-			new GridBagConstraints(
-				1, 1, 1, 1, 0.8, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 10, 10),
 				0, 0
 			)
 		);
@@ -115,7 +102,7 @@ public class UsernamePanel extends APanel
 		
 		southPanel = new TransparentPanel(new GridBagLayout());
 		
-		previousButton = new JButton("Prevoius");
+		previousButton = new JButton("Previous");
 		
 		nextButton = new JButton("Next");
 		
@@ -151,26 +138,12 @@ public class UsernamePanel extends APanel
 	
 	@Override
 	public void lock() {
-		usernameTextField.setEnabled(false);
+		
 	}
 	
 	@Override
 	public void unlock() {
-		usernameTextField.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public boolean isUsernameEmpty() {
-		return usernameTextField.getText().isEmpty();
-	}
-	
-	public String getUsername() {
-		return usernameTextField.getText();
+		
 	}
 	
 	

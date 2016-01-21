@@ -27,11 +27,11 @@ public class Lobby
 			if (currHost == null)
 				currHost = "127.0.0.1";
 			
-			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT);
+			//lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT);
 			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT);
 			
 			lobbyFrame.setOnStartObserver(lobbyServer);
-			lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);
+			//lobbyServer.setLobbyJoinFrameObserver(lobbyFrame);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -24,30 +24,39 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.LayoutManager;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
 
 /**
- * Classe astratta che estenderanno tutti i frame del programma.
+ * Classe astratta che estenderanno tutti i pannelli principali del programma.
  * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class AFrame extends JFrame
+public abstract class APanel extends JPanel
 {
 	/*
 	 * constants
 	 */
 	
-	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
+	protected static final String IMGS_PATH = "./imgs/";
 	
-	private static final String IMGS_PATH = "./imgs/";
 	
-	private static final ImageIcon ICON = new ImageIcon(IMGS_PATH + "icon.png");
+	
+	/*
+	 * model
+	 */
+	
+	private Image background;
+	
+	private int backgroundWidth;
+	
+	private int backgroundHeight;
 	
 	
 	
@@ -55,21 +64,18 @@ public abstract class AFrame extends JFrame
 	 * constructors
 	 */
 	
-	public AFrame(LayoutManager layout) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON.getImage());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setLayout(layout);
+	public APanel(LayoutManager layout) {
+		super(layout);
+		
+		this.background = null;
 	}
 	
-	public AFrame(int width, int height, LayoutManager layout) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON.getImage());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(width, height);
-		setLocationRelativeTo(null);
-		setLayout(layout);
+	public APanel(Image background, int backgroundWidth, int backgroundHeight, LayoutManager manager) {
+		super(manager);
+		
+		this.background = background;
+		this.backgroundWidth = backgroundWidth;
+		this.backgroundHeight = backgroundHeight;
 	}
 	
 	
@@ -81,4 +87,18 @@ public abstract class AFrame extends JFrame
 	public abstract void lock();
 	
 	public abstract void unlock();
+	
+	
+	
+	/*
+	 * override
+	 */
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		if (background == null)
+			super.paintComponent(g);
+		else
+			g.drawImage(background, 0, 0, backgroundWidth, backgroundHeight, null);
+	}
 }

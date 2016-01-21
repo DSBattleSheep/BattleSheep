@@ -20,28 +20,50 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view;
+
+
+
+import java.awt.Component;
+
+import javax.swing.JOptionPane;
 
 
 
 /**
- * Interfaccia per gli osservatori del SheepsPanel
+ * Classe per la creazione di messaggi.
  * 
  * @author Giulio Biagini
  */
-public interface SheepsPanelObserver
+public class MessageFactory
 {
-	/**
-	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
-	 * al click sul bottone "previous"
+	/*
+	 * constants
 	 */
-	public void onPreviousClick();
 	
-	/**
-	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
-	 * al click sul bottone "registration"
-	 * 
-	 * @param sheeps - la posizione delle pecore inserite nel pannello
+	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
+	
+	
+	
+	/*
+	 * private
 	 */
-	public void onRegistrationClick(boolean[][] sheeps);
+	
+	private static void showDialog(Component parent, String message, int type) {
+		JOptionPane.showMessageDialog(parent, message, PROGRAM_NAME, type);
+	}
+	
+	
+	
+	/*
+	 * public
+	 */
+	
+	public static void informationDialog(Component parent, String message) {
+		showDialog(parent, message, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static void errorDialog(Component parent, String message) {
+		showDialog(parent, message, JOptionPane.ERROR_MESSAGE);
+	}
 }

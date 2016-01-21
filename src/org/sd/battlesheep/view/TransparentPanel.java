@@ -20,28 +20,31 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view;
+
+
+
+import java.awt.Color;
+import java.awt.LayoutManager;
+
+import javax.swing.JPanel;
 
 
 
 /**
- * Interfaccia per gli osservatori dell'UsernamePanel
+ * Classe astratta che estenderanno tutti i pannelli secondari del programma.
  * 
  * @author Giulio Biagini
  */
-public interface UsernamePanelObserver
+@SuppressWarnings("serial")
+public class TransparentPanel extends JPanel
 {
-	/**
-	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
-	 * al click sul bottone "exit"
+	/*
+	 * constructor
 	 */
-	public void onExitClick();
 	
-	/**
-	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
-	 * al click sul bottone "next"
-	 * 
-	 * @param username - l'username inserito nel pannello
-	 */
-	public void onNextClick(String username);
+	public TransparentPanel(LayoutManager manager) {
+		super(manager);
+		setBackground(new Color(0, 0, 0, 0));
+	}
 }

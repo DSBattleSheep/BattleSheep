@@ -25,7 +25,10 @@ package org.sd.battlesheep.view.registration;
 
 
 /**
- * Interfaccia per gli osservatori del RegistrationFrame
+ * Interfaccia per la comunicazione dal frame della registrazione verso i
+ * propri osservatori delle azioni di:
+ * - click sul bottone per l'uscita;
+ * - click sul bottone per la registrazione.
  * 
  * @author Giulio Biagini
  */
@@ -33,12 +36,9 @@ public interface RegistrationFrameObserver
 {
 	public void onRegistrationFrameExitClick();
 	
-	/**
-	 * funzione che si occupa di notificare l'osservatore dell'evento relativo
-	 * al click sul bottone "registration"
-	 * 
-	 * @param username - l'username del giocatore
-	 * @param sheeps - la posizione delle pecore nel campo di gioco
-	 */
-	public void onRegistrationFrameOkClick(String username, boolean[][] sheeps);
+	public void onRegistrationFrameRegistrationClick(
+		String lobbyAddress,
+		String username,
+		boolean[][] sheepsPosition
+	);
 }
