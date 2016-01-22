@@ -25,7 +25,7 @@ public class PlayerRegistration
 		Map<String, NetPlayer> playerMap;
 		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface) Naming
 				.lookup("rmi://127.0.0.1:" + CommunicationConst.LOBBY_PORT + "/" + CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
-		playerMap = serverInterface.JoinLobby(username, port);
+		playerMap = serverInterface.joinLobby(username, port);
 		
 		playerMap.remove(username);
 		
