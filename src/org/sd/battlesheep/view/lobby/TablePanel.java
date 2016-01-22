@@ -43,6 +43,15 @@ import org.sd.battlesheep.view.TransparentPanel;
 
 
 
+/**
+ * Classe per il pannello che mostra una tabella con le seguenti informazioni
+ * per ogni client connesso:
+ * - l'username del giocatore;
+ * - l'indirizzo ip dell'host del giocatore;
+ * - la porta che l'host del giocatore userà per la comunicazione.
+ * 
+ * @author Giulio Biagini
+ */
 @SuppressWarnings("serial")
 public class TablePanel extends APanel
 {
@@ -95,6 +104,7 @@ public class TablePanel extends APanel
 		
 		middlePanel = new TransparentPanel(new GridBagLayout());
 		
+		// TODO -> migliorare questo codice
 		clientsTable = new JTable(clientsTableModel);
 		// imposto una larghezza migliore per le singole colonne
 		Dimension tableSize = clientsTable.getPreferredSize();
@@ -115,7 +125,7 @@ public class TablePanel extends APanel
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(10, 10, 5, 10),
 				0, 0
 			)
 		);
@@ -133,7 +143,7 @@ public class TablePanel extends APanel
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 10, 10, 5),
 				0, 0
 			)
 		);
@@ -142,7 +152,7 @@ public class TablePanel extends APanel
 			new GridBagConstraints(
 				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 5, 10, 10),
 				0, 0
 			)
 		);

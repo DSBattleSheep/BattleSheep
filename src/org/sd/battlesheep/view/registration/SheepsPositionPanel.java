@@ -26,6 +26,7 @@ package org.sd.battlesheep.view.registration;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -236,18 +237,19 @@ public class SheepsPositionPanel extends APanel
 	 */
 	
 	private void actionToggleButton(JToggleButton source) {
+		// TODO -> sparisce una riga o una colonna per colpa della dimensione che scende a 0
 		// voglio aggiungere una pecora ma ho già raggiunto il numero massimo di pecore
 		if (source.getIcon().equals(GRASS) && sheeps == 0)
 			return;
 		// voglio aggiungere una pecora e non ho ancora raggiunto il numero massimo di pecore
 		if (source.getIcon().equals(GRASS)) {
-			source.setSelected(true);
 			source.setIcon(SHEEP);
+			source.setSelected(true);
 			sheeps--;
 		// voglio togliere una pecora
 		} else {
-			source.setSelected(false);
 			source.setIcon(GRASS);
+			source.setSelected(false);
 			sheeps++;
 		}
 		remainingLabel.setText(sheeps + "");

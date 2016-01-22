@@ -34,6 +34,14 @@ import org.sd.battlesheep.view.AFrame;
 
 
 
+/**
+ * Classe per il frame della lobby che mostra:
+ * - gli username dei giocatori;
+ * - gli indirizzi ip degli host dei giocatori;
+ * - le porte che gli host dei giocatori useranno per la comunicazione.
+ * 
+ * @author Giulio Biagini
+ */
 @SuppressWarnings("serial")
 public class LobbyFrame extends AFrame
 {
@@ -78,7 +86,13 @@ public class LobbyFrame extends AFrame
 		
 		/* waiting panel */
 		
-		waitingPanel = new WaitingPanel();
+		waitingPanel = new WaitingPanel(host, port);
+		waitingPanel.getExitButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionExit();
+			}
+		});
 		
 		/* table panel */
 		

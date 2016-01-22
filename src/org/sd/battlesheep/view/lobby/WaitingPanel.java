@@ -32,6 +32,7 @@ import java.awt.Insets;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.APanel;
@@ -39,6 +40,13 @@ import org.sd.battlesheep.view.TransparentPanel;
 
 
 
+/**
+ * Classe per il pannello che mostra un messaggio ed una gif di attesa, oltre
+ * al proprio indirizzo ip ed alla porta sulla quale è in attesa di
+ * connessioni.
+ * 
+ * @author Giulio Biagini
+ */
 @SuppressWarnings("serial")
 public class WaitingPanel extends APanel
 {
@@ -54,9 +62,17 @@ public class WaitingPanel extends APanel
 	 * graphic
 	 */
 	
+	private TransparentPanel northPanel;
+	
+	private JLabel addressLabel;
+	
 	private TransparentPanel middlePanel;
 	
 	private JLabel waitingLabel;
+	
+	private TransparentPanel southPanel;
+	
+	private JButton exitButton;
 	
 	
 	
@@ -64,8 +80,24 @@ public class WaitingPanel extends APanel
 	 * constructor
 	 */
 	
-	public WaitingPanel() {
+	public WaitingPanel(String host, int port) {
 		super(Color.WHITE, new BorderLayout());
+		
+		/* north panel */
+		
+		northPanel = new TransparentPanel(new GridBagLayout());
+		
+		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
+		
+		northPanel.add(
+			addressLabel,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 5, 10),
+				0, 0
+			)
+		);
 		
 		/* middle panel */
 		
@@ -78,14 +110,32 @@ public class WaitingPanel extends APanel
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(5, 10, 5, 10),
+				0, 0
+			)
+		);
+		
+		/* south panel */
+		
+		southPanel = new TransparentPanel(new GridBagLayout());
+		
+		exitButton = new JButton("Exit");
+		
+		southPanel.add(
+			exitButton,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 10, 10),
 				0, 0
 			)
 		);
 		
 		/* this panel */
 		
-		add(waitingLabel, BorderLayout.CENTER);
+		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
+		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	
@@ -102,5 +152,15 @@ public class WaitingPanel extends APanel
 	@Override
 	public void unlock() {
 		
+	}
+	
+	
+	
+	/*
+	 * graphic
+	 */
+	
+	public JButton getExitButton() {
+		return exitButton;
 	}
 }
