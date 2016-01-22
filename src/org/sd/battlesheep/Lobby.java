@@ -58,9 +58,12 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 			String currHost = Utils.getLocalAddress().getHostAddress();
 			if (currHost == null)
 				currHost = "127.0.0.1";
+			System.out.println("Thread.activeCount()=" + Thread.activeCount());
 			
 			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT, this);
+			System.out.println("Thread.activeCount()=" + Thread.activeCount());
 			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
+			System.out.println("Thread.activeCount()=" + Thread.activeCount());
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -83,7 +86,7 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 
 	@Override
 	public void onLobbyFrameStartClick() {
-		lobbyFrame.dispose();
 		lobbyServer.startGame();
+		lobbyFrame.dispose();
 	}
 }

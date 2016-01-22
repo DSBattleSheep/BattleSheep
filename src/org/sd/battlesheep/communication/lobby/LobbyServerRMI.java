@@ -3,6 +3,7 @@ package org.sd.battlesheep.communication.lobby;
 
 
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -22,7 +23,10 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 @SuppressWarnings("serial")
 public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemoteInterface
 {
-
+	private int port;
+	
+	private Registry registry;
+	
 	private Map<String, NetPlayer> playerMap;
 	
 	private LobbyJoinInterface lobbyJoinInterface;
@@ -37,9 +41,10 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	
 	public LobbyServerRMI(int port, LobbyJoinInterface lobbyJoinInterface) throws RemoteException, AlreadyBoundException {
 		super();
+		this.port = port;
 		this.lobbyJoinInterface = lobbyJoinInterface;
 		playerMap = new HashMap<String, NetPlayer>();
-		Registry registry = LocateRegistry.createRegistry(port);
+		registry = LocateRegistry.createRegistry(port);
 		registry.bind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME, this);
 		plock = new ReentrantLock();
 		waitForStart = plock.newCondition();
@@ -76,5 +81,11 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		plock.lock();
 		waitForStart.signalAll();
 		plock.unlock();
+		try {
+			registry.unbind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
+			UnicastRemoteObject.unexportObject(registry, true);
+		} catch (RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
