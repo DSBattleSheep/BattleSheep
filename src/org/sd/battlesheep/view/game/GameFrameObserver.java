@@ -24,6 +24,14 @@ package org.sd.battlesheep.view.game;
 
 
 
+/**
+ * Interfaccia per la comunicazione dal frame della registrazione verso i
+ * propri osservatori delle azioni di:
+ * - click sul bottone per l'uscita;
+ * - attacco nei confronti di un avversario.
+ * 
+ * @author Giulio Biagini
+ */
 public interface GameFrameObserver
 {
 	public void onGameFrameExitClick();

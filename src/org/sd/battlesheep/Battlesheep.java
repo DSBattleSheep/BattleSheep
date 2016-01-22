@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.client.PlayerClient;
@@ -159,8 +160,8 @@ public class Battlesheep implements RegistrationFrameObserver
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						registrationFrame.dispose();
-						gameFrame = new GameFrame();
-						gameFrame.setVisible(true);
+						// gameFrame = new GameFrame(username, turnList, null);
+						JOptionPane.showMessageDialog(null, "Parte il giuoco");
 					}
 				});
 				

@@ -28,7 +28,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -39,6 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.sd.battlesheep.view.AFrame;
+
 
 
 /**
@@ -47,7 +49,7 @@ import javax.swing.JTextArea;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame
+public class GameFrame extends AFrame
 {
 	private static final int FIELD_WIDTH = 10;
 	
@@ -85,11 +87,30 @@ public class GameFrame extends JFrame
 	
 	
 	
-	public GameFrame() {
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setBounds(0, 0, 800, 600);
-		setResizable(false);
-		setLayout(new BorderLayout());
+	/*
+	 * model
+	 */
+	
+	private String myUsername;
+	
+	private ArrayList<String> usernames;
+	
+	private GameFrameObserver observer;
+	
+	
+	
+	/*
+	 * constructor
+	 */
+	
+	public GameFrame(String myUsername, ArrayList<String> opponentsUsername, GameFrameObserver observer) {
+		super(800, 600, new BorderLayout());
+		
+		/* model */
+		
+		this.myUsername = myUsername;
+		this.opponentField = opponentField;
+		this.observer = observer;
 		
 		/*
 		 * north panel
@@ -166,5 +187,21 @@ public class GameFrame extends JFrame
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(scrollableLogArea, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	/*
+	 * abstract
+	 */
+	
+	@Override
+	public void lock() {
+		
+	}
+	
+	@Override
+	public void unlock() {
+		
 	}
 }
