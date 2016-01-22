@@ -7,10 +7,8 @@ import javax.swing.SwingUtilities;
 import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.communication.lobby.LobbyJoinInterface;
 import org.sd.battlesheep.communication.lobby.LobbyServerRMI;
-import org.sd.battlesheep.communication.lobby.LobbyStartObserver;
 import org.sd.battlesheep.view.lobby.LobbyFrame;
-import org.sd.battlesheep.view.lobby.LobbyFrame2;
-import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
+import org.sd.battlesheep.view.lobby.LobbyFrameObserver;
 
 
 
@@ -19,11 +17,12 @@ import org.sd.battlesheep.view.lobby.LobbyJoinFrameObserver;
  * 
  * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
-public class Lobby implements LobbyJoinInterface, LobbyStartObserver
+public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 {
 	private LobbyFrame lobbyFrame;
 	
 	private LobbyServerRMI lobbyServer;
+	
 	
 	
 	private class UpdateGuiThread implements Runnable {
@@ -36,7 +35,8 @@ public class Lobby implements LobbyJoinInterface, LobbyStartObserver
 		
 		private int port;
 		
-
+		
+		
 		public UpdateGuiThread(LobbyFrame lobbyFrame, String username, String host, int port) {
 			this.lobbyFrame = lobbyFrame;
 			this.username = username;
@@ -46,9 +46,11 @@ public class Lobby implements LobbyJoinInterface, LobbyStartObserver
 		
 		@Override
 		public void run() {
+			System.out.println("è arrivato " + username);
 			lobbyFrame.addClient(username, host, port);
 		}
 	}
+	
 	
 	
 	public Lobby() {
@@ -60,8 +62,6 @@ public class Lobby implements LobbyJoinInterface, LobbyStartObserver
 			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT, this);
 			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
 			
-			// new LobbyFrame2();
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -71,10 +71,19 @@ public class Lobby implements LobbyJoinInterface, LobbyStartObserver
 	public void onClientJoin(String username, String host, int port) {
 		SwingUtilities.invokeLater(new UpdateGuiThread(lobbyFrame, username, host, port));
 	}
-
+	
+	
+	
+	@Override
+	public void onLobbyFrameExitClick() {
+		// lobbyFrame.dispose();
+		// TODO -> gestire l'uscita dal programma (lobby)
+		System.exit(0);
+	}
 
 	@Override
-	public void onLobbyStartClick() {
+	public void onLobbyFrameStartClick() {
+		lobbyFrame.dispose();
 		lobbyServer.startGame();
 	}
 }

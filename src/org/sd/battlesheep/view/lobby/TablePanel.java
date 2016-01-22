@@ -26,13 +26,17 @@ package org.sd.battlesheep.view.lobby;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.TransparentPanel;
@@ -42,6 +46,14 @@ import org.sd.battlesheep.view.TransparentPanel;
 @SuppressWarnings("serial")
 public class TablePanel extends APanel
 {
+	/*
+	 * constants
+	 */
+	
+	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
+	
+	
+	
 	/*
 	 * graphic
 	 */
@@ -64,7 +76,7 @@ public class TablePanel extends APanel
 	 * model
 	 */
 	
-	
+	private DefaultTableModel clientsTableModel;
 	
 	
 	
@@ -75,12 +87,27 @@ public class TablePanel extends APanel
 	public TablePanel() {
 		super(Color.WHITE, new BorderLayout());
 		
+		/* model */
+		
+		clientsTableModel = new DefaultTableModel(COLUMN_NAMES, 0);
+		
 		/* middle panel */
 		
 		middlePanel = new TransparentPanel(new GridBagLayout());
 		
-		clientsTable = new JTable();
-		// TODO
+		clientsTable = new JTable(clientsTableModel);
+		// imposto una larghezza migliore per le singole colonne
+		Dimension tableSize = clientsTable.getPreferredSize();
+		clientsTable.getColumnModel().getColumn(0).setPreferredWidth(Math.round(tableSize.width*0.50f));
+		clientsTable.getColumnModel().getColumn(1).setPreferredWidth(Math.round(tableSize.width*0.40f));
+		clientsTable.getColumnModel().getColumn(2).setPreferredWidth(Math.round(tableSize.width*0.10f));
+		// metto l'allineamento centrale alle celle della tabella
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		clientsTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		clientsTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		clientsTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		
 		clientsScrollPane = new JScrollPane(clientsTable);
 		
 		middlePanel.add(
@@ -122,7 +149,7 @@ public class TablePanel extends APanel
 		
 		/* this panel */
 		
-		// add(middlePanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
@@ -140,6 +167,20 @@ public class TablePanel extends APanel
 	@Override
 	public void unlock() {
 		
+	}
+	
+	
+	
+	/*
+	 * model
+	 */
+	
+	public int getClientsNumber() {
+		return clientsTableModel.getRowCount();
+	}
+	
+	public void addClient(String username, String host, int port) {
+		clientsTableModel.addRow(new String[]{username, host, port + ""});
 	}
 	
 	

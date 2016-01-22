@@ -87,7 +87,9 @@ public class Battlesheep implements RegistrationFrameObserver
 	
 	@Override
 	public void onRegistrationFrameExitClick() {
-		registrationFrame.dispose();
+		// registrationFrame.dispose();//
+		// TODO -> gestire l'uscita dal programma (client)
+		System.exit(0);
 	}
 	
 	@Override

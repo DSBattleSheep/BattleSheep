@@ -175,26 +175,26 @@ public class RegistrationFrame extends AFrame
 		else {
 			remove(lobbyAddressPanel);
 			add(warningPanel, BorderLayout.CENTER);
-			SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+			SwingUtilities.updateComponentTreeUI(this);
 		}
 	}
 	
 	private void actionPreviousToLobbyAddressPanel() {
 		remove(warningPanel);
 		add(lobbyAddressPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	private void actionNextToUsernamePanel() {
 		remove(warningPanel);
 		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	private void actionPreviousToWarningPanel() {
 		remove(usernamePanel);
 		add(warningPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	private void actionNextToSheepsPositionPanel() {
@@ -203,14 +203,14 @@ public class RegistrationFrame extends AFrame
 		else {
 			remove(usernamePanel);
 			add(sheepsPositionPanel, BorderLayout.CENTER);
-			SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+			SwingUtilities.updateComponentTreeUI(this);
 		}
 	}
 	
 	private void actionPreviousToUsernamePanel() {
 		remove(sheepsPositionPanel);
 		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(RegistrationFrame.this);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	private void actionRegistration() {
