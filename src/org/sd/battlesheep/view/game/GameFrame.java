@@ -27,19 +27,31 @@ package org.sd.battlesheep.view.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPException;
 
 import org.sd.battlesheep.view.AFrame;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.w3c.dom.UserDataHandler;
 
 
 
@@ -51,39 +63,25 @@ import org.sd.battlesheep.view.AFrame;
 @SuppressWarnings("serial")
 public class GameFrame extends AFrame
 {
-	private static final int FIELD_WIDTH = 10;
+	private static final int WIDTH = 800;
 	
-	private static final int FIELD_HEIGHT = 10;
-	
-	private static final Icon BANNER = new ImageIcon("./imgs/banner.jpg");
-	
-	private static final Icon GRASS = new ImageIcon("./imgs/grass.png");
+	private static final int HEIGHT = 600;
 	
 	
 	
-	private JPanel northPanel;
+	/*
+	 * graphic
+	 */
 	
-	private JLabel banner;
+	private FieldPanel myFieldPanel;
 	
-	private JPanel leftPanel;
+	private FieldPanel selectedOpponentFieldPanel;
 	
-	private JPanel middlePanel;
+	private FieldPanel[] opponentsFieldPanels;
 	
-	private JPanel middleLeftPanel;
+	private JScrollPane opponentsScrollPane;
 	
-	private JLabel myField[][];
-	
-	private JPanel middleRightPanel;
-	
-	private JLabel opponentField[][];
-	
-	private JPanel rightPanel;
-	
-	private JPanel southPanel;
-	
-	private JTextArea logArea;
-	
-	private JScrollPane scrollableLogArea;
+	private JTextArea log;// TODO -> delete this dummy interface
 	
 	
 	
@@ -93,9 +91,13 @@ public class GameFrame extends AFrame
 	
 	private String myUsername;
 	
-	private ArrayList<String> usernames;
+	private ArrayList<String> opponentsUsername;
 	
 	private GameFrameObserver observer;
+	
+	private int rows;
+	
+	private int cols;
 	
 	
 	
@@ -103,90 +105,50 @@ public class GameFrame extends AFrame
 	 * constructor
 	 */
 	
-	public GameFrame(String myUsername, ArrayList<String> opponentsUsername, GameFrameObserver observer) {
-		super(800, 600, new BorderLayout());
+	public GameFrame(String myUsername, ArrayList<String> opponentsUsername, int rows, int cols, GameFrameObserver observer) {
+		super(WIDTH, HEIGHT, new BorderLayout());
 		
 		/* model */
 		
 		this.myUsername = myUsername;
-		this.opponentField = opponentField;
+		this.opponentsUsername = opponentsUsername;
 		this.observer = observer;
+		this.rows = rows;
+		this.cols = cols;
+		
+		/*
+		 * DUMMY
+		 */
+		
+		log = new JTextArea();
+		log.setTabSize(4);
+		log.setEditable(false);
+		log.setBackground(Color.BLACK);
+		log.setForeground(Color.YELLOW);
+		log.setFont(log.getFont().deriveFont(Font.BOLD));
+		
+		add(log, BorderLayout.CENTER);
+		setVisible(true);
 		
 		/*
 		 * north panel
 		 */
 		
-		northPanel = new JPanel();
-		
-		banner = new JLabel(BANNER);
-		//banner.setPreferredSize(new Dimension(0, 200));
-		
-		northPanel.add(banner);
-		
-		/*
-		 * left panel
-		 */
+		// banner
 		
 		/*
 		 * middle panel
 		 */
 		
-		middlePanel = new JPanel();
-		middlePanel.setLayout(new GridLayout(1, 2));
-		
-		middleLeftPanel = new JPanel();
-		middleLeftPanel.setLayout(new GridLayout(FIELD_HEIGHT, FIELD_WIDTH));
-		
-		myField = new JLabel[FIELD_WIDTH][FIELD_HEIGHT];
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-			for (int y = 0; y < FIELD_HEIGHT; y++) {
-				myField[x][y] = new JLabel(GRASS);
-				myField[x][y].setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				middleLeftPanel.add(myField[x][y]);
-			}
-		}
-		
-		middleRightPanel = new JPanel();
-		middleRightPanel.setLayout(new GridLayout(FIELD_HEIGHT, FIELD_WIDTH));
-		
-		opponentField = new JLabel[FIELD_WIDTH][FIELD_HEIGHT];
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-			for (int y = 0; y < FIELD_HEIGHT; y++) {
-				opponentField[x][y] = new JLabel(GRASS);
-				opponentField[x][y].setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				middleRightPanel.add(opponentField[x][y]);
-			}
-		}
-		
-		middlePanel.add(middleLeftPanel);
-		middlePanel.add(middleRightPanel);
-		
-		/*
-		 * right panel
-		 */
+		// my field and selected opponent field
 		
 		/*
 		 * south panel
 		 */
 		
-		southPanel = new JPanel();
+		/* this frame */
 		
-		logArea = new JTextArea("ciao a tutti,\nbelli e brutti!");
-		logArea.setEditable(false);
-		logArea.setBackground(Color.BLACK);
-		logArea.setForeground(Color.WHITE);
-		logArea.setCaretColor(Color.BLACK);
-		logArea.setSelectionColor(Color.WHITE);
-		logArea.setSelectedTextColor(Color.BLACK);
-		
-		scrollableLogArea = new JScrollPane(logArea);
-		scrollableLogArea.setPreferredSize(new Dimension(0, 80));
-		
-		southPanel.add(scrollableLogArea);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(scrollableLogArea, BorderLayout.SOUTH);
+		// add panels to this frame
 	}
 	
 	
@@ -203,5 +165,39 @@ public class GameFrame extends AFrame
 	@Override
 	public void unlock() {
 		
+	}
+	
+	
+	
+	/*
+	 * model
+	 */
+	
+	public void setTurn(String username) {
+		if (username.equals(myUsername)) {
+			log.append("turn: MINE\n");
+			
+			new Thread(new Runnable() {
+				@Override public void run() {
+					Random rnd = new Random();
+					int u = rnd.nextInt(opponentsUsername.size());
+					int x = rnd.nextInt(cols);
+					int y = rnd.nextInt(rows);
+					log.append("\tattack " + opponentsUsername.get(u) + " in [" + x + "," + y + "]\n");
+					observer.onGameFrameAttack(opponentsUsername.get(u), x, y);
+				}
+			}).start();
+			
+		} else
+			log.append("turn: " + username);
+	}
+	
+	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
+		if (usernameAttacker.equals(myUsername))
+			log.append("\tI " + (hit ? "HIT" : "didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
+		else if (usernameDefender.equals(myUsername))
+			log.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
+		else
+			log.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
 	}
 }

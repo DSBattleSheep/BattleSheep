@@ -37,6 +37,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.TransparentPanel;
@@ -104,19 +106,20 @@ public class TablePanel extends APanel
 		
 		middlePanel = new TransparentPanel(new GridBagLayout());
 		
-		// TODO -> migliorare questo codice
 		clientsTable = new JTable(clientsTableModel);
-		// imposto una larghezza migliore per le singole colonne
-		Dimension tableSize = clientsTable.getPreferredSize();
-		clientsTable.getColumnModel().getColumn(0).setPreferredWidth(Math.round(tableSize.width*0.50f));
-		clientsTable.getColumnModel().getColumn(1).setPreferredWidth(Math.round(tableSize.width*0.40f));
-		clientsTable.getColumnModel().getColumn(2).setPreferredWidth(Math.round(tableSize.width*0.10f));
-		// metto l'allineamento centrale alle celle della tabella
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		clientsTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		clientsTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		clientsTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		TableColumnModel clientsTableColumnModel = clientsTable.getColumnModel();
+		TableColumn columnUsername = clientsTableColumnModel.getColumn(0);
+		TableColumn columnHost = clientsTableColumnModel.getColumn(1);
+		TableColumn columnPort = clientsTableColumnModel.getColumn(2);
+		Dimension clientsTableSize = clientsTable.getPreferredSize();
+		columnUsername.setPreferredWidth(Math.round(clientsTableSize.width * 0.4f));
+		columnHost.setPreferredWidth(Math.round(clientsTableSize.width * 0.4f));
+		columnPort.setPreferredWidth(Math.round(clientsTableSize.width * 0.2f));
+		DefaultTableCellRenderer clientsTableCellRenderer = new DefaultTableCellRenderer();
+		clientsTableCellRenderer.setHorizontalAlignment(JLabel.CENTER);
+		columnUsername.setCellRenderer(clientsTableCellRenderer);
+		columnHost.setCellRenderer(clientsTableCellRenderer);
+		columnPort.setCellRenderer(clientsTableCellRenderer);
 		
 		clientsScrollPane = new JScrollPane(clientsTable);
 		
@@ -171,12 +174,14 @@ public class TablePanel extends APanel
 	
 	@Override
 	public void lock() {
-		
+		clientsTable.setEnabled(false);
+		startButton.setEnabled(false);
 	}
 
 	@Override
 	public void unlock() {
-		
+		clientsTable.setEnabled(true);
+		startButton.setEnabled(true);
 	}
 	
 	
