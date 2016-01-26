@@ -8,6 +8,6 @@ import org.sd.battlesheep.model.field.Move;
 
 public interface MyTurnInterface extends Remote {
 	
-	public Move connectCurrentPlayer(String user) throws RemoteException, ServerNotActiveException;;
+	public Move connectCurrentPlayer(String user) throws RemoteException, ServerNotActiveException;
 	
 }

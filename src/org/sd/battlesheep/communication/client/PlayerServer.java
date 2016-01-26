@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 import java.util.concurrent.locks.Condition;
@@ -16,8 +17,10 @@ import org.sd.battlesheep.model.field.Move;
 import org.sd.battlesheep.model.player.Me;
 
 @SuppressWarnings("serial")
-public class PlayerServer extends UnicastRemoteObject implements OrderInterface, MyTurnInterface {
+public class PlayerServer extends UnicastRemoteObject implements OrderInterface, MyTurnInterface, AttackInterface {
 
+	private MoveAvailableInterface observer;
+	
 	private int myValueRandom;
 
 	private Me me;
@@ -36,10 +39,12 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	
 	private int countConnected;
 	
+	private Move currentMove;
+	
 	
 	
 
-	public PlayerServer() throws RemoteException, MaxPortRetryException {
+	public PlayerServer(MoveAvailableInterface observer) throws RemoteException, MaxPortRetryException {
 		super();
 
 		int retry = 0;
@@ -82,6 +87,13 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		itsMyTurn.signalAll();
 		pLock.unlock();
 	}
+	
+	public void setMove(Move move) {
+		pLock.lock();
+		this.currentMove = move;
+		moveSelectedCondition.signalAll();
+		pLock.unlock();
+	}
 
 	/**
 	 * funzione che si occupa di restituire la porta per la comunicazione con
@@ -101,9 +113,9 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	@Override
 	public Move connectCurrentPlayer(String username) {
 		pLock.lock();
-		if (this.myTurnStarted) {
+		if (! this.myTurnStarted) {
 			try {
-				itsMyTurn.wait();
+				itsMyTurn.await();
 			} catch (InterruptedException e) {
 				System.out.println("Qui siamo messi malino");
 				e.printStackTrace();
@@ -112,9 +124,25 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		countConnected++;
 		if (countConnected == playerCount)
 			// segnala che posso scegliere la mossa, SBLOCCATIIII
+			observer.canMove();
+			
+		try {
+			moveSelectedCondition.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
 			pLock.unlock();
+		}
+
+		
+		return currentMove;
+	}
+
+	
+	@Override
+	public boolean attackPlayer(int x, int y) throws RemoteException, ServerNotActiveException {
 		// FIXME
-		return null;
+		return true;
 	}
 
 }

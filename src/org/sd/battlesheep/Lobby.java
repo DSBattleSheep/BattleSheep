@@ -87,6 +87,10 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	@Override
 	public void onLobbyFrameStartClick() {
 		lobbyServer.startGame();
-		lobbyFrame.dispose();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				lobbyFrame.dispose();
+			}
+		});		
 	}
 }

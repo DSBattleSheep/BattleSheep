@@ -74,4 +74,10 @@ public class PlayerClient {
 		return turnInterface.connectCurrentPlayer(myUser);
 	}
 	
+	public static boolean attackPlayer(Opponent opponent, int x, int y) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
+		AttackInterface attackInterface = (AttackInterface) Naming
+				.lookup("rmi://" + opponent.getHost() + ":" + opponent.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
+		return attackInterface.attackPlayer(x, y);
+	}
+	
 }
