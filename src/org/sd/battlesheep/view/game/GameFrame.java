@@ -189,7 +189,7 @@ public class GameFrame extends AFrame
 			}).start();
 			
 		} else
-			log.append("turn: " + username);
+			log.append("turn: " + username + "\n");
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {

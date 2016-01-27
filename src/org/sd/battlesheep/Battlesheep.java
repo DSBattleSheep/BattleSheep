@@ -132,6 +132,30 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	}
 	
 	
+	private class GameSetAttackResultRunnable implements Runnable {
+
+		String attacker;
+		String defender;
+		
+		int x;
+		int y;
+		
+		boolean hit;
+		
+		private GameSetAttackResultRunnable(String usernameAttacker, Move move) {
+			this.attacker=usernameAttacker;
+			this.defender=move.getTarget();
+			this.x=move.getX();
+			this.y=move.getY();
+			this.hit=move.isHit();
+		}
+		
+		@Override
+		public void run() {
+			gameFrame.attackResult(attacker, defender, x, y, hit);
+		}		
+	}
+	
 	
 	@Override
 	public void onRegistrationFrameExitClick() {
@@ -246,9 +270,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		while(!ended) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
 			turnOwner = orderList.get(currPlayerIndex);
-			
-			System.out.println("il turno è di"+ turnOwner.getUsername());
-			
+						
 			if(turnOwner instanceof Me) {
 				playerServer.setPlayerNum(orderList.size());
 				
@@ -265,7 +287,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				
 			} else {
 				try {
+					SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(turnOwner.getUsername(), true));
 					recvdMove=PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
+					SwingUtilities.invokeLater(new GameSetAttackResultRunnable(turnOwner.getUsername(), recvdMove));
 					if(recvdMove.getTarget().equals(me.getUsername())) {
 						me.setHit(recvdMove.getX(), recvdMove.getY());
 					} else {
@@ -282,6 +306,12 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			currPlayerIndex = (currPlayerIndex + 1) % orderList.size();
 			//se non è il mio turno, chiedo la mossa al player che ha il turno
 			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -295,7 +325,19 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	@Override
 	public void onGameFrameAttack(final String username, final int x, final int y) {
 		
-		//TODO: invokelater per bloccare la view
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+
+				@Override
+				public void run() {
+					gameFrame.lock();
+				}
+				
+			});
+		} catch (InvocationTargetException | InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		new Thread(new Runnable() {
 			@Override
@@ -324,6 +366,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	@Override
 	public void onGameFrameExitClick() {
 		// TODO Auto-generated method stub
-		
+		//FIXME chiudi i thread di RMI
+		System.exit(0);
 	}
 }

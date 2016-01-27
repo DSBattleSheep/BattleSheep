@@ -87,6 +87,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		} catch (RemoteException | NotBoundException e) {
 			e.printStackTrace();
 		}
+		
 		System.out.println("Thread active count = " + Thread.activeCount());// XXX <- "C'è qualcosa che non va" - cit. vasco
 	}
 }
