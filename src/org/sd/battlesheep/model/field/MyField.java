@@ -106,4 +106,8 @@ public class MyField extends AField
 			return false;
 		}
 	}
+	
+	public boolean isSheep(int x, int y) {
+		return field[x][y]==SHEEP;
+	}
 }

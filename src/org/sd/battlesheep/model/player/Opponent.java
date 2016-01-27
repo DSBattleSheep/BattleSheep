@@ -133,4 +133,8 @@ public class Opponent extends APlayer implements Serializable
 	public void setHitSheep(int r, int c) {
 		opponentField.setHitSheep(r, c);
 	}
+	
+	public void setHit(int x, int y, boolean sheep) {
+		opponentField.setHit(x, y, sheep);
+	}
 }

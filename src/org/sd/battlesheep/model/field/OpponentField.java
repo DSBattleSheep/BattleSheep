@@ -112,4 +112,13 @@ public class OpponentField extends AField
 		field[r][c] = HIT_SHEEP;
 		sheeps--;
 	}
+	
+	public void setHit(int x, int y, boolean sheep) {
+		if(sheep) {
+			field[x][y]=HIT_SHEEP;
+			sheeps--;
+		} else {
+			field[x][y]=HIT_GRASS;
+		}
+	}
 }

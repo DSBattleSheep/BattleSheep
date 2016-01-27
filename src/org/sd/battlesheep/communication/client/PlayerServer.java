@@ -48,6 +48,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		super();
 
 		int retry = 0;
+		this.observer=observer;
 		countConnected = 0;
 		myTurnStarted = false;
 		pLock = new ReentrantLock();
@@ -83,6 +84,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	public void setPlayerNum(int playerNum) {
 		pLock.lock();
 		this.playerCount = playerNum;
+		this.countConnected=0;
 		this.myTurnStarted = true;
 		itsMyTurn.signalAll();
 		pLock.unlock();
@@ -91,6 +93,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	public void setMove(Move move) {
 		pLock.lock();
 		this.currentMove = move;
+		this.myTurnStarted=false;
 		moveSelectedCondition.signalAll();
 		pLock.unlock();
 	}
@@ -121,8 +124,11 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("connectCurrentPlayer: client " + username + "connected");
+		//FIXME gestire lista di user connessi, così rimuoviamo quelli non connessi
 		countConnected++;
-		if (countConnected == playerCount)
+		if (countConnected == playerCount - 1)
 			// segnala che posso scegliere la mossa, SBLOCCATIIII
 			observer.canMove();
 			
@@ -141,8 +147,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	
 	@Override
 	public boolean attackPlayer(int x, int y) throws RemoteException, ServerNotActiveException {
-		// FIXME
-		return true;
+		return me.isSheep(x, y);
 	}
 
 }

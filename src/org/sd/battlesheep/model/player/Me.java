@@ -85,4 +85,8 @@ public class Me extends APlayer
 	public boolean setHit(int r, int c) {
 		return myField.setHit(r, c);
 	}
+	
+	public boolean isSheep(int x, int y) {
+		return myField.isSheep(x, y);
+	}
 }

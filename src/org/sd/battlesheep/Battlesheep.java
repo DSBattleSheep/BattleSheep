@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
 
@@ -84,6 +86,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	private List<APlayer> orderList;
 	
+	private ReentrantLock pLock;
+	
+	private Condition myTurnEnded;
+	
 	
 
 	public static Battlesheep getInstance() {
@@ -93,6 +99,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	public Battlesheep() {
 		Battlesheep.instance = this;
 		playerMap = new HashMap<String, APlayer>();
+		pLock=new ReentrantLock();
+		myTurnEnded=pLock.newCondition();
 		
 		registrationFrame = new RegistrationFrame(
 			ModelConst.FIELD_ROWS,
@@ -231,20 +239,39 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		boolean ended=false;
 		int currPlayerIndex=0;
 		APlayer turnOwner;
+		Move recvdMove;
+		Opponent hitTarget;
 		
 		
 		while(!ended) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
 			turnOwner = orderList.get(currPlayerIndex);
 			
+			System.out.println("il turno è di"+ turnOwner.getUsername());
+			
 			if(turnOwner instanceof Me) {
 				playerServer.setPlayerNum(orderList.size());
 				
-				// TODO: condition await fino alla fine del turno
+				pLock.lock();
+				try {
+					myTurnEnded.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					pLock.unlock();
+				}
+				
 				
 			} else {
 				try {
-					PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
+					recvdMove=PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
+					if(recvdMove.getTarget().equals(me.getUsername())) {
+						me.setHit(recvdMove.getX(), recvdMove.getY());
+					} else {
+						hitTarget=(Opponent) playerMap.get(recvdMove.getTarget());
+						hitTarget.setHit(recvdMove.getX(), recvdMove.getY(), recvdMove.isHit());
+					}
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -279,7 +306,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					
 					//TODO: invokelater per notificare la view e basta
 					
-					// TODO: condition unlock perchè è finito il turno!
+					pLock.lock();
+					myTurnEnded.signal();
+					pLock.unlock();
 					
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					e.printStackTrace();
