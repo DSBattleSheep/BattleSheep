@@ -74,22 +74,19 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	private GameFrame gameFrame;
 	
-	
-	
 	private PlayerServer playerServer;
 	
-	private Map<String, APlayer> playerMap;
-
-	private ArrayList<String> opponentList;
 	
 	private Me me;
 	
+	private Map<String, APlayer> playerMap;
+	
 	private List<APlayer> orderList;
+	
 	
 	private ReentrantLock pLock;
 	
 	private Condition myTurnEnded;
-	
 	
 
 	public static Battlesheep getInstance() {
@@ -98,7 +95,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	public Battlesheep() {
 		Battlesheep.instance = this;
+		
+		orderList = new ArrayList<APlayer>();
 		playerMap = new HashMap<String, APlayer>();
+		
 		pLock=new ReentrantLock();
 		myTurnEnded=pLock.newCondition();
 		
@@ -108,6 +108,32 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			ModelConst.SHEEPS_NUMBER,
 			this
 		);
+	}
+	
+	private class GameFrameLockRunnable implements Runnable {
+		@Override
+		public void run() {
+			gameFrame.lock();
+		}
+	}
+	
+	private class DisposeRegistrationFrameAndCreateGameFrame implements Runnable {
+
+		private String username;
+		
+		private ArrayList<String> opponentList;
+		
+		private DisposeRegistrationFrameAndCreateGameFrame(String username, ArrayList<String> opponentList) {
+			this.username = username;
+			this.opponentList = opponentList;
+		}
+		
+		@Override
+		public void run() {
+			registrationFrame.dispose();			
+			gameFrame = new GameFrame(username, opponentList, ModelConst.FIELD_ROWS, 
+					ModelConst.FIELD_COLS, Battlesheep.getInstance());
+		}		
 	}
 	
 	private class GameFrameSetTurnRunnable implements Runnable {
@@ -132,22 +158,24 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	}
 	
 	
-	private class GameSetAttackResultRunnable implements Runnable {
+	private class GameFrameSetAttackResultRunnable implements Runnable {
 
 		String attacker;
+		
 		String defender;
 		
 		int x;
+		
 		int y;
 		
 		boolean hit;
 		
-		private GameSetAttackResultRunnable(String usernameAttacker, Move move) {
-			this.attacker=usernameAttacker;
-			this.defender=move.getTarget();
-			this.x=move.getX();
-			this.y=move.getY();
-			this.hit=move.isHit();
+		private GameFrameSetAttackResultRunnable(String usernameAttacker, Move move) {
+			this.attacker = usernameAttacker;
+			this.defender = move.getTarget();
+			this.x = move.getX();
+			this.y = move.getY();
+			this.hit = move.isHit();
 		}
 		
 		@Override
@@ -155,6 +183,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			gameFrame.attackResult(attacker, defender, x, y, hit);
 		}		
 	}
+	
 	
 	
 	@Override
@@ -165,8 +194,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	}
 	
 	@Override
-	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String username, final boolean[][] sheepsPosition) {
-		Thread t = new Thread(new Runnable() {			
+	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String myUsername, final boolean[][] sheepsPosition) {
+		new Thread(new Runnable() {			
 			@Override
 			public void run() {
 				/*
@@ -180,14 +209,14 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 								
 				Map<String, NetPlayer> players = null;
 				
-				System.out.println("Console di: " + username);
+				System.out.println("Console di: " + myUsername);
 				
 				try {
-					me = new Me(username, sheepsPosition);
+					me = new Me(myUsername, sheepsPosition);
 					if (playerServer == null)
 						playerServer = new PlayerServer(Battlesheep.getInstance());
 					playerServer.setMe(me);
-					players = PlayerRegistration.Join(username, playerServer.getPort());
+					players = PlayerRegistration.Join(myUsername, playerServer.getPort());
 					
 				} catch (UsernameAlreadyTakenException e) {
 					MessageFactory.errorDialog(null, e.getMessage());
@@ -207,65 +236,51 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					e.printStackTrace();					
 					return;
 				}
-			
-				
 				
 				// Abbiamo joinato e la lobby ci ha restituito tutti i player
 				
-				List<String> turnList = PlayerClient.getOrder(username, playerServer.getValueRandom(), players);
+				List<String> turnList = PlayerClient.getOrder(myUsername, playerServer.getValueRandom(), players);
 				
 				System.out.println("registrato!");
+
+				ArrayList<String> opponentList = new ArrayList<String>();
 				
-				orderList = new ArrayList<APlayer>();
-				opponentList = new ArrayList<String>();
+				orderList.clear();
+				playerMap.clear();
 				
-				for(String pUsername : turnList) {
-					if(pUsername!=username) {
-						NetPlayer currPlayer = players.get(pUsername);
+				for(String username : turnList) {
+					if(username == myUsername) {
+						orderList.add(me);
+						playerMap.put(myUsername, me);
+					} else {
+						NetPlayer currPlayer = players.get(username);
 						Opponent opponent = new Opponent(currPlayer, ModelConst.FIELD_ROWS, ModelConst.FIELD_COLS,
 								ModelConst.SHEEPS_NUMBER);
 						orderList.add(opponent);
 						playerMap.put(opponent.getUsername(), opponent);
-						opponentList.add(pUsername);
-					} else {
-						orderList.add(me);
-						playerMap.put(me.getUsername(), me);
+						opponentList.add(username);
 					}
 				}
 				
 				try {
-					SwingUtilities.invokeAndWait(new Runnable() {					
-						@Override
-						public void run() {
-							registrationFrame.dispose();			
-							gameFrame = new GameFrame(username, opponentList, ModelConst.FIELD_ROWS, 
-									ModelConst.FIELD_COLS, Battlesheep.getInstance());
-						}
-					});
+					SwingUtilities.invokeAndWait(new DisposeRegistrationFrameAndCreateGameFrame(myUsername, opponentList));
 				} catch (InvocationTargetException | InterruptedException e1) {
 					e1.printStackTrace();
 				}
 				
-				
-					
-				
 				System.out.println("gameLoop()!!!");
 				gameLoop();
 			}
-		});
-		
-		t.start();
+		}).start();
 	}
 	
 	
-	
 	private void gameLoop() {
-		boolean ended=false;
-		int currPlayerIndex=0;
+		boolean ended = false;
+		int currPlayerIndex = 0;
 		APlayer turnOwner;
 		Move recvdMove;
 		Opponent hitTarget;
-		
 		
 		while(!ended) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
@@ -284,12 +299,11 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					pLock.unlock();
 				}
 				
-				
 			} else {
 				try {
 					SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(turnOwner.getUsername(), true));
-					recvdMove=PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
-					SwingUtilities.invokeLater(new GameSetAttackResultRunnable(turnOwner.getUsername(), recvdMove));
+					recvdMove = PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
+					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(turnOwner.getUsername(), recvdMove));
 					if(recvdMove.getTarget().equals(me.getUsername())) {
 						me.setHit(recvdMove.getX(), recvdMove.getY());
 					} else {
@@ -300,19 +314,32 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					//il tizio col turno è morto, ricomincio
+					
+					orderList.remove(currPlayerIndex);
+					playerMap.remove(turnOwner.getUsername());
+					
+					//TODO avvisare la vista del crash!
+					
 					continue;
 				}
 			}
-			currPlayerIndex = (currPlayerIndex + 1) % orderList.size();
-			//se non è il mio turno, chiedo la mossa al player che ha il turno
 			
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			currPlayerIndex = (currPlayerIndex + 1) % orderList.size();
+			//se non è il mio turno, chiedo la mossa al player che ha il turno
+			
+			if (orderList.size() == 1 || me.lost())
+				ended = true;
 		}
+		if (! me.lost())
+			System.out.println("WIIIIIINNER!! YO!");
+		else 
+			System.out.println("You loooose! :'(");
 	}
 
 
@@ -321,32 +348,25 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	public void canMove() {
 		SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(me.getUsername(), false));
 	}
+	
+	
 
 	@Override
 	public void onGameFrameAttack(final String username, final int x, final int y) {
-		
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-
-				@Override
-				public void run() {
-					gameFrame.lock();
-				}
-				
-			});
-		} catch (InvocationTargetException | InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {	
+				try {
+					SwingUtilities.invokeAndWait(new GameFrameLockRunnable());
+				} catch (InvocationTargetException | InterruptedException e1) {
+					e1.printStackTrace();
+				}
 				try {
 					boolean hit = PlayerClient.attackPlayer((Opponent) playerMap.get(username), x, y);
-					playerServer.setMove(new Move(username, x, y, hit));
-					
-					//TODO: invokelater per notificare la view e basta
+					Move move = new Move(username, x, y, hit);
+					playerServer.setMove(move);
+
+					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(me.getUsername(), move));
 					
 					pLock.lock();
 					myTurnEnded.signal();
@@ -361,11 +381,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	
 
-
-
 	@Override
 	public void onGameFrameExitClick() {
-		// TODO Auto-generated method stub
 		//FIXME chiudi i thread di RMI
 		System.exit(0);
 	}
