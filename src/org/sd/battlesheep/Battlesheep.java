@@ -40,10 +40,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.SwingUtilities;
 
-import org.sd.battlesheep.communication.client.MoveAvailableInterface;
+import org.sd.battlesheep.communication.client.PlayersConnectedInterface;
 import org.sd.battlesheep.communication.client.PlayerClient;
 import org.sd.battlesheep.communication.client.PlayerRegistration;
 import org.sd.battlesheep.communication.client.PlayerServer;
+import org.sd.battlesheep.model.KickedOutPlayerException;
 import org.sd.battlesheep.model.MaxPortRetryException;
 import org.sd.battlesheep.model.ModelConst;
 import org.sd.battlesheep.model.UsernameAlreadyTakenException;
@@ -65,7 +66,7 @@ import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
  * 
  * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
-public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver, MoveAvailableInterface
+public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver, PlayersConnectedInterface
 {
 	private static Battlesheep instance;
 	
@@ -87,6 +88,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	private ReentrantLock pLock;
 	
 	private Condition myTurnEnded;
+	
 	
 
 	public static Battlesheep getInstance() {
@@ -193,6 +195,18 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		System.exit(0);
 	}
 	
+	
+	private void removeFromActivePlayers(String username) {
+		
+		// FIXME: ragionare se serve una lock per queste remove
+		
+		orderList.remove(playerMap.get(username));
+		playerMap.remove(username);
+		
+		//TODO avvisare la vista del crash!
+	}
+	
+	
 	@Override
 	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String myUsername, final boolean[][] sheepsPosition) {
 		new Thread(new Runnable() {			
@@ -277,17 +291,24 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	private void gameLoop() {
 		boolean ended = false;
+		boolean kickedOut = false;
 		int currPlayerIndex = 0;
 		APlayer turnOwner;
 		Move recvdMove;
 		Opponent hitTarget;
 		
-		while(!ended) {
+		while(!ended && !kickedOut) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
 			turnOwner = orderList.get(currPlayerIndex);
 						
-			if(turnOwner instanceof Me) {
-				playerServer.setPlayerNum(orderList.size());
+			if (turnOwner.lost()) {
+				System.out.println(turnOwner.getUsername() + " has lost!");
+				removeFromActivePlayers(turnOwner.getUsername());
+				
+				currPlayerIndex = currPlayerIndex % orderList.size();
+				continue;
+			} else if(turnOwner instanceof Me) {
+				playerServer.setExpectedPlayers(orderList);
 				
 				pLock.lock();
 				try {
@@ -311,16 +332,15 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 						hitTarget.setHit(recvdMove.getX(), recvdMove.getY(), recvdMove.isHit());
 					}
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 					//il tizio col turno è morto, ricomincio
 					
-					orderList.remove(currPlayerIndex);
-					playerMap.remove(turnOwner.getUsername());
+					System.out.println(turnOwner.getUsername() + " is crashed!");
+					removeFromActivePlayers(turnOwner.getUsername());
 					
-					//TODO avvisare la vista del crash!
-					
+					currPlayerIndex = currPlayerIndex % orderList.size();
 					continue;
+				} catch (KickedOutPlayerException e) {
+					kickedOut = true;
 				}
 			}
 			
@@ -336,7 +356,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			if (orderList.size() == 1 || me.lost())
 				ended = true;
 		}
-		if (! me.lost())
+		if (kickedOut)
+			System.out.println("I've been kicked out!! <.<");
+		else if (! me.lost())
 			System.out.println("WIIIIIINNER!! YO!");
 		else 
 			System.out.println("You loooose! :'(");
@@ -345,8 +367,16 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 
 	@Override
-	public void canMove() {
+	public void onTurnOwnerCanMove() {
 		SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(me.getUsername(), false));
+	}
+
+
+	
+	@Override
+	public void notifyNotConnectedUser(String username) {
+		System.out.println(username + " did not connect!");
+		removeFromActivePlayers(username);
 	}
 	
 	
