@@ -306,6 +306,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				removeFromActivePlayers(turnOwner.getUsername());
 				
 				currPlayerIndex = currPlayerIndex % orderList.size();
+				if (orderList.size() == 1)
+					ended = true;
 				continue;
 			} else if(turnOwner instanceof Me) {
 				playerServer.setExpectedPlayers(orderList);

@@ -90,7 +90,7 @@ public class Opponent extends APlayer implements Serializable
 	 */
 	@Override
 	public boolean lost() {
-		return opponentField.getAliveSheepsNumber() > 0;
+		return opponentField.getAliveSheepsNumber() == 0;
 	}
 	
 	

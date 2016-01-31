@@ -70,7 +70,7 @@ public class Me extends APlayer
 	 */
 	@Override
 	public boolean lost() {
-		return myField.getAliveSheepsNumber() > 0;
+		return myField.getAliveSheepsNumber() == 0;
 	}
 	
 	
