@@ -287,11 +287,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			}
 		}).start();
 	}
+
 	
 	
 	private void gameLoop() {
 		boolean ended = false;
 		boolean kickedOut = false;
+		boolean removedTurnOwner = false;
 		int currPlayerIndex = 0;
 		APlayer turnOwner;
 		Move recvdMove;
@@ -301,22 +303,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
 			turnOwner = orderList.get(currPlayerIndex);
 						
-			if (turnOwner.lost()) {
-				System.out.println(turnOwner.getUsername() + " has lost!");
-				removeFromActivePlayers(turnOwner.getUsername());
-				
-				currPlayerIndex = currPlayerIndex % orderList.size();
-				if (orderList.size() == 1)
-					ended = true;
-				continue;
-			} else if(turnOwner instanceof Me) {
+			if(turnOwner instanceof Me) {
 				playerServer.setExpectedPlayers(orderList);
 				
 				pLock.lock();
 				try {
 					myTurnEnded.await();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} finally {
 					pLock.unlock();
@@ -330,30 +323,38 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					if(recvdMove.getTarget().equals(me.getUsername())) {
 						me.setHit(recvdMove.getX(), recvdMove.getY());
 					} else {
-						hitTarget=(Opponent) playerMap.get(recvdMove.getTarget());
+						hitTarget = (Opponent) playerMap.get(recvdMove.getTarget());
 						hitTarget.setHit(recvdMove.getX(), recvdMove.getY(), recvdMove.isHit());
+						if (hitTarget.lost()) {
+							System.out.println(hitTarget.getUsername() + " has lost!");
+							removeFromActivePlayers(hitTarget.getUsername());
+						}
 					}
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					//il tizio col turno è morto, ricomincio
 					
 					System.out.println(turnOwner.getUsername() + " is crashed!");
-					removeFromActivePlayers(turnOwner.getUsername());
 					
-					currPlayerIndex = currPlayerIndex % orderList.size();
-					continue;
+					removedTurnOwner = true;
 				} catch (KickedOutPlayerException e) {
 					kickedOut = true;
 				}
 			}
 			
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			currPlayerIndex = (currPlayerIndex + 1) % orderList.size();
-			//se non è il mio turno, chiedo la mossa al player che ha il turno
+			
+			if (!removedTurnOwner)
+				currPlayerIndex = (orderList.indexOf(turnOwner) + 1) % orderList.size();
+			else {
+				currPlayerIndex = orderList.indexOf(turnOwner)  % (orderList.size() - 1);
+				removeFromActivePlayers(turnOwner.getUsername());
+				removedTurnOwner = false;
+			}
 			
 			if (orderList.size() == 1 || me.lost())
 				ended = true;
@@ -370,7 +371,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 	@Override
 	public void onTurnOwnerCanMove() {
-		SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(me.getUsername(), false));
+		if (orderList.size() > 1)
+			SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(me.getUsername(), false));
+		else {
+			pLock.lock();
+			myTurnEnded.signal();
+			pLock.unlock();
+		}
 	}
 
 
@@ -394,7 +401,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					e1.printStackTrace();
 				}
 				try {
-					boolean hit = PlayerClient.attackPlayer((Opponent) playerMap.get(username), x, y);
+					APlayer player = playerMap.get(username);
+					if (player == null)
+						throw new NullPointerException(username + " does not exist in playerMap");
+					boolean hit = PlayerClient.attackPlayer((Opponent) player, x, y);
 					Move move = new Move(username, x, y, hit);
 					playerServer.setMove(move);
 
@@ -404,8 +414,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					myTurnEnded.signal();
 					pLock.unlock();
 					
-				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
-					e.printStackTrace();
+				} catch (NullPointerException | MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
+					System.out.println(e.getMessage());
+					removeFromActivePlayers(username);
+					onTurnOwnerCanMove();
 				}
 			}
 		}).start();

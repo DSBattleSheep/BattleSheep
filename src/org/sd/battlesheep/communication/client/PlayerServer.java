@@ -81,7 +81,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 			else {
 				pLock.unlock();
 				for (String username : expectedPlayers)
-					observer.notifyNotConnectedUser(username);					
+					observer.notifyNotConnectedUser(username);
 				observer.onTurnOwnerCanMove();
 			}
 		}
@@ -187,7 +187,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 			}
 		}
 		
-		System.out.println("connectCurrentPlayer: client " + username + "connected");
+		System.out.println("connectCurrentPlayer: client " + username + " connected");
 		//FIXME gestire lista di user connessi, così rimuoviamo quelli non connessi
 		
 		try {
@@ -205,7 +205,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		} catch (NullPointerException e) {
 			pLock.unlock();
 			// TODO: così non ci può essere un player che si infila a caso.. Va bene?
-			throw new KickedOutPlayerException(username + ": You are not an expected player.");   
+			throw new KickedOutPlayerException(username + ": You are not an expected player.");
 		}
 		
 		try {
