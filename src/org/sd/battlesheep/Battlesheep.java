@@ -84,6 +84,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	private List<APlayer> orderList;
 	
+	private List<String> crashedOpponents;
+	
 	
 	private ReentrantLock pLock;
 	
@@ -100,9 +102,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		
 		orderList = new ArrayList<APlayer>();
 		playerMap = new HashMap<String, APlayer>();
+		crashedOpponents = new ArrayList<String>();
 		
-		pLock=new ReentrantLock();
-		myTurnEnded=pLock.newCondition();
+		pLock = new ReentrantLock();
+		myTurnEnded = pLock.newCondition();
 		
 		registrationFrame = new RegistrationFrame(
 			ModelConst.FIELD_ROWS,
@@ -200,6 +203,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		
 		// FIXME: ragionare se serve una lock per queste remove
 		
+		crashedOpponents.add(username);
 		orderList.remove(playerMap.get(username));
 		playerMap.remove(username);
 		
@@ -302,6 +306,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		while(!ended && !kickedOut) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
 			turnOwner = orderList.get(currPlayerIndex);
+			crashedOpponents.clear();
 						
 			if(turnOwner instanceof Me) {
 				playerServer.setExpectedPlayers(orderList);
@@ -330,6 +335,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 							removeFromActivePlayers(hitTarget.getUsername());
 						}
 					}
+					for (String removedPlayer : recvdMove.getCrashedOpponents())
+						removeFromActivePlayers(removedPlayer);
+					
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					//il tizio col turno è morto, ricomincio
 					
@@ -405,7 +413,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					if (player == null)
 						throw new NullPointerException(username + " does not exist in playerMap");
 					boolean hit = PlayerClient.attackPlayer((Opponent) player, x, y);
-					Move move = new Move(username, x, y, hit);
+					Move move = new Move(username, x, y, hit, crashedOpponents);
 					playerServer.setMove(move);
 
 					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(me.getUsername(), move));

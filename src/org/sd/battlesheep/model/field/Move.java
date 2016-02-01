@@ -19,11 +19,12 @@ public class Move implements Serializable {
 	
 
 
-	public Move(String target, int x, int y, boolean hit) {
+	public Move(String target, int x, int y, boolean hit, List<String> crashedList) {
 		this.target = target;
 		this.x = x;
 		this.y = y;
 		this.hit = hit;
+		this.crashedOpponents = crashedList;
 	}
 
 	/**
@@ -46,13 +47,14 @@ public class Move implements Serializable {
 	public int getY() {
 		return y;
 	}
+	
 	/**
 	 * @return the hit
 	 */
 	public boolean isHit() {
 		return hit;
 	}
-
+	
 	/**
 	 * @return the crashedOpponents
 	 */
