@@ -28,16 +28,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import org.sd.battlesheep.view.APanel;
 
 
 
@@ -45,12 +41,8 @@ import org.sd.battlesheep.view.APanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends APanel
+public class LobbyAddressPanel extends AShipPanel
 {
-	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
-	
-	
-	
 	private JPanel northPanel;
 	
 	private JLabel addressLabel;
@@ -72,7 +64,7 @@ public class LobbyAddressPanel extends APanel
 	 */
 	
 	public LobbyAddressPanel() {
-		super(BATTLESHIP, new BorderLayout());
+		super(new BorderLayout());
 		
 		/* north panel */
 		

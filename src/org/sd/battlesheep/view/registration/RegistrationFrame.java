@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.MessageFactory;
@@ -49,7 +50,11 @@ public class RegistrationFrame extends AFrame
 	
 	private LobbyAddressPanel lobbyAddressPanel;
 	
-	private WarningPanel warningPanel;
+	private WarningPanel1 warningPanel1;
+	
+	private WarningPanel2 warningPanel2;
+	
+	private WarningPanel3 warningPanel3;
 	
 	private UsernamePanel usernamePanel;
 	
@@ -80,25 +85,21 @@ public class RegistrationFrame extends AFrame
 		lobbyAddressPanel.getNextButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				actionNextToWarningPanel();
+				actionNextToWarningPanel1();
 			}
 		});
 		
-		/* warning panel */
+		/* warning panel 1 */
 		
-		warningPanel = new WarningPanel();
-		warningPanel.getPreviousButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionPreviousToLobbyAddressPanel();
-			}
-		});
-		warningPanel.getNextButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionNextToUsernamePanel();
-			}
-		});
+		warningPanel1 = new WarningPanel1();
+		
+		/* warning panel 2 */
+		
+		warningPanel2 = new WarningPanel2();
+		
+		/* warning panel 3 */
+		
+		warningPanel3 = new WarningPanel3();
 		
 		/* username panel */
 		
@@ -106,7 +107,7 @@ public class RegistrationFrame extends AFrame
 		usernamePanel.getPreviousButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				actionPreviousToWarningPanel();
+				actionPreviousToLobbyAddressPanel();
 			}
 		});
 		usernamePanel.getNextButton().addActionListener(new ActionListener() {
@@ -144,32 +145,62 @@ public class RegistrationFrame extends AFrame
 		if (observer != null)
 			observer.onRegistrationFrameExitClick();
 	}
-
-	private void actionNextToWarningPanel() {
+	
+	private void actionNextToWarningPanel1() {
 		if (lobbyAddressPanel.isAddressEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the address field");
 		else {
 			remove(lobbyAddressPanel);
-			add(warningPanel, BorderLayout.CENTER);
+			add(warningPanel1, BorderLayout.CENTER);
 			SwingUtilities.updateComponentTreeUI(this);
+			Timer timer = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					actionNextToWarningPanel2();
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
-	private void actionPreviousToLobbyAddressPanel() {
-		remove(warningPanel);
-		add(lobbyAddressPanel, BorderLayout.CENTER);
+	private void actionNextToWarningPanel2() {
+		remove(warningPanel1);
+		add(warningPanel2, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
+		Timer timer = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToWarningPanel3();
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
+	}
+	
+	private void actionNextToWarningPanel3() {
+		remove(warningPanel2);
+		add(warningPanel3, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+		Timer timer = new Timer(2000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToUsernamePanel();
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
 	}
 	
 	private void actionNextToUsernamePanel() {
-		remove(warningPanel);
+		remove(warningPanel3);
 		add(usernamePanel, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
-	private void actionPreviousToWarningPanel() {
+	private void actionPreviousToLobbyAddressPanel() {
 		remove(usernamePanel);
-		add(warningPanel, BorderLayout.CENTER);
+		add(lobbyAddressPanel, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
@@ -207,14 +238,18 @@ public class RegistrationFrame extends AFrame
 	
 	public void lock() {
 		lobbyAddressPanel.lock();
-		warningPanel.lock();
+		warningPanel1.lock();
+		warningPanel2.lock();
+		warningPanel3.lock();
 		usernamePanel.lock();
 		sheepsPositionPanel.lock();
 	}
 	
 	public void unlock() {
 		lobbyAddressPanel.unlock();
-		warningPanel.unlock();
+		warningPanel1.unlock();
+		warningPanel2.unlock();
+		warningPanel3.unlock();
 		usernamePanel.unlock();
 		sheepsPositionPanel.unlock();
 	}

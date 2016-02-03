@@ -28,16 +28,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -48,12 +45,8 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class SheepsPositionPanel extends APanel implements FieldObserver
+public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 {
-	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
-	
-	
-	
 	private JPanel northPanel;
 	
 	private JLabel positionLabel;
@@ -85,7 +78,7 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 	
 	
 	public SheepsPositionPanel(int rows, int cols, int sheeps) {
-		super(BATTLESHEEP, new BorderLayout());
+		super(new BorderLayout());
 		
 		/* model */
 		
