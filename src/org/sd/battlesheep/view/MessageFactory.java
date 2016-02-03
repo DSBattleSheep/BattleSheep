@@ -31,33 +31,19 @@ import javax.swing.JOptionPane;
 
 
 /**
- * Classe per la creazione di messaggi.
- * 
  * @author Giulio Biagini
  */
 public class MessageFactory
 {
-	/*
-	 * constants
-	 */
-	
 	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
 	
 	
-	
-	/*
-	 * private
-	 */
 	
 	private static void showDialog(Component parent, String message, int type) {
 		JOptionPane.showMessageDialog(parent, message, PROGRAM_NAME, type);
 	}
 	
 	
-	
-	/*
-	 * public
-	 */
 	
 	public static void informationDialog(Component parent, String message) {
 		showDialog(parent, message, JOptionPane.INFORMATION_MESSAGE);

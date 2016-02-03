@@ -20,31 +20,16 @@
 
 
 
-package org.sd.battlesheep.view;
-
-
-
-import java.awt.Color;
-import java.awt.LayoutManager;
-
-import javax.swing.JPanel;
+package org.sd.battlesheep.view.utils;
 
 
 
 /**
- * Classe astratta che estenderanno tutti i pannelli secondari del programma.
- * 
  * @author Giulio Biagini
  */
-@SuppressWarnings("serial")
-public class TransparentPanel extends JPanel
+public interface FieldObserver
 {
-	/*
-	 * constructor
-	 */
+	public void onFielsCellClick(Cell source);
 	
-	public TransparentPanel(LayoutManager manager) {
-		super(manager);
-		setBackground(new Color(0, 0, 0, 0));
-	}
+	public void onFieldClick();
 }

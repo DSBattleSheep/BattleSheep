@@ -34,41 +34,32 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello che richiede al giocatore di inserire l'indirizzo ip
- * del server (lobby).
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class LobbyAddressPanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
 	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
-	private TransparentPanel northPanel;
+	private JPanel northPanel;
 	
 	private JLabel addressLabel;
 	
 	private JTextField addressTextField;
 	
-	private TransparentPanel southPanel;
+	
+	
+	private JPanel southPanel;
 	
 	private JButton exitButton;
 	
@@ -80,12 +71,13 @@ public class LobbyAddressPanel extends APanel
 	 * constructor
 	 */
 	
-	public LobbyAddressPanel(int width, int height) {
-		super(BATTLESHIP, width, height, new BorderLayout());
+	public LobbyAddressPanel() {
+		super(BATTLESHIP, new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		addressLabel = new JLabel("Lobby Ip Address:");
 		addressLabel.setForeground(Color.WHITE);
@@ -101,6 +93,7 @@ public class LobbyAddressPanel extends APanel
 				0, 0
 			)
 		);
+		
 		northPanel.add(
 			addressTextField,
 			new GridBagConstraints(
@@ -113,7 +106,8 @@ public class LobbyAddressPanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		exitButton = new JButton("Exit");
 		
@@ -128,6 +122,7 @@ public class LobbyAddressPanel extends APanel
 				0, 0
 			)
 		);
+		
 		southPanel.add(
 			nextButton,
 			new GridBagConstraints(
@@ -146,26 +141,6 @@ public class LobbyAddressPanel extends APanel
 	
 	
 	
-	/*
-	 * abstract
-	 */
-	
-	@Override
-	public void lock() {
-		addressTextField.setEnabled(false);
-	}
-	
-	@Override
-	public void unlock() {
-		addressTextField.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
 	public boolean isAddressEmpty() {
 		return addressTextField.getText().isEmpty();
 	}
@@ -176,15 +151,23 @@ public class LobbyAddressPanel extends APanel
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
 	public JButton getExitButton() {
 		return exitButton;
 	}
 	
 	public JButton getNextButton() {
 		return nextButton;
+	}
+	
+	
+	
+	@Override
+	public void lock() {
+		addressTextField.setEnabled(false);
+	}
+	
+	@Override
+	public void unlock() {
+		addressTextField.setEnabled(true);
 	}
 }

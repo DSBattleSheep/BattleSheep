@@ -20,16 +20,17 @@
 
 
 
-package org.sd.battlesheep.view;
+package org.sd.battlesheep.view.utils;
 
 
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.LayoutManager;
 
-import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 
 
@@ -37,9 +38,17 @@ import javax.swing.JPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class APanel extends JPanel
+public class Cell extends JLabel
 {
-	protected static final String IMGS_PATH = "./imgs/";
+	private static final String IMGS_PATH = "./imgs/";
+	
+	private static final Image GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
+	
+	private static final Image SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
+	
+	private static final Image HIT_GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
+	
+	private static final Image HIT_SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
 	
 	
 	
@@ -47,25 +56,44 @@ public abstract class APanel extends JPanel
 	
 	
 	
-	public APanel(Color background, LayoutManager manager) {
-		super(manager);
-		setBackground(background);
-		setOpaque(true);
-		
-		this.background = null;
-	}
-	
-	public APanel(Image background, LayoutManager manager) {
-		super(manager);
-		
-		this.background = background;
+	public Cell() {
+		setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		background = GRASS;
 	}
 	
 	
 	
-	public abstract void lock();
+	public void setGrass() {
+		background = GRASS;
+	}
 	
-	public abstract void unlock();
+	public void setSheep() {
+		background = SHEEP;
+	}
+	
+	public void setHitGrass() {
+		background = HIT_GRASS;
+	}
+	
+	public void setHitSheep() {
+		background = HIT_SHEEP;
+	}
+	
+	public boolean isGrass() {
+		return background.equals(GRASS);
+	}
+	
+	public boolean isSheep() {
+		return background.equals(SHEEP);
+	}
+	
+	public boolean isHitGrass() {
+		return background.equals(HIT_GRASS);
+	}
+	
+	public boolean isHitSheep() {
+		return background.equals(HIT_SHEEP);
+	}
 	
 	
 	

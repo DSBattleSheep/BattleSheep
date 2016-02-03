@@ -35,37 +35,29 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello che informa il giocatore dell'hack delle pecore.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class WarningPanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
 	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
-	private TransparentPanel northPanel;
+	private JPanel middlePanel;
 	
 	private JLabel warningLabel;
 	
-	private TransparentPanel southPanel;
+	
+	
+	private JPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -73,22 +65,19 @@ public class WarningPanel extends APanel
 	
 	
 	
-	/*
-	 * constructor
-	 */
-	
-	public WarningPanel(int width, int height) {
-		super(BATTLESHIP, width, height, new BorderLayout());
+	public WarningPanel() {
+		super(BATTLESHIP, new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new JPanel(new GridBagLayout());
+		middlePanel.setBackground(new Color(0, 0, 0, 0));
 		
 		warningLabel = new JLabel("Warning: The game is being hacked!", JLabel.CENTER);
 		warningLabel.setFont(getFont().deriveFont(Font.BOLD));
 		warningLabel.setForeground(Color.RED);
 		
-		northPanel.add(
+		middlePanel.add(
 			warningLabel,
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
@@ -100,7 +89,8 @@ public class WarningPanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		previousButton = new JButton("Previous");
 		
@@ -127,15 +117,21 @@ public class WarningPanel extends APanel
 		
 		/* this panel */
 		
-		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	
 	
-	/*
-	 * abstract
-	 */
+	public JButton getPreviousButton() {
+		return previousButton;
+	}
+	
+	public JButton getNextButton() {
+		return nextButton;
+	}
+	
+	
 	
 	@Override
 	public void lock() {
@@ -145,19 +141,5 @@ public class WarningPanel extends APanel
 	@Override
 	public void unlock() {
 		
-	}
-	
-	
-	
-	/*
-	 * graphic
-	 */
-	
-	public JButton getPreviousButton() {
-		return previousButton;
-	}
-	
-	public JButton getNextButton() {
-		return nextButton;
 	}
 }

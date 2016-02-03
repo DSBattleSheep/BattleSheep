@@ -36,29 +36,16 @@ import org.sd.battlesheep.view.MessageFactory;
 
 
 /**
- * Classe per il frame della registrazione che richiede al giocatore:
- * - l'indirizzo ip del server (lobby);
- * - il proprio username;
- * - la posizione delle proprie pecore nel campo di gioco.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class RegistrationFrame extends AFrame
 {
-	/*
-	 * constants
-	 */
-	
 	private static final int WIDTH = 500;
 	
-	private static final int HEIGHT = 700;
+	private static final int HEIGHT = 550;
 	
 	
-	
-	/*
-	 * graphic
-	 */
 	
 	private LobbyAddressPanel lobbyAddressPanel;
 	
@@ -70,17 +57,9 @@ public class RegistrationFrame extends AFrame
 	
 	
 	
-	/*
-	 * model
-	 */
-	
 	private RegistrationFrameObserver observer;
 	
 	
-	
-	/*
-	 * constructor
-	 */
 	
 	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
 		super(WIDTH, HEIGHT, new BorderLayout());
@@ -91,7 +70,7 @@ public class RegistrationFrame extends AFrame
 		
 		/* lobby address panel */
 		
-		lobbyAddressPanel = new LobbyAddressPanel(WIDTH, HEIGHT);
+		lobbyAddressPanel = new LobbyAddressPanel();
 		lobbyAddressPanel.getExitButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -107,7 +86,7 @@ public class RegistrationFrame extends AFrame
 		
 		/* warning panel */
 		
-		warningPanel = new WarningPanel(WIDTH, HEIGHT);
+		warningPanel = new WarningPanel();
 		warningPanel.getPreviousButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -123,7 +102,7 @@ public class RegistrationFrame extends AFrame
 		
 		/* username panel */
 		
-		usernamePanel = new UsernamePanel(WIDTH, HEIGHT);
+		usernamePanel = new UsernamePanel();
 		usernamePanel.getPreviousButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -139,7 +118,7 @@ public class RegistrationFrame extends AFrame
 		
 		/* sheeps position panel */
 		
-		sheepsPositionPanel = new SheepsPositionPanel(rows, cols, sheeps, WIDTH, HEIGHT);
+		sheepsPositionPanel = new SheepsPositionPanel(rows, cols, sheeps);
 		sheepsPositionPanel.getPreviousButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -161,12 +140,9 @@ public class RegistrationFrame extends AFrame
 	
 	
 	
-	/*
-	 * actions
-	 */
-	
 	private void actionExit() {
-		observer.onRegistrationFrameExitClick();
+		if (observer != null)
+			observer.onRegistrationFrameExitClick();
 	}
 
 	private void actionNextToWarningPanel() {
@@ -219,19 +195,15 @@ public class RegistrationFrame extends AFrame
 			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheep");
 		else if (remainingSheeps != 0)
 			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheeps");
-		else
+		else if (observer != null)
 			observer.onRegistrationFrameRegistrationClick(
 				lobbyAddressPanel.getAddress(),
 				usernamePanel.getUsername(),
-				sheepsPositionPanel.getPositions()
+				sheepsPositionPanel.getSheepsPosition()
 			);
 	}
 	
 	
-	
-	/*
-	 * abstract
-	 */
 	
 	public void lock() {
 		lobbyAddressPanel.lock();

@@ -33,6 +33,7 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,41 +42,36 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello che mostra una tabella con le seguenti informazioni
- * per ogni client connesso:
- * - l'username del giocatore;
- * - l'indirizzo ip dell'host del giocatore;
- * - la porta che l'host del giocatore userà per la comunicazione.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class TablePanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
 	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
 	
 	
 	
-	/*
-	 * graphic
-	 */
+	private JPanel northPanel;
 	
-	private TransparentPanel middlePanel;
+	private JLabel addressLabel;
+	
+	
+	
+	private JPanel middlePanel;
+	
+	private DefaultTableModel clientsTableModel;
 	
 	private JTable clientsTable;
 	
 	private JScrollPane clientsScrollPane;
 	
-	private TransparentPanel southPanel;
+	
+	
+	private JPanel southPanel;
 	
 	private JButton exitButton;
 	
@@ -83,28 +79,32 @@ public class TablePanel extends APanel
 	
 	
 	
-	/*
-	 * model
-	 */
-	
-	private DefaultTableModel clientsTableModel;
-	
-	
-	
-	/*
-	 * constructor
-	 */
-	
-	public TablePanel() {
+	public TablePanel(String host, int port) {
 		super(Color.WHITE, new BorderLayout());
 		
-		/* model */
+		/* north panel */
 		
-		clientsTableModel = new DefaultTableModel(COLUMN_NAMES, 0);
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
+		
+		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
+		
+		northPanel.add(
+			addressLabel,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 5, 10),
+				0, 0
+			)
+		);
 		
 		/* middle panel */
 		
-		middlePanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new JPanel(new GridBagLayout());
+		middlePanel.setBackground(new Color(0, 0, 0, 0));
+		
+		clientsTableModel = new DefaultTableModel(COLUMN_NAMES, 0);
 		
 		clientsTable = new JTable(clientsTableModel);
 		TableColumnModel clientsTableColumnModel = clientsTable.getColumnModel();
@@ -128,14 +128,15 @@ public class TablePanel extends APanel
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
+				new Insets(5, 10, 5, 10),
 				0, 0
 			)
 		);
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		exitButton = new JButton("Exit");
 		
@@ -150,6 +151,7 @@ public class TablePanel extends APanel
 				0, 0
 			)
 		);
+		
 		southPanel.add(
 			startButton,
 			new GridBagConstraints(
@@ -162,15 +164,30 @@ public class TablePanel extends APanel
 		
 		/* this panel */
 		
+		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	
 	
-	/*
-	 * abstract
-	 */
+	public DefaultTableModel getClientsTableModel() {
+		return clientsTableModel;
+	}
+	
+	public JTable getClientsTable() {
+		return clientsTable;
+	}
+	
+	public JButton getExitButton() {
+		return exitButton;
+	}
+	
+	public JButton getStartButton() {
+		return startButton;
+	}
+	
+	
 	
 	@Override
 	public void lock() {
@@ -182,33 +199,5 @@ public class TablePanel extends APanel
 	public void unlock() {
 		clientsTable.setEnabled(true);
 		startButton.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public int getClientsNumber() {
-		return clientsTableModel.getRowCount();
-	}
-	
-	public void addClient(String username, String host, int port) {
-		clientsTableModel.addRow(new String[]{username, host, port + ""});
-	}
-	
-	
-	
-	/*
-	 * graphic
-	 */
-	
-	public JButton getExitButton() {
-		return exitButton;
-	}
-	
-	public JButton getStartButton() {
-		return startButton;
 	}
 }

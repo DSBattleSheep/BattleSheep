@@ -34,41 +34,32 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello che richiede al giocatore di inserire il proprio
- * username.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class UsernamePanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
 	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
-	private TransparentPanel northPanel;
+	private JPanel northPanel;
 	
 	private JLabel usernameLabel;
 	
 	private JTextField usernameTextField;
 	
-	private TransparentPanel southPanel;
+	
+	
+	private JPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -76,16 +67,13 @@ public class UsernamePanel extends APanel
 	
 	
 	
-	/*
-	 * constructor
-	 */
-	
-	public UsernamePanel(int width, int height) {
-		super(BATTLESHEEP, width, height, new BorderLayout());
+	public UsernamePanel() {
+		super(BATTLESHEEP, new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		usernameLabel = new JLabel("Username:");
 		usernameLabel.setForeground(Color.WHITE);
@@ -113,7 +101,8 @@ public class UsernamePanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		previousButton = new JButton("Prevoius");
 		
@@ -146,26 +135,6 @@ public class UsernamePanel extends APanel
 	
 	
 	
-	/*
-	 * abstract
-	 */
-	
-	@Override
-	public void lock() {
-		usernameTextField.setEnabled(false);
-	}
-	
-	@Override
-	public void unlock() {
-		usernameTextField.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
 	public boolean isUsernameEmpty() {
 		return usernameTextField.getText().isEmpty();
 	}
@@ -176,15 +145,23 @@ public class UsernamePanel extends APanel
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
 	public JButton getPreviousButton() {
 		return previousButton;
 	}
 	
 	public JButton getNextButton() {
 		return nextButton;
+	}
+	
+	
+	
+	@Override
+	public void lock() {
+		usernameTextField.setEnabled(false);
+	}
+	
+	@Override
+	public void unlock() {
+		usernameTextField.setEnabled(true);
 	}
 }

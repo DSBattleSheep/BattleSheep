@@ -34,58 +34,47 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello che mostra un messaggio ed una gif di attesa, oltre
- * al proprio indirizzo ip ed alla porta sulla quale è in attesa di
- * connessioni.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class WaitingPanel extends APanel
 {
-	/*
-	 * constants
-	 */
-	
 	private static final Icon WAIT = new ImageIcon(IMGS_PATH + "ajax-loader.gif");
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
-	private TransparentPanel northPanel;
+	private JPanel northPanel;
 	
 	private JLabel addressLabel;
 	
-	private TransparentPanel middlePanel;
+	
+	
+	private JPanel middlePanel;
 	
 	private JLabel waitingLabel;
 	
-	private TransparentPanel southPanel;
+	
+	
+	private JPanel southPanel;
 	
 	private JButton exitButton;
 	
 	
-	
-	/*
-	 * constructor
-	 */
 	
 	public WaitingPanel(String host, int port) {
 		super(Color.WHITE, new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
 		
@@ -101,7 +90,8 @@ public class WaitingPanel extends APanel
 		
 		/* middle panel */
 		
-		middlePanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new JPanel(new GridBagLayout());
+		middlePanel.setBackground(new Color(0, 0, 0, 0));
 		
 		waitingLabel = new JLabel("Waiting for clients...", WAIT, JLabel.CENTER);
 		
@@ -117,7 +107,8 @@ public class WaitingPanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		exitButton = new JButton("Exit");
 		
@@ -140,9 +131,11 @@ public class WaitingPanel extends APanel
 	
 	
 	
-	/*
-	 * abstract
-	 */
+	public JButton getExitButton() {
+		return exitButton;
+	}
+	
+	
 	
 	@Override
 	public void lock() {
@@ -152,15 +145,5 @@ public class WaitingPanel extends APanel
 	@Override
 	public void unlock() {
 		
-	}
-	
-	
-	
-	/*
-	 * graphic
-	 */
-	
-	public JButton getExitButton() {
-		return exitButton;
 	}
 }

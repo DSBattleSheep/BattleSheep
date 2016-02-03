@@ -29,35 +29,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 import org.sd.battlesheep.view.AFrame;
 
 
 
 /**
- * Classe per il frame della lobby che mostra:
- * - gli username dei giocatori;
- * - gli indirizzi ip degli host dei giocatori;
- * - le porte che gli host dei giocatori useranno per la comunicazione.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class LobbyFrame extends AFrame
 {
-	/*
-	 * constants
-	 */
-	
 	private static final int WIDTH = 400;
 	
 	private static final int HEIGHT = 400;
 	
 	
-	
-	/*
-	 * graphic
-	 */
 	
 	private WaitingPanel waitingPanel;
 	
@@ -65,17 +53,9 @@ public class LobbyFrame extends AFrame
 	
 	
 	
-	/*
-	 * model
-	 */
-	
 	private LobbyFrameObserver observer;
 	
 	
-	
-	/*
-	 * constructor
-	 */
 	
 	public LobbyFrame(String host, int port, LobbyFrameObserver observer) {
 		super(WIDTH, HEIGHT, new BorderLayout());
@@ -96,7 +76,7 @@ public class LobbyFrame extends AFrame
 		
 		/* table panel */
 		
-		tablePanel = new TablePanel();
+		tablePanel = new TablePanel(host, port);
 		tablePanel.getExitButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,23 +98,29 @@ public class LobbyFrame extends AFrame
 	
 	
 	
-	/*
-	 * actions
-	 */
-	
 	private void actionExit() {
-		observer.onLobbyFrameExitClick();
+		if (observer != null)
+			observer.onLobbyFrameExitClick();
 	}
 	
 	private void actionStart() {
-		observer.onLobbyFrameStartClick();
+		if (observer != null)
+			observer.onLobbyFrameStartClick();
 	}
 	
 	
 	
-	/*
-	 * abstract
-	 */
+	public void addClient(String username, String host, int port) {
+		DefaultTableModel clientsTableModel = tablePanel.getClientsTableModel();
+		if (clientsTableModel.getRowCount() == 0) {
+			remove(waitingPanel);
+			add(tablePanel, BorderLayout.CENTER);
+		}
+		clientsTableModel.addRow(new String[]{username, host, port + ""});
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	
 	
 	@Override
 	public void lock() {
@@ -146,20 +132,5 @@ public class LobbyFrame extends AFrame
 	public void unlock() {
 		waitingPanel.unlock();
 		tablePanel.unlock();
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public void addClient(String username, String host, int port) {
-		if (tablePanel.getClientsNumber() == 0) {
-			remove(waitingPanel);
-			add(tablePanel, BorderLayout.CENTER);
-		}
-		tablePanel.addClient(username, host, port);
-		SwingUtilities.updateComponentTreeUI(this);
 	}
 }

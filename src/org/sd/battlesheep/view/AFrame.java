@@ -32,17 +32,11 @@ import javax.swing.JFrame;
 
 
 /**
- * Classe astratta che estenderanno tutti i frame del programma.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public abstract class AFrame extends JFrame
 {
-	/*
-	 * constants
-	 */
-	
 	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
 	
 	private static final String IMGS_PATH = "./imgs/";
@@ -50,10 +44,6 @@ public abstract class AFrame extends JFrame
 	private static final ImageIcon ICON = new ImageIcon(IMGS_PATH + "icon.png");
 	
 	
-	
-	/*
-	 * constructors
-	 */
 	
 	public AFrame(LayoutManager layout) {
 		super(PROGRAM_NAME);
@@ -73,10 +63,6 @@ public abstract class AFrame extends JFrame
 	}
 	
 	
-	
-	/*
-	 * abstract
-	 */
 	
 	public abstract void lock();
 	

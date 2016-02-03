@@ -25,47 +25,45 @@ package org.sd.battlesheep.view.main;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
- * Classe per il pannello mostrato nel frame principale che chiede in quale
- * modalità avviare il programma:
- * - come server per la lobby;
- * - come client per il gioco.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class MainPanel extends APanel
 {
-	/*
-	 * graphic
-	 */
-	
-	private TransparentPanel northPanel;
+	private JPanel northPanel;
 	
 	private JLabel modeLabel;
 	
-	private TransparentPanel middlePanel;
+	
+	
+	private JPanel middlePanel;
 	
 	private JRadioButton serverRadioButton;
 	
 	private JRadioButton clientRadioButton;
 	
-	private TransparentPanel southPanel;
+	private ButtonGroup radioButtonGroup;
+	
+	
+	
+	private JPanel southPanel;
 	
 	private JButton exitButton;
 	
@@ -73,18 +71,15 @@ public class MainPanel extends APanel
 	
 	
 	
-	/*
-	 * constructor
-	 */
-	
 	public MainPanel() {
-		super(new BorderLayout());
+		super(Color.WHITE, new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
 		
-		modeLabel = new JLabel("Start the program as:");
+		modeLabel = new JLabel("Start the program as:", JLabel.CENTER);
 		
 		northPanel.add(
 			modeLabel,
@@ -98,23 +93,20 @@ public class MainPanel extends APanel
 		
 		/* middle panel */
 		
-		middlePanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new JPanel(new GridBagLayout());
+		middlePanel.setBackground(new Color(0, 0, 0, 0));
 		
-		serverRadioButton = new JRadioButton("server", false);
-		serverRadioButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionServer();
-			}
-		});
+		serverRadioButton = new JRadioButton("Server", false);
+		serverRadioButton.setBackground(new Color(0, 0, 0, 0));
+		serverRadioButton.setMnemonic(KeyEvent.VK_S);
 		
-		clientRadioButton = new JRadioButton("client", true);
-		clientRadioButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionClient();
-			}
-		});
+		clientRadioButton = new JRadioButton("Client", true);
+		clientRadioButton.setBackground(new Color(0, 0, 0, 0));
+		clientRadioButton.setMnemonic(KeyEvent.VK_C);
+		
+		radioButtonGroup = new ButtonGroup();
+		radioButtonGroup.add(serverRadioButton);
+		radioButtonGroup.add(clientRadioButton);
 		
 		middlePanel.add(
 			serverRadioButton,
@@ -125,6 +117,7 @@ public class MainPanel extends APanel
 				0, 0
 			)
 		);
+		
 		middlePanel.add(
 			clientRadioButton,
 			new GridBagConstraints(
@@ -137,7 +130,8 @@ public class MainPanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
 		
 		exitButton = new JButton("Exit");
 		
@@ -152,6 +146,7 @@ public class MainPanel extends APanel
 				0, 0
 			)
 		);
+		
 		southPanel.add(
 			startButton,
 			new GridBagConstraints(
@@ -171,25 +166,23 @@ public class MainPanel extends APanel
 	
 	
 	
-	/*
-	 * actions
-	 */
-	
-	private void actionServer() {
-		serverRadioButton.setSelected(true);
-		clientRadioButton.setSelected(false);
+	public JRadioButton getServerRadioButton() {
+		return serverRadioButton;
 	}
 	
-	private void actionClient() {
-		clientRadioButton.setSelected(true);
-		serverRadioButton.setSelected(false);
+	public JRadioButton getClientRadioButton() {
+		return clientRadioButton;
+	}
+	
+	public JButton getExitButton() {
+		return exitButton;
+	}
+	
+	public JButton getStartButton() {
+		return startButton;
 	}
 	
 	
-	
-	/*
-	 * abstract
-	 */
 	
 	@Override
 	public void lock() {
@@ -201,33 +194,5 @@ public class MainPanel extends APanel
 	public void unlock() {
 		serverRadioButton.setEnabled(true);
 		clientRadioButton.setEnabled(true);
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public boolean isServerSelected() {
-		return serverRadioButton.isSelected();
-	}
-	
-	public boolean isClientSelected() {
-		return clientRadioButton.isSelected();
-	}
-	
-	
-	
-	/*
-	 * graphic
-	 */
-	
-	public JButton getExitButton() {
-		return exitButton;
-	}
-	
-	public JButton getStartButton() {
-		return startButton;
 	}
 }

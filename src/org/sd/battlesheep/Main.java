@@ -24,9 +24,12 @@ package org.sd.battlesheep;
 
 
 
+import java.util.ArrayList;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.main.MainFrame;
 import org.sd.battlesheep.view.main.MainFrameObserver;
 
@@ -34,9 +37,6 @@ import org.sd.battlesheep.view.main.MainFrameObserver;
 
 
 /**
- * Classe principale che avvia il programma mostrando il frame principale che
- * permette di scegliere la modalità server (lobby) o client (gioco).
- * 
  * @author Giulio Biagini
  */
 public class Main implements MainFrameObserver
@@ -47,6 +47,11 @@ public class Main implements MainFrameObserver
 	
 	private Main() {
 		mainFrame = new MainFrame(this);
+		/*String myName = "Biagio";
+		ArrayList<String> opponentsName = new ArrayList<>();
+		opponentsName.add("Ise");
+		opponentsName.add("Minizinc");
+		new GameFrame(myName, opponentsName, 10, 10, null);*/
 	}
 	
 	

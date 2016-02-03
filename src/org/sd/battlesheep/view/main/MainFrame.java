@@ -33,40 +33,27 @@ import org.sd.battlesheep.view.AFrame;
 
 
 /**
- * Classe per il frame principale che chiede in quale modalità avviare il
- * programma:
- * - come server per la lobby;
- * - come client per il gioco.
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
 public class MainFrame extends AFrame
 {
-	/*
-	 * graphic
-	 */
-	
 	private MainPanel mainPanel;
 	
 	
-	
-	/*
-	 * model
-	 */
 	
 	private MainFrameObserver observer;
 	
 	
 	
-	/*
-	 * constructor
-	 */
-	
 	public MainFrame(MainFrameObserver observer) {
 		super(new BorderLayout());
 		
+		/* model */
+		
 		this.observer = observer;
+		
+		/* main panel */
 		
 		mainPanel = new MainPanel();
 		mainPanel.getExitButton().addActionListener(new ActionListener() {
@@ -82,6 +69,8 @@ public class MainFrame extends AFrame
 			}
 		});
 		
+		/* this frame */
+		
 		add(mainPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
@@ -89,23 +78,17 @@ public class MainFrame extends AFrame
 	
 	
 	
-	/*
-	 * actions
-	 */
-	
 	private void actionExit() {
-		observer.onMainFrameExitClick();
+		if (observer != null)
+			observer.onMainFrameExitClick();
 	}
 	
 	private void actionStart() {
-		observer.onMainFrameStartClick(mainPanel.isServerSelected());
+		if (observer != null)
+			observer.onMainFrameStartClick(mainPanel.getServerRadioButton().isSelected());
 	}
 	
 	
-	
-	/*
-	 * abstract
-	 */
 	
 	@Override
 	public void lock() {

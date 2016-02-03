@@ -25,11 +25,6 @@ package org.sd.battlesheep.view.lobby;
 
 
 /**
- * Interfaccia per la comunicazione dal frame della lobby verso i propri
- * osservatori delle azioni di:
- * - click sul bottone per l'uscita;
- * - click sul bottone per l'avvio del gioco.
- * 
  * @author Giulio Biagini
  */
 public interface LobbyFrameObserver

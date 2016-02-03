@@ -25,39 +25,13 @@ package org.sd.battlesheep.view.game;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Random;
-
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPException;
 
 import org.sd.battlesheep.view.AFrame;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.w3c.dom.UserDataHandler;
 
 
 
 /**
- * TODO
- * 
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
@@ -69,25 +43,9 @@ public class GameFrame extends AFrame
 	
 	
 	
-	/*
-	 * graphic
-	 */
-	
-	private FieldPanel myFieldPanel;
-	
-	private FieldPanel selectedOpponentFieldPanel;
-	
-	private FieldPanel[] opponentsFieldPanels;
-	
-	private JScrollPane opponentsScrollPane;
-	
-	private JTextArea log;// TODO -> delete this dummy interface
+	private GamePanel gamePanel;
 	
 	
-	
-	/*
-	 * model
-	 */
 	
 	private String myUsername;
 	
@@ -116,46 +74,27 @@ public class GameFrame extends AFrame
 		this.rows = rows;
 		this.cols = cols;
 		
-		/*
-		 * DUMMY
-		 */
+		/* game panel */
 		
-		log = new JTextArea();
-		log.setTabSize(4);
-		log.setEditable(false);
-		log.setBackground(Color.BLACK);
-		log.setForeground(Color.YELLOW);
-		log.setFont(log.getFont().deriveFont(Font.BOLD));
-		
-		add(log, BorderLayout.CENTER);
-		setVisible(true);
-		
-		/*
-		 * north panel
-		 */
-		
-		// banner
-		
-		/*
-		 * middle panel
-		 */
-		
-		// my field and selected opponent field
-		
-		/*
-		 * south panel
-		 */
+		gamePanel = new GamePanel(rows, cols);
 		
 		/* this frame */
 		
-		// add panels to this frame
+		add(gamePanel, BorderLayout.CENTER);
+		setVisible(true);
 	}
 	
 	
 	
-	/*
-	 * abstract
-	 */
+	public void setTurn(String username) {
+		
+	}
+	
+	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
+		
+	}
+	
+	
 	
 	@Override
 	public void lock() {
@@ -165,39 +104,5 @@ public class GameFrame extends AFrame
 	@Override
 	public void unlock() {
 		
-	}
-	
-	
-	
-	/*
-	 * model
-	 */
-	
-	public void setTurn(String username) {
-		if (username.equals(myUsername)) {
-			log.append("turn: MINE\n");
-			
-			new Thread(new Runnable() {
-				@Override public void run() {
-					Random rnd = new Random();
-					int u = rnd.nextInt(opponentsUsername.size());
-					int x = rnd.nextInt(cols);
-					int y = rnd.nextInt(rows);
-					log.append("\tattack " + opponentsUsername.get(u) + " in [" + x + "," + y + "]\n");
-					observer.onGameFrameAttack(opponentsUsername.get(u), x, y);
-				}
-			}).start();
-			
-		} else
-			log.append("turn: " + username + "\n");
-	}
-	
-	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		if (usernameAttacker.equals(myUsername))
-			log.append("\tI " + (hit ? "HIT" : "didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
-		else if (usernameDefender.equals(myUsername))
-			log.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
-		else
-			log.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
 	}
 }
