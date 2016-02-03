@@ -121,7 +121,9 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 		middlePanel = new JPanel(new GridBagLayout());
 		middlePanel.setBackground(new Color(0, 0, 0, 0));
 		
-		field = new Field(rows, cols, this);
+		field = new Field("", rows, cols, this);
+		
+		field.getUsernameLabel().setForeground(Color.WHITE);
 		
 		middlePanel.add(
 			field,
@@ -191,6 +193,10 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 	}
 	
 	
+	
+	public void setUsername(String username) {
+		field.setUsername(username);
+	}
 	
 	public int getRemainingSheeps() {
 		return sheeps;

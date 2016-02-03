@@ -22,6 +22,8 @@
 
 package org.sd.battlesheep.view.registration;
 
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;

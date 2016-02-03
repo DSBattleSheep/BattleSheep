@@ -76,7 +76,7 @@ public class GameFrame extends AFrame
 		
 		/* game panel */
 		
-		gamePanel = new GamePanel(rows, cols);
+		gamePanel = new GamePanel(myUsername, opponentsUsername, rows, cols);
 		
 		/* this frame */
 		
@@ -98,11 +98,11 @@ public class GameFrame extends AFrame
 	
 	@Override
 	public void lock() {
-		
+		gamePanel.lock();
 	}
 	
 	@Override
 	public void unlock() {
-		
+		gamePanel.unlock();
 	}
 }

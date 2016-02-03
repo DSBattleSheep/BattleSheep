@@ -46,12 +46,14 @@ public class Main implements MainFrameObserver
 	
 	
 	private Main() {
-		mainFrame = new MainFrame(this);
-		/*String myName = "Biagio";
+		// mainFrame = new MainFrame(this);
+		String myName = "Biagio";
 		ArrayList<String> opponentsName = new ArrayList<>();
 		opponentsName.add("Ise");
 		opponentsName.add("Minizinc");
-		new GameFrame(myName, opponentsName, 10, 10, null);*/
+		opponentsName.add("Bera");
+		opponentsName.add("Danger");
+		new GameFrame(myName, opponentsName, 10, 10, null);
 	}
 	
 	

@@ -208,6 +208,7 @@ public class RegistrationFrame extends AFrame
 		if (usernamePanel.isUsernameEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the username field");
 		else {
+			sheepsPositionPanel.setUsername(usernamePanel.getUsername());
 			remove(usernamePanel);
 			add(sheepsPositionPanel, BorderLayout.CENTER);
 			SwingUtilities.updateComponentTreeUI(this);
@@ -236,6 +237,7 @@ public class RegistrationFrame extends AFrame
 	
 	
 	
+	@Override
 	public void lock() {
 		lobbyAddressPanel.lock();
 		warningPanel1.lock();
@@ -245,6 +247,7 @@ public class RegistrationFrame extends AFrame
 		sheepsPositionPanel.lock();
 	}
 	
+	@Override
 	public void unlock() {
 		lobbyAddressPanel.unlock();
 		warningPanel1.unlock();
