@@ -25,10 +25,26 @@ package org.sd.battlesheep.view.game;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.utils.Cell;
+import org.sd.battlesheep.view.utils.Field;
+import org.sd.battlesheep.view.utils.FieldObserver;
 
 
 
@@ -36,21 +52,49 @@ import org.sd.battlesheep.view.AFrame;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class GameFrame extends AFrame
+public class GameFrame extends AFrame implements FieldObserver
 {
+	private static final Icon BANNER = new ImageIcon(IMGS_PATH + "banner.png");
+	
+	
+	
 	private static final int WIDTH = 800;
 	
 	private static final int HEIGHT = 600;
 	
 	
 	
-	private GamePanel gamePanel;
+	private JPanel northPanel;
+	
+	private JLabel bannerLabel;
+	
+	
+	
+	private JPanel middlePanel;
+	
+	private Field myField;
+	
+	private Field opponentField;
+	
+	
+	
+	private JPanel rightPanel;
+	
+	private JList<String> opponentsUsernameList;
+	
+	private ArrayList<Field> opponentsField;
+	
+	
+	
+	private JPanel southPanel;
+	
+	private JTextArea logTextArea;
 	
 	
 	
 	private String myUsername;
 	
-	private ArrayList<String> opponentsUsername;
+	private String[] opponentsUsername;
 	
 	private GameFrameObserver observer;
 	
@@ -64,7 +108,7 @@ public class GameFrame extends AFrame
 	 * constructor
 	 */
 	
-	public GameFrame(String myUsername, ArrayList<String> opponentsUsername, int rows, int cols, GameFrameObserver observer) {
+	public GameFrame(String myUsername, String[] opponentsUsername, int rows, int cols, GameFrameObserver observer) {
 		super(WIDTH, HEIGHT, new BorderLayout());
 		
 		/* model */
@@ -75,55 +119,160 @@ public class GameFrame extends AFrame
 		this.rows = rows;
 		this.cols = cols;
 		
-		/* game panel */
+		/* north panel */
 		
-		gamePanel = new GamePanel(myUsername, opponentsUsername, rows, cols);
+		northPanel = new JPanel(new GridBagLayout());
+		northPanel.setBackground(new Color(0, 0, 0, 0));
+		
+		bannerLabel = new JLabel(BANNER);
+		bannerLabel.setOpaque(true);
+		bannerLabel.setBackground(new Color(0, 0, 0, 0));
+		
+		northPanel.add(
+			bannerLabel,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 5, 10),
+				0, 0
+			)
+		);
+		
+		/* middle panel */
+		
+		middlePanel = new JPanel(new GridBagLayout());
+		middlePanel.setBackground(new Color(0, 0, 0, 0));
+		
+		myField = new Field(myUsername, rows, cols, null);
+		
+		opponentField = new Field(opponentsUsername[0], rows, cols, null);
+		
+		middlePanel.add(
+			myField,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 5),
+				0, 0
+			)
+		);
+		
+		middlePanel.add(
+			opponentField,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 5),
+				0, 0
+			)
+		);
+		
+		/* right panel */
+		
+		rightPanel = new JPanel(new GridLayout(opponentsUsername.length, 1));
+		rightPanel.setBackground(new Color(0, 0, 0, 0));
+		
+		opponentsUsernameList = new JList<>(opponentsUsername);
+		
+		opponentsField = new ArrayList<>();
+		for (int i = 0; i < opponentsUsername.length; i++)
+			opponentsField.add(new Field(opponentsUsername[i], rows, cols, null));
+		
+		rightPanel.add(
+			opponentsUsernameList,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 5, 10),
+				0, 0
+			)
+		);
+		
+		/* south panel */
+		
+		southPanel = new JPanel(new GridBagLayout());
+		southPanel.setBackground(new Color(0, 0, 0, 0));
+		southPanel.setPreferredSize(new Dimension(southPanel.getWidth(), 75));
+		
+		logTextArea = new JTextArea();
+		logTextArea.setEditable(false);
+		logTextArea.setBackground(Color.BLACK);
+		logTextArea.setForeground(Color.WHITE);
+		logTextArea.setSelectionColor(Color.WHITE);
+		logTextArea.setSelectedTextColor(Color.BLACK);
+		
+		southPanel.add(
+			logTextArea,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 10, 10),
+				0, 0
+			)
+		);
 		
 		/* this frame */
 		
-		add(gamePanel, BorderLayout.CENTER);
+		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
+		add(rightPanel, BorderLayout.EAST);
+		add(southPanel, BorderLayout.SOUTH);
+		
 		setVisible(true);
+	}
+	
+	
+	
+	private void actionStiCazzi() {
+		
+	}
+	
+	
+	
+	@Override
+	public void onFieldCellClick(Cell source) {
+		
 	}
 	
 	
 	
 	public void setTurn(String username) {
 		if (username.equals(myUsername)) {
-			System.out.print("turn: MINE\n");
+			logTextArea.append("turn: MINE\n");
 			
 			new Thread(new Runnable() {
 				@Override public void run() {
 					Random rnd = new Random();
-					int u = rnd.nextInt(opponentsUsername.size());
+					int u = rnd.nextInt(opponentsUsername.length);
 					int x = rnd.nextInt(cols);
 					int y = rnd.nextInt(rows);
-					System.out.print("\tattack " + opponentsUsername.get(u) + " in [" + x + "," + y + "]\n");
-					observer.onGameFrameAttack(opponentsUsername.get(u), x, y);
+					logTextArea.append("\tattack " + opponentsUsername[u] + " in [" + x + "," + y + "]\n");
+					observer.onGameFrameAttack(opponentsUsername[u], x, y);
 				}
 			}).start();
 			
 		} else
-			System.out.print("turn: " + username + "\n");
+			logTextArea.append("turn: " + username + "\n");
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
 		if (usernameAttacker.equals(myUsername))
-			System.out.print("\tI " + (hit ? "HIT" : "didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
+			logTextArea.append("\tI " + (hit ? "HIT " : "didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
 		else if (usernameDefender.equals(myUsername))
-			System.out.print("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
+			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
 		else
-			System.out.print("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
+			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT " : " didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
 	}
 	
 	
 	
 	@Override
 	public void lock() {
-		gamePanel.lock();
+		
 	}
 	
 	@Override
 	public void unlock() {
-		gamePanel.unlock();
+		
 	}
 }

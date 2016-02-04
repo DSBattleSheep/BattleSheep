@@ -93,6 +93,7 @@ public class LobbyFrame extends AFrame
 		/* this frame */
 		
 		add(waitingPanel, BorderLayout.CENTER);
+		
 		setVisible(true);
 	}
 	

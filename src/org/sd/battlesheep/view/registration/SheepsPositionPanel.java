@@ -173,7 +173,7 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 	
 	
 	@Override
-	public void onFielsCellClick(Cell source) {
+	public void onFieldCellClick(Cell source) {
 		if (source.isGrass() && sheeps > 0) {
 			source.setSheep();
 			sheeps--;
@@ -185,11 +185,6 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 			remainingLabel.setText(sheeps + "");
 			SwingUtilities.updateComponentTreeUI(this);
 		}
-	}
-	
-	@Override
-	public void onFieldClick() {
-		
 	}
 	
 	

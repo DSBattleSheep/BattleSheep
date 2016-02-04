@@ -56,9 +56,29 @@ public class Cell extends JLabel
 	
 	
 	
-	public Cell() {
+	private int r;
+	
+	private int c;
+	
+	
+	
+	public Cell(int r, int c) {
 		setBorder(BorderFactory.createLineBorder(Color.GREEN));
-		background = GRASS;
+		
+		this.background = GRASS;
+		
+		this.r = r;
+		this.c = c;
+	}
+	
+	
+	
+	public int getRow() {
+		return r;
+	}
+	
+	public int getCol() {
+		return c;
 	}
 	
 	

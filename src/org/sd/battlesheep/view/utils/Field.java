@@ -103,7 +103,7 @@ public class Field extends APanel
 		cells = new Cell[rows][cols];
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				cells[r][c] = new Cell();
+				cells[r][c] = new Cell(r, c);
 				cells[r][c].addMouseListener(new MouseListener() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
@@ -136,7 +136,7 @@ public class Field extends APanel
 	
 	private void actionClick(Cell source) {
 		if (observer != null)
-			observer.onFielsCellClick(source);
+			observer.onFieldCellClick(source);
 	}
 	
 	

@@ -37,11 +37,11 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public abstract class AFrame extends JFrame
 {
-	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
+	protected static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
 	
-	private static final String IMGS_PATH = "./imgs/";
+	protected static final String IMGS_PATH = "./imgs/";
 	
-	private static final ImageIcon ICON = new ImageIcon(IMGS_PATH + "icon.png");
+	protected static final ImageIcon ICON = new ImageIcon(IMGS_PATH + "icon.png");
 	
 	
 	
