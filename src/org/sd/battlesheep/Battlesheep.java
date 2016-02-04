@@ -136,8 +136,12 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		@Override
 		public void run() {
 			registrationFrame.dispose();			
-			gameFrame = new GameFrame(username, opponentList, ModelConst.FIELD_ROWS, 
-					ModelConst.FIELD_COLS, Battlesheep.getInstance());
+			gameFrame = new GameFrame(username, 
+				opponentList.toArray(new String[opponentList.size()]), 
+				ModelConst.FIELD_ROWS, 
+				ModelConst.FIELD_COLS, 
+				Battlesheep.getInstance()
+			);
 		}		
 	}
 	
@@ -203,6 +207,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		
 		// FIXME: ragionare se serve una lock per queste remove
 		
+		System.out.println("removeFromActivePlayers("+username+")");
+		
 		crashedOpponents.add(username);
 		orderList.remove(playerMap.get(username));
 		playerMap.remove(username);
@@ -211,8 +217,20 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	}
 	
 	
+	private void hitPlayer(Opponent target, int x, int y, boolean hit) {
+		target.setHit(x, y, hit);
+		if (target.lost()) {
+			System.out.println(target.getUsername() + " has lost!");
+			removeFromActivePlayers(target.getUsername());
+		}
+	}
+	
+	
 	@Override
 	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String myUsername, final boolean[][] sheepsPosition) {
+		
+		registrationFrame.lock();
+		
 		new Thread(new Runnable() {			
 			@Override
 			public void run() {
@@ -325,16 +343,17 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(turnOwner.getUsername(), true));
 					recvdMove = PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
 					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(turnOwner.getUsername(), recvdMove));
-					if(recvdMove.getTarget().equals(me.getUsername())) {
-						me.setHit(recvdMove.getX(), recvdMove.getY());
-					} else {
-						hitTarget = (Opponent) playerMap.get(recvdMove.getTarget());
-						hitTarget.setHit(recvdMove.getX(), recvdMove.getY(), recvdMove.isHit());
-						if (hitTarget.lost()) {
-							System.out.println(hitTarget.getUsername() + " has lost!");
-							removeFromActivePlayers(hitTarget.getUsername());
-						}
-					}
+					
+					if(recvdMove.getTarget().equals(me.getUsername()))
+						me.hit(recvdMove.getX(), recvdMove.getY());
+					else
+						hitPlayer(
+								(Opponent)playerMap.get(recvdMove.getTarget()), 
+								recvdMove.getX(), 
+								recvdMove.getY(), 
+								recvdMove.isHit()
+						);
+					
 					for (String removedPlayer : recvdMove.getCrashedOpponents())
 						removeFromActivePlayers(removedPlayer);
 					
@@ -350,7 +369,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			}
 			
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -400,19 +419,21 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 	@Override
 	public void onGameFrameAttack(final String username, final int x, final int y) {
+		try {
+			SwingUtilities.invokeAndWait(new GameFrameLockRunnable());
+		} catch (InvocationTargetException | InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {	
+				
 				try {
-					SwingUtilities.invokeAndWait(new GameFrameLockRunnable());
-				} catch (InvocationTargetException | InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				try {
-					APlayer player = playerMap.get(username);
-					if (player == null)
+					Opponent target = (Opponent)playerMap.get(username);
+					if (target == null)
 						throw new NullPointerException(username + " does not exist in playerMap");
-					boolean hit = PlayerClient.attackPlayer((Opponent) player, x, y);
+					boolean hit = PlayerClient.attackPlayer( target, x, y);
+					hitPlayer(target, x, y, hit);
 					Move move = new Move(username, x, y, hit, crashedOpponents);
 					playerServer.setMove(move);
 

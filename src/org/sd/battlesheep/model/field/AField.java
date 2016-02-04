@@ -27,22 +27,22 @@ package org.sd.battlesheep.model.field;
 /**
  * Classe per il campo di gioco.
  * 
- * Il campo di gioco è caratterizzato da un numero di righe ed un numero di
- * colonne che moltiplicate ne danno il numero di celle.
+ * Il campo di gioco è caratterizzato da una altezza ed una larghezza
+ * che moltiplicate ne danno il numero di celle.
  * 
  * @author Giulio Biagini
  */
 public abstract class AField
 {
 	/**
-	 * il numero di righe del campo di gioco
+	 * la larghezza del campo di gioco
 	 */
-	protected int rows;
+	protected int width;
 	
 	/**
-	 * il numero di colonne del campo di gioco
+	 * l'altezza del campo di gioco
 	 */
-	protected int cols;
+	protected int height;
 	
 	/**
 	 * il campo di gioco
@@ -54,12 +54,12 @@ public abstract class AField
 	/**
 	 * crea un campo di gioco di dimensioni in input
 	 * 
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
+	 * @param width - la larghezza del campo di gioco
+	 * @param height - l'altezza del campo di gioco
 	 */
-	public AField(int rows, int cols) {
-		this.rows = rows;
-		this.cols = cols;
+	public AField(int width, int height) {
+		this.width = width;
+		this.height = height;
 	}
 	
 	
@@ -75,22 +75,22 @@ public abstract class AField
 	
 	
 	/**
-	 * funzione che si occupa di restituire il numero di righe del campo di
+	 * funzione che si occupa di restituire la larghezza del campo di
 	 * gioco
 	 * 
-	 * @return  il numero di righe del campo di gioco
+	 * @return  la larghezza del campo di gioco
 	 */
-	public int getRowsNumber() {
-		return rows;
+	public int getWidth() {
+		return width;
 	}
 	
 	/**
-	 * funzione che si occupa di restituire il numero di colonne del campo di
+	 * funzione che si occupa di restituire l'altezza del campo di
 	 * gioco
 	 * 
-	 * @return il numero di colonne del campo di gioco
+	 * @return l'altezza del campo di gioco
 	 */
-	public int getColsNumber() {
-		return cols;
+	public int getHeight() {
+		return height;
 	}
 }

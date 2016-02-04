@@ -50,7 +50,6 @@ public class Opponent extends APlayer implements Serializable
 	 */
 	private String host;
 
-	
 	/**
 	 * la porta per la comunicazione con gli altri giocatori
 	 */
@@ -69,15 +68,15 @@ public class Opponent extends APlayer implements Serializable
 	 * risiede.
 	 * 
 	 * @param netPlayer - un oggetto contenente username, host e porta
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
+	 * @param width - la larghezza del campo di gioco
+	 * @param height - l'altezza del campo di gioco
 	 * @param sheeps - il numero di pecore iniziale nel campo di gioco
 	 */
-	public Opponent(NetPlayer netPlayer, int rows, int cols, int sheeps) {
+	public Opponent(NetPlayer netPlayer, int width, int height, int sheeps) {
 		super(netPlayer.getUsername());
 		this.host = netPlayer.getHost();
 		this.port = netPlayer.getPort();
-		this.opponentField = new OpponentField(rows, cols, sheeps);
+		this.opponentField = new OpponentField(width, height, sheeps);
 	}
 	
 	
@@ -115,25 +114,11 @@ public class Opponent extends APlayer implements Serializable
 	}
 	
 	/**
-	 * funzione che si occupa di settare una cella come un colpo nell'erba
-	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 */
-	public void setHitGrass(int r, int c) {
-		opponentField.setHitGrass(r, c);
-	}
-	
-	/**
 	 * funzione che si occupa di settare una cella come una pecora colpita
 	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 */
-	public void setHitSheep(int r, int c) {
-		opponentField.setHitSheep(r, c);
-	}
-	
+	 * @param x - coordinata x della mappa
+	 * @param y - coordinata y della mappa
+	 */	
 	public void setHit(int x, int y, boolean sheep) {
 		opponentField.setHit(x, y, sheep);
 	}

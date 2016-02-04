@@ -27,8 +27,8 @@ package org.sd.battlesheep.model.field;
 /**
  * Classe per il campo di gioco dell'avversario.
  * 
- * Il campo di gioco dell'avversario è caratterizzato da un numero di righe ed
- * un numero di colonne che moltiplicate ne danno il numero di celle. Il campo
+ * Il campo di gioco dell'avversario è caratterizzato da una altezza ed una larghezza 
+ * che moltiplicate ne danno il numero di celle. Il campo
  * di gioco dell'avversario è inizializzato con celle identificanti erba e, man
  * mano che il gioco avanza, sono memorizzate le celle colpite (con successo o
  * meno) dal giocatore e dagli altri avversari.
@@ -64,16 +64,16 @@ public class OpponentField extends AField
 	/**
 	 * crea un campo di gioco per un avversario
 	 * 
-	 * @param rows - il numero di righe del campo di gioco
-	 * @param cols - il numero di colonne del campo di gioco
+	 * @param width - la larghezza del campo di gioco
+	 * @param height - l'altezza del campo di gioco
 	 * @param sheeps - il numero di pecore nel campo di gioco
 	 */
-	public OpponentField(int rows, int cols, int sheeps) {
-		super(rows, cols);
-		this.field = new char[rows][cols];
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				field[r][c] = GRASS;
+	public OpponentField(int width, int height, int sheeps) {
+		super(width, height);
+		this.field = new char[width][height];
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				field[x][y] = GRASS;
 		this.sheeps = sheeps;
 	}
 	
@@ -88,37 +88,23 @@ public class OpponentField extends AField
 	@Override
 	public int getAliveSheepsNumber() {
 		return sheeps;
-	}
+	}	
 	
-	
-	
-	/**
-	 * funzione che si occupa di settare una cella come un colpo nell'erba
-	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 */
-	public void setHitGrass(int r, int c) {
-		field[r][c] = HIT_GRASS;
-	}
 	
 	/**
 	 * funzione che si occupa di settare una cella come una pecora colpita
 	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 */
-	public void setHitSheep(int r, int c) {
-		field[r][c] = HIT_SHEEP;
-		sheeps--;
-	}
-	
+	 * @param x - coordinata x della mappa
+	 * @param y - coordinata y della mappa
+	 * @param sheep - viene indicato come impostare la cella. Con true è una pecora 
+	 * 				  colpita mentre con false è erba.
+	 */	
 	public void setHit(int x, int y, boolean sheep) {
 		if(sheep) {
-			field[x][y]=HIT_SHEEP;
+			field[x][y] = HIT_SHEEP;
 			sheeps--;
 		} else {
-			field[x][y]=HIT_GRASS;
+			field[x][y] = HIT_GRASS;
 		}
 	}
 }

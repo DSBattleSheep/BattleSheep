@@ -82,8 +82,8 @@ public class Me extends APlayer
 	 * @param c - l'indice della colonna che identifica la cella
 	 * @return true se è stata colpita una pecora, false altrimenti
 	 */
-	public boolean setHit(int r, int c) {
-		return myField.setHit(r, c);
+	public void hit(int r, int c) {
+		myField.hit(r, c);
 	}
 	
 	public boolean isSheep(int x, int y) {

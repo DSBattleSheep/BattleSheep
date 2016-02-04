@@ -27,8 +27,8 @@ package org.sd.battlesheep.model.field;
 /**
  * Classe per il campo di gioco del giocatore.
  * 
- * Il campo di gioco del giocatore è caratterizzato da un numero di righe ed un
- * numero di colonne che moltiplicate ne danno il numero di celle. Nel campo di
+ * Il campo di gioco del giocatore è caratterizzato da una altezza ed una larghezza 
+ * che moltiplicate ne danno il numero di celle. Nel campo di
  * gioco del giocatore è memorizzata la posizione dell'erba, delle pecore e
  * delle celle colpite (con successo o meno) dagli avversari.
  * 
@@ -57,6 +57,13 @@ public class MyField extends AField
 	private static final char HIT_SHEEP = 'S';
 	
 	
+	/**
+	 * contatore che indica quante sono le pecore ancora vive
+	 */
+	private int aliveSheepsCount;
+	
+	
+	
 	
 	/**
 	 * crea un campo di gioco per il giocatore
@@ -65,10 +72,15 @@ public class MyField extends AField
 	 */
 	public MyField(boolean[][] sheeps) {
 		super(sheeps.length, sheeps[0].length);
-		this.field = new char[rows][cols];
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				this.field[r][c] = sheeps[r][c] ? SHEEP : GRASS;
+		aliveSheepsCount = 0;
+		this.field = new char[width][height];
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (sheeps[x][y]) {
+					this.field[x][y] = SHEEP;
+					aliveSheepsCount++;
+				} else
+					this.field[x][y] = GRASS;
 	}
 	
 	
@@ -81,11 +93,7 @@ public class MyField extends AField
 	 */
 	@Override
 	public int getAliveSheepsNumber() {
-		int sheeps = 0;
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				sheeps += (field[r][c] == SHEEP) ? 1 : 0;
-		return sheeps;
+		return aliveSheepsCount;
 	}
 	
 	
@@ -93,21 +101,29 @@ public class MyField extends AField
 	/**
 	 * funzione che si occupa di settare una cella come colpita
 	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 * @return true se è stata colpita una pecora, false altrimenti
+	 * @param x - coordinata x della mappa
+	 * @param y - coordinata y della mappa
 	 */
-	public boolean setHit(int r, int c) {
-		if (field[r][c] == SHEEP) {
-			field[r][c] = HIT_SHEEP;
-			return true;
+	public void hit(int x, int y) {
+		if (field[x][y] == SHEEP) {
+			field[x][y] = HIT_SHEEP;
+			aliveSheepsCount--;
 		} else {
-			field[r][c] = HIT_GRASS;
-			return false;
+			field[x][y] = HIT_GRASS;
 		}
 	}
 	
+	
+	
+	/**
+	 * funzione che si occupa di verificare se nella cella indicata
+	 * c'è una pecora oppure no
+	 * 
+	 * @param x - cordinata x della mappa
+	 * @param y - cordinata y della mappa
+	 * @return true se c'è una pecora nella cella indicata, false altrimenti
+	 */
 	public boolean isSheep(int x, int y) {
-		return field[x][y]==SHEEP;
+		return field[x][y] == SHEEP;
 	}
 }
