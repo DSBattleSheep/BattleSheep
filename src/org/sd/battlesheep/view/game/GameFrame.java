@@ -32,7 +32,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -41,6 +40,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.DefaultCaret;
 
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.utils.Cell;
@@ -71,19 +74,19 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	
 	
+	private JPanel rightPanel;
+	
+	private ArrayList<Field> opponentsField;
+	
+	private JList<String> opponentsUsernameList;
+	
+	
+	
 	private JPanel middlePanel;
 	
 	private Field myField;
 	
 	private Field opponentField;
-	
-	
-	
-	private JPanel rightPanel;
-	
-	private JList<String> opponentsUsernameList;
-	
-	private ArrayList<Field> opponentsField;
 	
 	
 	
@@ -95,15 +98,7 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	
 	
-	private String myUsername;
-	
-	private String[] opponentsUsername;
-	
 	private GameFrameObserver observer;
-	
-	private int rows;
-	
-	private int cols;
 	
 	
 	
@@ -116,11 +111,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		/* model */
 		
-		this.myUsername = myUsername;
-		this.opponentsUsername = opponentsUsername;
 		this.observer = observer;
-		this.rows = rows;
-		this.cols = cols;
 		
 		/* north panel */
 		
@@ -141,6 +132,33 @@ public class GameFrame extends AFrame implements FieldObserver
 			)
 		);
 		
+		/* right panel */
+		
+		rightPanel = new JPanel(new GridLayout(opponentsUsername.length, 1));
+		rightPanel.setBackground(new Color(0, 0, 0, 0));
+		
+		opponentsField = new ArrayList<>();
+		for (String opponentUsername : opponentsUsername)
+			opponentsField.add(new Field(opponentUsername, rows, cols, this));
+		
+		opponentsUsernameList = new JList<>(opponentsUsername);
+		opponentsUsernameList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				actionList();
+			}
+		});
+		
+		rightPanel.add(
+			opponentsUsernameList,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 5, 10),
+				0, 0
+			)
+		);
+		
 		/* middle panel */
 		
 		middlePanel = new JPanel(new GridBagLayout());
@@ -148,7 +166,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		myField = new Field(myUsername, rows, cols, null);
 		
-		opponentField = new Field(opponentsUsername[0], rows, cols, null);
+		opponentField = opponentsField.get(0);
 		
 		middlePanel.add(
 			myField,
@@ -161,32 +179,11 @@ public class GameFrame extends AFrame implements FieldObserver
 		);
 		
 		middlePanel.add(
-			opponentField,
+			opponentsField.get(0),
 			new GridBagConstraints(
 				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		/* right panel */
-		
-		rightPanel = new JPanel(new GridLayout(opponentsUsername.length, 1));
-		rightPanel.setBackground(new Color(0, 0, 0, 0));
-		
-		opponentsUsernameList = new JList<>(opponentsUsername);
-		
-		opponentsField = new ArrayList<>();
-		for (int i = 0; i < opponentsUsername.length; i++)
-			opponentsField.add(new Field(opponentsUsername[i], rows, cols, null));
-		
-		rightPanel.add(
-			opponentsUsernameList,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 5, 10),
 				0, 0
 			)
 		);
@@ -204,6 +201,9 @@ public class GameFrame extends AFrame implements FieldObserver
 		logTextArea.setSelectionColor(Color.WHITE);
 		logTextArea.setSelectedTextColor(Color.BLACK);
 		
+		DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
 		logScrollPane = new JScrollPane(logTextArea);
 		
 		southPanel.add(
@@ -219,8 +219,8 @@ public class GameFrame extends AFrame implements FieldObserver
 		/* this frame */
 		
 		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
 		add(rightPanel, BorderLayout.EAST);
+		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
 		
 		setVisible(true);
@@ -228,45 +228,90 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	
 	
-	private void actionStiCazzi() {
-		
+	private void actionList() {
+		String opponentUsername = opponentsUsernameList.getSelectedValue();
+		if (opponentUsername != null) {
+			for (Field field : opponentsField)
+				if (field.getUsername().equals(opponentUsername)) {
+					middlePanel.remove(1);
+					middlePanel.add(
+						field,
+						new GridBagConstraints(
+							1, 0, 1, 1, 1, 1,
+							GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 5),
+							0, 0
+						)
+					);
+					break;
+				}
+			SwingUtilities.updateComponentTreeUI(this);
+		}
 	}
 	
 	
 	
 	@Override
 	public void onFieldCellClick(Cell source) {
-		
+		if (source.isGrass()) {
+			String opponentUsername = opponentField.getUsername();
+			int r = source.getRow();
+			int c = source.getCol();
+			logTextArea.append("\tI attack " + opponentUsername + " in [" + c + "," + r + "]\n");
+			if (observer != null)
+				observer.onGameFrameAttack(opponentUsername, c, r);
+		}
 	}
 	
 	
 	
 	public void setTurn(String username) {
-		if (username.equals(myUsername)) {
-			logTextArea.append("turn: MINE\n");
-			
-			new Thread(new Runnable() {
-				@Override public void run() {
-					Random rnd = new Random();
-					int u = rnd.nextInt(opponentsUsername.length);
-					int x = rnd.nextInt(cols);
-					int y = rnd.nextInt(rows);
-					logTextArea.append("\tattack " + opponentsUsername[u] + " in [" + x + "," + y + "]\n");
-					observer.onGameFrameAttack(opponentsUsername[u], x, y);
-				}
-			}).start();
-			
-		} else
-			logTextArea.append("turn: " + username + "\n");
+		// it's my turn
+		if (username.equals(myField.getUsername())) {
+			opponentsUsernameList.setEnabled(true);
+			opponentField.unlock();
+			logTextArea.append("TURN: mine\n");
+		// it's someone else turn
+		} else {
+			opponentsUsernameList.setEnabled(false);
+			opponentField.lock();
+			logTextArea.append("TURN: " + username + "\n");
+		}
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		if (usernameAttacker.equals(myUsername))
+		// I'm the attacker
+		if (usernameAttacker.equals(myField.getUsername()))
 			logTextArea.append("\tI " + (hit ? "HIT " : "didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
-		else if (usernameDefender.equals(myUsername))
+		// I'm the defender
+		else if (usernameDefender.equals(myField.getUsername())) {
+			logTextArea.append("\t" + usernameAttacker + " attack ME in [" + x + "," + y + "]\n");
 			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
-		else
+		// someone attacked someone else
+		} else {
+			logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "]\n");
 			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT " : " didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
+		}
+		
+		// I'm the defender
+		if (usernameAttacker.equals(myField.getUsername())) {
+			if (hit)
+				myField.getCell(y, x).setHitSheep();
+			else
+				myField.getCell(y, x).setHitGrass();
+		// someone else is the defender
+		} else {
+			for (int i = 0; i < opponentsField.size(); i++)
+				if (opponentsField.get(i).getUsername().equals(usernameDefender)) {
+					if (hit)
+						opponentsField.get(i).getCell(y, x).setHitSheep();
+					else
+						opponentsField.get(i).getCell(y, x).setHitGrass();
+					opponentField = opponentsField.get(i);
+					SwingUtilities.updateComponentTreeUI(this);
+					break;
+				}
+		}
 	}
 	
 	
