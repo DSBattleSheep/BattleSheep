@@ -419,11 +419,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 	@Override
 	public void onGameFrameAttack(final String username, final int x, final int y) {
-		try {
-			SwingUtilities.invokeAndWait(new GameFrameLockRunnable());
-		} catch (InvocationTargetException | InterruptedException e1) {
-			e1.printStackTrace();
-		}
+		gameFrame.lock();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {	
