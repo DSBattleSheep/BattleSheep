@@ -19,12 +19,12 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 public class PlayerRegistration
 {
-	public static Map<String, NetPlayer> Join(String username, int port) 
+	public static Map<String, NetPlayer> Join(String lobbyAddress, String username, int port) 
 			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException {
 		
 		Map<String, NetPlayer> playerMap;
 		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface) Naming
-				.lookup("rmi://127.0.0.1:" + CommunicationConst.LOBBY_PORT + "/" + CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
+				.lookup("rmi://" + lobbyAddress + ":" + CommunicationConst.LOBBY_PORT + "/" + CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
 		playerMap = serverInterface.joinLobby(username, port);
 		
 		playerMap.remove(username);

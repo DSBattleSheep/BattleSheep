@@ -252,7 +252,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					if (playerServer == null)
 						playerServer = new PlayerServer(Battlesheep.getInstance());
 					playerServer.setMe(me);
-					players = PlayerRegistration.Join(myUsername, playerServer.getPort());
+					players = PlayerRegistration.Join(lobbyAddress, myUsername, playerServer.getPort());
 					
 				} catch (UsernameAlreadyTakenException e) {
 					MessageFactory.errorDialog(null, e.getMessage());
