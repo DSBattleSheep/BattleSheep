@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.UnmarshalException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Map;
 
@@ -20,15 +21,15 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 public class PlayerRegistration
 {
-	public static Map<String, NetPlayer> Join(String lobbyAddress, String username, int port) 
+	public static Map<String, NetPlayer> Join(String lobbyAddress, String username, int playerPort) 
 			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException {
 		
 		Map<String, NetPlayer> playerMap;
 		
+		Registry registry = LocateRegistry.getRegistry(lobbyAddress, CommunicationConst.LOBBY_PORT);
+		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface) registry.lookup(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);	
 		
-		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface)LocateRegistry.getRegistry(lobbyAddress, port).lookup(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);	
-		
-		playerMap = serverInterface.joinLobby(username, port);
+		playerMap = serverInterface.joinLobby(username, playerPort);
 		
 		playerMap.remove(username);
 		

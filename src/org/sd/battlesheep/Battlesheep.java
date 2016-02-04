@@ -267,6 +267,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					System.exit(1);
 				} catch (NotBoundException | ServerNotActiveException | ConnectException | UnmarshalException | MalformedURLException e) {
 					MessageFactory.errorDialog(null, e.getMessage());
+					e.printStackTrace();
 					return;
 				} catch (RemoteException e) {
 					e.printStackTrace();					
