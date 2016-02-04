@@ -48,6 +48,14 @@ public class RegistrationFrame extends AFrame
 	
 	
 	
+	private static final int WARNING_PANEL_1_DURATION = 200;// TODO -> 1000
+	
+	private static final int WARNING_PANEL_2_DURATION = 200;// TODO -> 3000
+	
+	private static final int WARNING_PANEL_3_DURATION = 200;// TODO -> 2000
+	
+	
+	
 	private LobbyAddressPanel lobbyAddressPanel;
 	
 	private WarningPanel1 warningPanel1;
@@ -153,7 +161,7 @@ public class RegistrationFrame extends AFrame
 			remove(lobbyAddressPanel);
 			add(warningPanel1, BorderLayout.CENTER);
 			SwingUtilities.updateComponentTreeUI(this);
-			Timer timer = new Timer(1000, new ActionListener() {
+			Timer timer = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					actionNextToWarningPanel2();
@@ -168,7 +176,7 @@ public class RegistrationFrame extends AFrame
 		remove(warningPanel1);
 		add(warningPanel2, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
-		Timer timer = new Timer(3000, new ActionListener() {
+		Timer timer = new Timer(WARNING_PANEL_2_DURATION, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionNextToWarningPanel3();
@@ -182,7 +190,7 @@ public class RegistrationFrame extends AFrame
 		remove(warningPanel2);
 		add(warningPanel3, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
-		Timer timer = new Timer(2000, new ActionListener() {
+		Timer timer = new Timer(WARNING_PANEL_3_DURATION, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionNextToUsernamePanel();

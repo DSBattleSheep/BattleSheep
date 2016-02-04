@@ -39,6 +39,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.sd.battlesheep.view.AFrame;
@@ -89,6 +90,8 @@ public class GameFrame extends AFrame implements FieldObserver
 	private JPanel southPanel;
 	
 	private JTextArea logTextArea;
+	
+	private JScrollPane logScrollPane;
 	
 	
 	
@@ -201,8 +204,10 @@ public class GameFrame extends AFrame implements FieldObserver
 		logTextArea.setSelectionColor(Color.WHITE);
 		logTextArea.setSelectedTextColor(Color.BLACK);
 		
+		logScrollPane = new JScrollPane(logTextArea);
+		
 		southPanel.add(
-			logTextArea,
+			logScrollPane,
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
