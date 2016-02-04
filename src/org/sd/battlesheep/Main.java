@@ -46,8 +46,8 @@ public class Main implements MainFrameObserver
 	
 	
 	private Main() {
-		// mainFrame = new MainFrame(this);
-		new GameFrame("Biagio", new String[]{"Ise", "Minizinc", "Bera", "Danger"}, 10, 10, null);
+		mainFrame = new MainFrame(this);
+		// new GameFrame("Biagio", new String[]{"Ise", "Minizinc", "Bera", "Danger"}, 10, 10, null);
 	}
 	
 	
