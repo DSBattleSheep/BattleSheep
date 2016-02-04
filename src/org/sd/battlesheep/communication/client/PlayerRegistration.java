@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.UnmarshalException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.ServerNotActiveException;
 import java.util.Map;
 
@@ -23,8 +24,10 @@ public class PlayerRegistration
 			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException {
 		
 		Map<String, NetPlayer> playerMap;
-		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface) Naming
-				.lookup("rmi://" + lobbyAddress + ":" + CommunicationConst.LOBBY_PORT + "/" + CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
+		
+		
+		LobbyJoinRemoteInterface serverInterface = (LobbyJoinRemoteInterface)LocateRegistry.getRegistry(lobbyAddress, port).lookup(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);	
+		
 		playerMap = serverInterface.joinLobby(username, port);
 		
 		playerMap.remove(username);
