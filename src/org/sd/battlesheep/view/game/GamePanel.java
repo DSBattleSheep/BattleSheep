@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -45,11 +46,9 @@ public class GamePanel extends APanel
 	
 	
 	
-	private JScrollPane rightScrollPane;
-	
 	private JPanel rightPanel;
 	
-	private ArrayList<Field> opponentsField;
+	private JList<Field> opponentsFieldList;
 	
 	
 	
@@ -114,24 +113,29 @@ public class GamePanel extends APanel
 			new GridBagConstraints(
 				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 5, 10),
+				new Insets(5, 10, 5, 5),
 				0, 0
 			)
 		);
 		
-		/* left panel */
+		/* right panel */
 		
 		rightPanel = new JPanel(new GridLayout(opponentsUsername.size(), 1));
 		rightPanel.setBackground(new Color(0, 0, 0, 0));
 		
-		opponentsField = new ArrayList<>();
-		for (int i = 0; i < opponentsUsername.size(); i++) {
-			opponentsField.add(new Field(opponentsUsername.get(i), rows, cols, null));
-			rightPanel.add(opponentsField.get(i));
-		}
+		opponentsFieldList = new JList<>();
+		for (int i = 0; i < opponentsUsername.size(); i++)
+			opponentsFieldList.add(new Field(opponentsUsername.get(i), rows, cols, null));
 		
-		rightScrollPane = new JScrollPane(rightPanel);
-		rightScrollPane.setBackground(new Color(0, 0, 0, 0));
+		rightPanel.add(
+			opponentsFieldList,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 5, 10),
+				0, 0
+			)
+		);
 		
 		/* south panel */
 		
@@ -139,7 +143,7 @@ public class GamePanel extends APanel
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
-		add(rightScrollPane, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.EAST);
 	}
 	
 	

@@ -26,6 +26,7 @@ package org.sd.battlesheep.view.game;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.sd.battlesheep.view.AFrame;
 
@@ -87,11 +88,31 @@ public class GameFrame extends AFrame
 	
 	
 	public void setTurn(String username) {
-		
+		if (username.equals(myUsername)) {
+			System.out.print("turn: MINE\n");
+			
+			new Thread(new Runnable() {
+				@Override public void run() {
+					Random rnd = new Random();
+					int u = rnd.nextInt(opponentsUsername.size());
+					int x = rnd.nextInt(cols);
+					int y = rnd.nextInt(rows);
+					System.out.print("\tattack " + opponentsUsername.get(u) + " in [" + x + "," + y + "]\n");
+					observer.onGameFrameAttack(opponentsUsername.get(u), x, y);
+				}
+			}).start();
+			
+		} else
+			System.out.print("turn: " + username + "\n");
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		
+		if (usernameAttacker.equals(myUsername))
+			System.out.print("\tI " + (hit ? "HIT" : "didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
+		else if (usernameDefender.equals(myUsername))
+			System.out.print("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
+		else
+			System.out.print("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + usernameDefender + " in [" + x + "," + y + "]\n");
 	}
 	
 	
