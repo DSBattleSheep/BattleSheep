@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.BSFrame;
 import org.sd.battlesheep.view.MessageFactory;
 
 
@@ -40,7 +40,7 @@ import org.sd.battlesheep.view.MessageFactory;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends AFrame
+public class RegistrationFrame extends BSFrame
 {
 	private static final int WIDTH = 500;
 	
@@ -67,6 +67,8 @@ public class RegistrationFrame extends AFrame
 	private UsernamePanel usernamePanel;
 	
 	private SheepsPositionPanel sheepsPositionPanel;
+	
+	private LockPanel lockPanel;
 	
 	
 	
@@ -138,6 +140,16 @@ public class RegistrationFrame extends AFrame
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionRegistration();
+			}
+		});
+		
+		/* lock panel */
+		
+		lockPanel = new LockPanel();
+		lockPanel.getExitButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionExit();
 			}
 		});
 		
@@ -235,33 +247,27 @@ public class RegistrationFrame extends AFrame
 			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheep");
 		else if (remainingSheeps != 0)
 			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheeps");
-		else if (observer != null)
+		else if (observer != null) {
+			actionLock();
 			observer.onRegistrationFrameRegistrationClick(
 				lobbyAddressPanel.getAddress(),
 				usernamePanel.getUsername(),
 				sheepsPositionPanel.getSheepsPosition()
 			);
+		}
+	}
+	
+	private void actionLock() {
+		remove(sheepsPositionPanel);
+		add(lockPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	
 	
-	@Override
-	public void lock() {
-		lobbyAddressPanel.lock();
-		warningPanel1.lock();
-		warningPanel2.lock();
-		warningPanel3.lock();
-		usernamePanel.lock();
-		sheepsPositionPanel.lock();
-	}
-	
-	@Override
 	public void unlock() {
-		lobbyAddressPanel.unlock();
-		warningPanel1.unlock();
-		warningPanel2.unlock();
-		warningPanel3.unlock();
-		usernamePanel.unlock();
-		sheepsPositionPanel.unlock();
+		remove(lockPanel);
+		add(sheepsPositionPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 }

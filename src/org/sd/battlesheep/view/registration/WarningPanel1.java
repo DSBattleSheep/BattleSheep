@@ -27,10 +27,14 @@ package org.sd.battlesheep.view.registration;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import org.sd.battlesheep.view.BattleshipPanel;
+import org.sd.battlesheep.view.TransparentPanel;
 
 
 
@@ -38,11 +42,9 @@ import javax.swing.JLabel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel1 extends AShipPanel
+public class WarningPanel1 extends BattleshipPanel
 {
-	private static final Icon WAIT = new ImageIcon(IMGS_PATH + "ajax-loader.gif");
-	
-	
+	private TransparentPanel middlePanel;
 	
 	private JLabel loadingLabel;
 	
@@ -51,23 +53,27 @@ public class WarningPanel1 extends AShipPanel
 	public WarningPanel1() {
 		super(new BorderLayout());
 		
-		loadingLabel = new JLabel("Loading...", WAIT, JLabel.CENTER);
+		/* middle panel */
+		
+		middlePanel = new TransparentPanel(new GridBagLayout());
+		
+		loadingLabel = new JLabel("Loading...", WAITING_ICON, JLabel.CENTER);
 		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		loadingLabel.setBackground(new Color(0, 0, 0, 0));
-		loadingLabel.setForeground(Color.RED);
+		loadingLabel.setForeground(Color.WHITE);
 		
-		add(loadingLabel, BorderLayout.CENTER);
-	}
-	
-	
-	
-	@Override
-	public void lock() {
+		middlePanel.add(
+			loadingLabel,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(10, 10, 10, 10),
+				0, 0
+			)
+		);
 		
-	}
-	
-	@Override
-	public void unlock() {
+		/* this panel */
 		
+		add(middlePanel, BorderLayout.CENTER);
 	}
 }

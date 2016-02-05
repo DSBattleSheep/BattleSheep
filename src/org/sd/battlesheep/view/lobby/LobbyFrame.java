@@ -29,9 +29,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 
-import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.BSFrame;
 
 
 
@@ -39,7 +38,7 @@ import org.sd.battlesheep.view.AFrame;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends AFrame
+public class LobbyFrame extends BSFrame
 {
 	private static final int WIDTH = 400;
 	
@@ -49,7 +48,7 @@ public class LobbyFrame extends AFrame
 	
 	private WaitingPanel waitingPanel;
 	
-	private TablePanel tablePanel;
+	private ClientsPanel clientsPanel;
 	
 	
 	
@@ -76,14 +75,14 @@ public class LobbyFrame extends AFrame
 		
 		/* table panel */
 		
-		tablePanel = new TablePanel(host, port);
-		tablePanel.getExitButton().addActionListener(new ActionListener() {
+		clientsPanel = new ClientsPanel(host, port);
+		clientsPanel.getExitButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionExit();
 			}
 		});
-		tablePanel.getStartButton().addActionListener(new ActionListener() {
+		clientsPanel.getStartButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionStart();
@@ -112,26 +111,11 @@ public class LobbyFrame extends AFrame
 	
 	
 	public void addClient(String username, String host, int port) {
-		DefaultTableModel clientsTableModel = tablePanel.getClientsTableModel();
-		if (clientsTableModel.getRowCount() == 0) {
+		if (clientsPanel.getClientsNumber() == 0) {
 			remove(waitingPanel);
-			add(tablePanel, BorderLayout.CENTER);
+			add(clientsPanel, BorderLayout.CENTER);
 		}
-		clientsTableModel.addRow(new String[]{username, host, port + ""});
+		clientsPanel.addClient(username, host, port);
 		SwingUtilities.updateComponentTreeUI(this);
-	}
-	
-	
-	
-	@Override
-	public void lock() {
-		waitingPanel.lock();
-		tablePanel.lock();
-	}
-	
-	@Override
-	public void unlock() {
-		waitingPanel.unlock();
-		tablePanel.unlock();
 	}
 }

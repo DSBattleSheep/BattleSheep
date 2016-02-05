@@ -32,8 +32,10 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.sd.battlesheep.view.BattlesheepPanel;
+import org.sd.battlesheep.view.TransparentPanel;
 
 
 
@@ -41,9 +43,9 @@ import javax.swing.JTextField;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class UsernamePanel extends ASheepPanel
+public class UsernamePanel extends BattlesheepPanel
 {
-	private JPanel northPanel;
+	private TransparentPanel northPanel;
 	
 	private JLabel usernameLabel;
 	
@@ -51,7 +53,7 @@ public class UsernamePanel extends ASheepPanel
 	
 	
 	
-	private JPanel southPanel;
+	private TransparentPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -64,8 +66,7 @@ public class UsernamePanel extends ASheepPanel
 		
 		/* north panel */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(new Color(0, 0, 0, 0));
+		northPanel = new TransparentPanel(new GridBagLayout());
 		
 		usernameLabel = new JLabel("Username:");
 		usernameLabel.setForeground(Color.WHITE);
@@ -93,8 +94,7 @@ public class UsernamePanel extends ASheepPanel
 		
 		/* south panel */
 		
-		southPanel = new JPanel(new GridBagLayout());
-		southPanel.setBackground(new Color(0, 0, 0, 0));
+		southPanel = new TransparentPanel(new GridBagLayout());
 		
 		previousButton = new JButton("Prevoius");
 		
@@ -143,17 +143,5 @@ public class UsernamePanel extends ASheepPanel
 	
 	public JButton getNextButton() {
 		return nextButton;
-	}
-	
-	
-	
-	@Override
-	public void lock() {
-		usernameTextField.setEnabled(false);
-	}
-	
-	@Override
-	public void unlock() {
-		usernameTextField.setEnabled(true);
 	}
 }

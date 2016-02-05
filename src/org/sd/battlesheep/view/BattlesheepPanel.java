@@ -20,16 +20,14 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view;
 
 
 
-import java.awt.Image;
+import java.awt.Graphics;
 import java.awt.LayoutManager;
 
-import javax.swing.ImageIcon;
-
-import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.utils.BSPanel;
 
 
 
@@ -37,13 +35,20 @@ import org.sd.battlesheep.view.APanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class AShipPanel extends APanel
+public class BattlesheepPanel extends BSPanel
 {
-	private static final Image BATTLESHIP = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
+	public BattlesheepPanel(LayoutManager manager) {
+		super(manager);
+	}
 	
 	
 	
-	public AShipPanel(LayoutManager manager) {
-		super(BATTLESHIP, manager);
+	@Override
+	public void paintComponent(Graphics g) {
+		g.drawImage(
+			BATTLESHEEP_BACKGROUND,
+			0, 0, getWidth(), getHeight(),
+			null
+		);
 	}
 }

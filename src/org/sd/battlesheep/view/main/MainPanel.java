@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.main;
 
 
 
@@ -29,13 +29,15 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JRadioButton;
 
-import org.sd.battlesheep.view.BattleshipPanel;
 import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.WhitePanel;
 
 
 
@@ -43,13 +45,21 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends BattleshipPanel
+public class MainPanel extends WhitePanel
 {
 	private TransparentPanel northPanel;
 	
-	private JLabel addressLabel;
+	private JLabel modeLabel;
 	
-	private JTextField addressTextField;
+	
+	
+	private TransparentPanel middlePanel;
+	
+	private JRadioButton serverRadioButton;
+	
+	private JRadioButton clientRadioButton;
+	
+	private ButtonGroup radioButtonGroup;
 	
 	
 	
@@ -57,42 +67,61 @@ public class LobbyAddressPanel extends BattleshipPanel
 	
 	private JButton exitButton;
 	
-	private JButton nextButton;
+	private JButton startButton;
 	
 	
 	
-	/*
-	 * constructor
-	 */
-	
-	public LobbyAddressPanel() {
+	public MainPanel() {
 		super(new BorderLayout());
 		
 		/* north panel */
 		
 		northPanel = new TransparentPanel(new GridBagLayout());
 		
-		addressLabel = new JLabel("Lobby Ip Address:");
-		addressLabel.setForeground(Color.WHITE);
-		
-		addressTextField = new JTextField("127.0.0.1");
+		modeLabel = new JLabel("Start the program as:", JLabel.CENTER);
 		
 		northPanel.add(
-			addressLabel,
+			modeLabel,
 			new GridBagConstraints(
-				0, 0, 1, 1, 0.2, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 5),
+				new Insets(10, 10, 5, 10),
 				0, 0
 			)
 		);
 		
-		northPanel.add(
-			addressTextField,
+		/* middle panel */
+		
+		middlePanel = new TransparentPanel(new GridBagLayout());
+		
+		serverRadioButton = new JRadioButton("Server", false);
+		serverRadioButton.setBackground(new Color(0, 0, 0, 0));
+		serverRadioButton.setMnemonic(KeyEvent.VK_S);
+		
+		clientRadioButton = new JRadioButton("Client", true);
+		clientRadioButton.setBackground(new Color(0, 0, 0, 0));
+		clientRadioButton.setMnemonic(KeyEvent.VK_C);
+		
+		radioButtonGroup = new ButtonGroup();
+		radioButtonGroup.add(serverRadioButton);
+		radioButtonGroup.add(clientRadioButton);
+		
+		middlePanel.add(
+			serverRadioButton,
 			new GridBagConstraints(
-				1, 0, 1, 1, 0.8, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 5, 10),
+				new Insets(5, 10, 5, 5),
+				0, 0
+			)
+		);
+		
+		middlePanel.add(
+			clientRadioButton,
+			new GridBagConstraints(
+				1, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 5, 5, 10),
 				0, 0
 			)
 		);
@@ -103,7 +132,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 		
 		exitButton = new JButton("Exit");
 		
-		nextButton = new JButton("Next");
+		startButton = new JButton("Start");
 		
 		southPanel.add(
 			exitButton,
@@ -116,7 +145,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 		);
 		
 		southPanel.add(
-			nextButton,
+			startButton,
 			new GridBagConstraints(
 				1, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -128,17 +157,18 @@ public class LobbyAddressPanel extends BattleshipPanel
 		/* this panel */
 		
 		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	
 	
-	public boolean isAddressEmpty() {
-		return addressTextField.getText().isEmpty();
+	public boolean isServerSelected() {
+		return serverRadioButton.isSelected();
 	}
 	
-	public String getAddress() {
-		return addressTextField.getText();
+	public boolean isClientSelected() {
+		return clientRadioButton.isSelected();
 	}
 	
 	
@@ -147,7 +177,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 		return exitButton;
 	}
 	
-	public JButton getNextButton() {
-		return nextButton;
+	public JButton getStartButton() {
+		return startButton;
 	}
 }

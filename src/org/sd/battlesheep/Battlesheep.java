@@ -229,8 +229,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	@Override
 	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String myUsername, final boolean[][] sheepsPosition) {
 		
-		registrationFrame.lock();
-		
 		new Thread(new Runnable() {			
 			@Override
 			public void run() {

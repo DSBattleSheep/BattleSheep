@@ -25,21 +25,10 @@ package org.sd.battlesheep.view.main;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
-import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.BSFrame;
 
 
 
@@ -47,29 +36,9 @@ import org.sd.battlesheep.view.AFrame;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainFrame extends AFrame
+public class MainFrame extends BSFrame
 {
-	private JPanel northPanel;
-	
-	private JLabel modeLabel;
-	
-	
-	
-	private JPanel middlePanel;
-	
-	private JRadioButton serverRadioButton;
-	
-	private JRadioButton clientRadioButton;
-	
-	private ButtonGroup radioButtonGroup;
-	
-	
-	
-	private JPanel southPanel;
-	
-	private JButton exitButton;
-	
-	private JButton startButton;
+	private MainPanel mainPanel;
 	
 	
 	
@@ -84,106 +53,26 @@ public class MainFrame extends AFrame
 		
 		this.observer = observer;
 		
-		/* north panel */
+		/* main panel */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(Color.WHITE);
+		mainPanel = new MainPanel();
 		
-		modeLabel = new JLabel("Start the program as:", JLabel.CENTER);
-		
-		northPanel.add(
-			modeLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new JPanel(new GridBagLayout());
-		middlePanel.setBackground(Color.WHITE);
-		
-		serverRadioButton = new JRadioButton("Server", false);
-		serverRadioButton.setBackground(new Color(0, 0, 0, 0));
-		serverRadioButton.setMnemonic(KeyEvent.VK_S);
-		
-		clientRadioButton = new JRadioButton("Client", true);
-		clientRadioButton.setBackground(new Color(0, 0, 0, 0));
-		clientRadioButton.setMnemonic(KeyEvent.VK_C);
-		
-		radioButtonGroup = new ButtonGroup();
-		radioButtonGroup.add(serverRadioButton);
-		radioButtonGroup.add(clientRadioButton);
-		
-		middlePanel.add(
-			serverRadioButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		middlePanel.add(
-			clientRadioButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new JPanel(new GridBagLayout());
-		southPanel.setBackground(Color.WHITE);
-		
-		exitButton = new JButton("Exit");
-		exitButton.addActionListener(new ActionListener() {
+		mainPanel.getExitButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				actionExit();
 			}
 		});
-		
-		startButton = new JButton("Start");
-		startButton.addActionListener(new ActionListener() {
+		mainPanel.getStartButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				actionStart();
 			}
 		});
 		
-		southPanel.add(
-			exitButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		
-		southPanel.add(
-			startButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
-				0, 0
-			)
-		);
-		
 		/* this frame */
 		
-		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
+		add(mainPanel, BorderLayout.CENTER);
 		
 		pack();
 		
@@ -199,20 +88,6 @@ public class MainFrame extends AFrame
 	
 	private void actionStart() {
 		if (observer != null)
-			observer.onMainFrameStartClick(serverRadioButton.isSelected());
-	}
-	
-	
-	
-	@Override
-	public void lock() {
-		serverRadioButton.setEnabled(false);
-		clientRadioButton.setEnabled(false);
-	}
-	
-	@Override
-	public void unlock() {
-		serverRadioButton.setEnabled(true);
-		clientRadioButton.setEnabled(true);
+			observer.onMainFrameStartClick(mainPanel.isServerSelected());
 	}
 }

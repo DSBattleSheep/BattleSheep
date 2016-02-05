@@ -34,9 +34,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.TransparentPanel;
 
 
 
@@ -44,15 +43,15 @@ import org.sd.battlesheep.view.APanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class Field extends APanel
+public class Field extends TransparentPanel
 {
-	private JPanel northPanel;
+	private TransparentPanel northPanel;
 	
 	private JLabel usernameLabel;
 	
 	
 	
-	private JPanel middlePanel;
+	private TransparentPanel middlePanel;
 	
 	private Cell[][] cells;
 	
@@ -69,7 +68,7 @@ public class Field extends APanel
 	
 	
 	public Field(String username, int rows, int cols, FieldObserver observer) {
-		super(new Color(0, 0, 0, 0), new BorderLayout());
+		super(new BorderLayout());
 		
 		/* model */
 		
@@ -80,8 +79,7 @@ public class Field extends APanel
 		
 		/* north panel */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(new Color(0, 0, 0, 0));
+		northPanel = new TransparentPanel(new GridBagLayout());
 		
 		usernameLabel = new JLabel(this.username, JLabel.CENTER);
 		
@@ -97,8 +95,7 @@ public class Field extends APanel
 		
 		/* middle panel */
 		
-		middlePanel = new JPanel(new GridLayout(rows, cols));
-		middlePanel.setBackground(new Color(0, 0, 0, 0));
+		middlePanel = new TransparentPanel(new GridLayout(rows, cols));
 		
 		cells = new Cell[rows][cols];
 		for (int r = 0; r < rows; r++) {
@@ -146,12 +143,12 @@ public class Field extends APanel
 		usernameLabel.setText(this.username);
 	}
 	
-	public String getUsername() {
-		return username;
+	public void setUsernameForeground(Color color) {
+		usernameLabel.setForeground(color);
 	}
 	
-	public JLabel getUsernameLabel() {
-		return usernameLabel;
+	public String getUsername() {
+		return username;
 	}
 	
 	public Cell getCell(int r, int c) {
@@ -160,14 +157,12 @@ public class Field extends APanel
 	
 	
 	
-	@Override
 	public void lock() {
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)
 				cells[r][c].setEnabled(false);
 	}
 	
-	@Override
 	public void unlock() {
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)

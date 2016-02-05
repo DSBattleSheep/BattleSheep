@@ -32,9 +32,10 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.sd.battlesheep.view.BattlesheepPanel;
+import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -45,9 +46,9 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
+public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserver
 {
-	private JPanel northPanel;
+	private TransparentPanel northPanel;
 	
 	private JLabel positionLabel;
 	
@@ -55,13 +56,13 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 	
 	
 	
-	private JPanel middlePanel;
+	private TransparentPanel middlePanel;
 	
 	private Field field;
 	
 	
 	
-	private JPanel southPanel;
+	private TransparentPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -88,8 +89,7 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 		
 		/* north panel */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(new Color(0, 0, 0, 0));
+		northPanel = new TransparentPanel(new GridBagLayout());
 		
 		positionLabel = new JLabel("Sheeps Position:");
 		positionLabel.setForeground(Color.WHITE);
@@ -118,12 +118,11 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 		
 		/* middle panel */
 		
-		middlePanel = new JPanel(new GridBagLayout());
-		middlePanel.setBackground(new Color(0, 0, 0, 0));
+		middlePanel = new TransparentPanel(new GridBagLayout());
 		
 		field = new Field("", rows, cols, this);
 		
-		field.getUsernameLabel().setForeground(Color.WHITE);
+		field.setUsernameForeground(Color.WHITE);
 		
 		middlePanel.add(
 			field,
@@ -137,8 +136,7 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 		
 		/* south panel */
 		
-		southPanel = new JPanel(new GridBagLayout());
-		southPanel.setBackground(new Color(0, 0, 0, 0));
+		southPanel = new TransparentPanel(new GridBagLayout());
 		
 		previousButton = new JButton("Prevoius");
 		
@@ -213,19 +211,5 @@ public class SheepsPositionPanel extends ASheepPanel implements FieldObserver
 	
 	public JButton getRegistrationButton() {
 		return registrationButton;
-	}
-	
-	
-	
-	@Override
-	public void lock() {
-		field.lock();
-		registrationButton.setEnabled(false);
-	}
-	
-	@Override
-	public void unlock() {
-		field.unlock();
-		registrationButton.setEnabled(true);
 	}
 }

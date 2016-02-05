@@ -24,10 +24,10 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.Color;
 import java.awt.LayoutManager;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import org.sd.battlesheep.view.utils.BSPanel;
 
 
 
@@ -35,36 +35,10 @@ import javax.swing.JFrame;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class AFrame extends JFrame
+public class WhitePanel extends BSPanel
 {
-	protected static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
-	
-	protected static final String IMGS_PATH = "./imgs/";
-	
-	protected static final ImageIcon ICON = new ImageIcon(IMGS_PATH + "icon.png");
-	
-	
-	
-	public AFrame(LayoutManager layout) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON.getImage());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setLayout(layout);
+	public WhitePanel(LayoutManager manager) {
+		super(manager);
+		setBackground(Color.WHITE);
 	}
-	
-	public AFrame(int width, int height, LayoutManager layout) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON.getImage());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(width, height);
-		setLocationRelativeTo(null);
-		setLayout(layout);
-	}
-	
-	
-	
-	public abstract void lock();
-	
-	public abstract void unlock();
 }

@@ -25,7 +25,6 @@ package org.sd.battlesheep.view.lobby;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -33,7 +32,6 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,7 +39,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.WhitePanel;
 
 
 
@@ -49,19 +48,19 @@ import org.sd.battlesheep.view.APanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class TablePanel extends APanel
+public class ClientsPanel extends WhitePanel
 {
 	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
 	
 	
 	
-	private JPanel northPanel;
+	private TransparentPanel northPanel;
 	
 	private JLabel addressLabel;
 	
 	
 	
-	private JPanel middlePanel;
+	private TransparentPanel middlePanel;
 	
 	private DefaultTableModel clientsTableModel;
 	
@@ -71,7 +70,7 @@ public class TablePanel extends APanel
 	
 	
 	
-	private JPanel southPanel;
+	private TransparentPanel southPanel;
 	
 	private JButton exitButton;
 	
@@ -79,13 +78,12 @@ public class TablePanel extends APanel
 	
 	
 	
-	public TablePanel(String host, int port) {
-		super(Color.WHITE, new BorderLayout());
+	public ClientsPanel(String host, int port) {
+		super(new BorderLayout());
 		
 		/* north panel */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(new Color(0, 0, 0, 0));
+		northPanel = new TransparentPanel(new GridBagLayout());
 		
 		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
 		
@@ -101,8 +99,7 @@ public class TablePanel extends APanel
 		
 		/* middle panel */
 		
-		middlePanel = new JPanel(new GridBagLayout());
-		middlePanel.setBackground(new Color(0, 0, 0, 0));
+		middlePanel = new TransparentPanel(new GridBagLayout());
 		
 		clientsTableModel = new DefaultTableModel(COLUMN_NAMES, 0);
 		
@@ -135,8 +132,7 @@ public class TablePanel extends APanel
 		
 		/* south panel */
 		
-		southPanel = new JPanel(new GridBagLayout());
-		southPanel.setBackground(new Color(0, 0, 0, 0));
+		southPanel = new TransparentPanel(new GridBagLayout());
 		
 		exitButton = new JButton("Exit");
 		
@@ -171,13 +167,15 @@ public class TablePanel extends APanel
 	
 	
 	
-	public DefaultTableModel getClientsTableModel() {
-		return clientsTableModel;
+	public int getClientsNumber() {
+		return clientsTableModel.getRowCount();
 	}
 	
-	public JTable getClientsTable() {
-		return clientsTable;
+	public void addClient(String username, String host, int port) {
+		clientsTableModel.addRow(new String[]{username, host, port + ""});
 	}
+	
+	
 	
 	public JButton getExitButton() {
 		return exitButton;
@@ -185,19 +183,5 @@ public class TablePanel extends APanel
 	
 	public JButton getStartButton() {
 		return startButton;
-	}
-	
-	
-	
-	@Override
-	public void lock() {
-		clientsTable.setEnabled(false);
-		startButton.setEnabled(false);
-	}
-
-	@Override
-	public void unlock() {
-		clientsTable.setEnabled(true);
-		startButton.setEnabled(true);
 	}
 }

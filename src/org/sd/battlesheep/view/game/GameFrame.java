@@ -45,7 +45,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DefaultCaret;
 
-import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.BSFrame;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -56,7 +56,7 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class GameFrame extends AFrame implements FieldObserver
+public class GameFrame extends BSFrame implements FieldObserver
 {
 	private static final Icon BANNER = new ImageIcon(IMGS_PATH + "banner.png");
 	

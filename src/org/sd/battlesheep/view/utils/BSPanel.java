@@ -20,16 +20,17 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.utils;
 
 
 
 import java.awt.Image;
 import java.awt.LayoutManager;
+import java.io.File;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import org.sd.battlesheep.view.APanel;
+import javax.swing.JPanel;
 
 
 
@@ -37,13 +38,34 @@ import org.sd.battlesheep.view.APanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class ASheepPanel extends APanel
+public class BSPanel extends JPanel
 {
-	private static final Image BATTLESHEEP = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
+	private static final String IMGS_PATH;
 	
 	
 	
-	public ASheepPanel(LayoutManager manager) {
-		super(BATTLESHEEP, manager);
+	protected static final Image BATTLESHIP_BACKGROUND;
+	
+	protected static final Image BATTLESHEEP_BACKGROUND;
+	
+	
+	
+	protected static final Icon WAITING_ICON;
+	
+	
+	
+	static {
+		IMGS_PATH = "imgs";
+		
+		BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battleship.jpg").getImage();
+		BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battlesheep.jpg").getImage();
+		
+		WAITING_ICON = new ImageIcon(IMGS_PATH + File.separator + "ajax-loader.gif");
+	}
+	
+	
+	
+	public BSPanel(LayoutManager manager) {
+		super(manager);
 	}
 }

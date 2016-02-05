@@ -24,12 +24,10 @@ package org.sd.battlesheep.view;
 
 
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.LayoutManager;
 
-import javax.swing.JPanel;
+import org.sd.battlesheep.view.utils.BSPanel;
 
 
 
@@ -37,43 +35,20 @@ import javax.swing.JPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public abstract class APanel extends JPanel
+public class BattleshipPanel extends BSPanel
 {
-	protected static final String IMGS_PATH = "./imgs/";
-	
-	
-	
-	private Image background;
-	
-	
-	
-	public APanel(Color background, LayoutManager manager) {
+	public BattleshipPanel(LayoutManager manager) {
 		super(manager);
-		setBackground(background);
-		setOpaque(true);
-		
-		this.background = null;
 	}
-	
-	public APanel(Image background, LayoutManager manager) {
-		super(manager);
-		
-		this.background = background;
-	}
-	
-	
-	
-	public abstract void lock();
-	
-	public abstract void unlock();
 	
 	
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		if (background == null)
-			super.paintComponent(g);
-		else
-			g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(
+			BATTLESHIP_BACKGROUND,
+			0, 0, getWidth(), getHeight(),
+			null
+		);
 	}
 }

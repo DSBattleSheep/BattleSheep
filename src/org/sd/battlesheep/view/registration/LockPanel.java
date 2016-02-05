@@ -31,6 +31,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
@@ -42,32 +43,53 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel3 extends BattlesheepPanel
+public class LockPanel extends BattlesheepPanel
 {
 	private TransparentPanel middlePanel;
 	
-	private JLabel hackedLabel;
+	private JLabel waitingLabel;
 	
 	
 	
-	public WarningPanel3() {
+	private TransparentPanel southPanel;
+	
+	private JButton exitButton;
+	
+	
+	
+	public LockPanel() {
 		super(new BorderLayout());
 		
 		/* middle panel */
 		
 		middlePanel = new TransparentPanel(new GridBagLayout());
 		
-		hackedLabel = new JLabel("The game has been hacked!", JLabel.CENTER);
-		hackedLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		hackedLabel.setBackground(new Color(0, 0, 0, 0));
-		hackedLabel.setForeground(Color.RED);
+		waitingLabel = new JLabel("Registration...", WAITING_ICON, JLabel.CENTER);
+		waitingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		waitingLabel.setForeground(Color.WHITE);
 		
 		middlePanel.add(
-			hackedLabel,
+			waitingLabel,
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
+				new Insets(10, 10, 5, 10),
+				0, 0
+			)
+		);
+		
+		/* south panel */
+		
+		southPanel = new TransparentPanel(new GridBagLayout());
+		
+		exitButton = new JButton("Exit");
+		
+		southPanel.add(
+			exitButton,
+			new GridBagConstraints(
+				0, 0, 1, 1, 1, 1,
+				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 10, 10),
 				0, 0
 			)
 		);
@@ -75,5 +97,12 @@ public class WarningPanel3 extends BattlesheepPanel
 		/* this panel */
 		
 		add(middlePanel, BorderLayout.CENTER);
+		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	public JButton getExitButton() {
+		return exitButton;
 	}
 }
