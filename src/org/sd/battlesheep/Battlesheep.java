@@ -115,13 +115,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		);
 	}
 	
-	private class GameFrameLockRunnable implements Runnable {
-		@Override
-		public void run() {
-			gameFrame.lock();
-		}
-	}
-	
 	private class DisposeRegistrationFrameAndCreateGameFrame implements Runnable {
 
 		private String username;
@@ -213,7 +206,17 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		orderList.remove(playerMap.get(username));
 		playerMap.remove(username);
 		
-		//TODO avvisare la vista del crash!
+
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {				
+				@Override
+				public void run() {
+					gameFrame.playerCrashed(me.getUsername());
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -318,7 +321,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		int currPlayerIndex = 0;
 		APlayer turnOwner;
 		Move recvdMove;
-		Opponent hitTarget;
 		
 		while(!ended && !kickedOut) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
@@ -385,12 +387,31 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			if (orderList.size() == 1 || me.lost())
 				ended = true;
 		}
-		if (kickedOut)
+		if (kickedOut) {
 			System.out.println("I've been kicked out!! <.<");
-		else if (! me.lost())
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					gameFrame.playerLost(me.getUsername(), true);
+				}
+			});
+		} else if (! me.lost()) {
 			System.out.println("WIIIIIINNER!! YO!");
-		else 
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					gameFrame.playerWon(me.getUsername());
+				}
+			});
+		} else { 
 			System.out.println("You loooose! :'(");
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					gameFrame.playerLost(me.getUsername(), false);
+				}
+			});
+		}
 	}
 
 

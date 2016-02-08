@@ -314,6 +314,27 @@ public class GameFrame extends BSFrame implements FieldObserver
 		}
 	}
 	
+	public void playerWon(String username) {
+		//TODO: il player 'username' ha vinto
+		// se username == me allora farei un popup "congratulazioni hai vinto" altrimenti semplice log.. 
+	}
+	
+	public void playerCrashed(String username) {
+		//TODO: il player 'username' è stato eliminato dalla partita perchè è crashato
+	}
+	
+	public void playerLost(String username, boolean kickedOut) {
+		if (username.equals(myField.getUsername())) {
+			if (kickedOut) {
+				// sono stato eliminato dalla partita perchè ho laggato troppo e sono arrivato dopo l'inizio del turno
+			} else {
+				// ho perso perchè mi hanno abbattuto tutte le pecuredde
+			}
+		} else {
+			// Il player 'username' è stato eliminato dalla partita perchè ha perso. 
+			// Per ora non viene differenziato se è stato buttato fuori per lag o per aver perso.
+		}
+	}
 	
 	
 	@Override
