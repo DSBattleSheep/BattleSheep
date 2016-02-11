@@ -91,6 +91,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	
 	private Condition myTurnEnded;
 	
+	private Move lastMove;
 	
 
 	public static Battlesheep getInstance() {
@@ -320,7 +321,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		boolean removedTurnOwner = false;
 		int currPlayerIndex = 0;
 		APlayer turnOwner;
-		Move recvdMove;
+
+		lastMove=new Move("", 0, 0, false, null, 0);
 		
 		while(!ended && !kickedOut) {
 			//se è il mio turno assegno il numero di opponent (ovvero mi sblocco)
@@ -328,7 +330,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			crashedOpponents.clear();
 						
 			if(turnOwner instanceof Me) {
-				playerServer.setExpectedPlayers(orderList);
+				playerServer.setExpectedPlayers(orderList, lastMove);
 				
 				pLock.lock();
 				try {
@@ -342,20 +344,20 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			} else {
 				try {
 					SwingUtilities.invokeLater(new GameFrameSetTurnRunnable(turnOwner.getUsername(), true));
-					recvdMove = PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername());
-					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(turnOwner.getUsername(), recvdMove));
+					lastMove = PlayerClient.connectToPlayer((Opponent) turnOwner, me.getUsername(),lastMove);
+					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(turnOwner.getUsername(), lastMove));
 					
-					if(recvdMove.getTarget().equals(me.getUsername()))
-						me.hit(recvdMove.getX(), recvdMove.getY());
+					if(lastMove.getTarget().equals(me.getUsername()))
+						me.hit(lastMove.getX(), lastMove.getY());
 					else
 						hitPlayer(
-								(Opponent)playerMap.get(recvdMove.getTarget()), 
-								recvdMove.getX(), 
-								recvdMove.getY(), 
-								recvdMove.isHit()
+								(Opponent)playerMap.get(lastMove.getTarget()), 
+								lastMove.getX(), 
+								lastMove.getY(), 
+								lastMove.isHit()
 						);
 					
-					for (String removedPlayer : recvdMove.getCrashedOpponents())
+					for (String removedPlayer : lastMove.getCrashedOpponents())
 						removeFromActivePlayers(removedPlayer);
 					
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
@@ -450,10 +452,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 						throw new NullPointerException(username + " does not exist in playerMap");
 					boolean hit = PlayerClient.attackPlayer( target, x, y);
 					hitPlayer(target, x, y, hit);
-					Move move = new Move(username, x, y, hit, crashedOpponents);
-					playerServer.setMove(move);
+					lastMove= new Move(username, x, y, hit, crashedOpponents, lastMove.getMoveIndex()+1);
+					playerServer.setMove(lastMove);
 
-					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(me.getUsername(), move));
+					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(me.getUsername(), lastMove));
 					
 					pLock.lock();
 					myTurnEnded.signal();
@@ -474,5 +476,23 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	public void onGameFrameExitClick() {
 		//FIXME chiudi i thread di RMI
 		System.exit(0);
+	}
+
+	@Override
+	public void updateMove(Move newMove) {
+		lastMove=newMove;
+		if(newMove.getTarget().equals(me.getUsername())) {
+			Opponent target = (Opponent)playerMap.get(newMove.getTarget());
+			hitPlayer(target, newMove.getX(), newMove.getY(), newMove.isHit());
+		} else {
+			me.hit(newMove.getX(), newMove.getY());
+		}
+	}
+
+	@Override
+	public void pushMoveUpdate(String userName, Move newMove) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
+		Opponent target = (Opponent)playerMap.get(newMove.getTarget());
+		PlayerClient.pushMoveUpdate(target, newMove);
+
 	}
 }

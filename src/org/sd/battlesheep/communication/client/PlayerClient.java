@@ -69,16 +69,22 @@ public class PlayerClient {
 		
 	}
 	
-	public static Move connectToPlayer(Opponent turnOwner, String myUser) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, KickedOutPlayerException {
+	public static Move connectToPlayer(Opponent turnOwner, String myUser, Move oldMove) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, KickedOutPlayerException {
 		TurnOwnerInterface turnInterface = (TurnOwnerInterface) Naming
 				.lookup("rmi://" + turnOwner.getHost() + ":" + turnOwner.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
-		return turnInterface.connectToTurnOwner(myUser);
+		return turnInterface.connectToTurnOwner(myUser, oldMove);
 	}
 	
 	public static boolean attackPlayer(Opponent opponent, int x, int y) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
 		AttackInterface attackInterface = (AttackInterface) Naming
 				.lookup("rmi://" + opponent.getHost() + ":" + opponent.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
 		return attackInterface.attackPlayer(x, y);
+	}
+	
+	public static void pushMoveUpdate(Opponent opponent, Move newMove) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
+		PushMoveInterface pushInterface = (PushMoveInterface) Naming
+				.lookup("rmi://" + opponent.getHost() + ":" + opponent.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
+		pushInterface.pushMoveUpdate(newMove);
 	}
 	
 }

@@ -17,23 +17,25 @@ public class Move implements Serializable {
 	// FIXME!
 	private List<String> crashedOpponents;
 	
+	private int moveIndex;
 
 
-	public Move(String target, int x, int y, boolean hit, List<String> crashedList) {
+	public Move(String target, int x, int y, boolean hit, List<String> crashedList, int moveIndex) {
 		this.target = target;
 		this.x = x;
 		this.y = y;
 		this.hit = hit;
 		this.crashedOpponents = crashedList;
+		this.moveIndex=moveIndex;
 	}
-
+	
 	/**
 	 * @return the target
 	 */
 	public String getTarget() {
 		return target;
 	}
-
+	
 	/**
 	 * @return the x
 	 */
@@ -53,6 +55,10 @@ public class Move implements Serializable {
 	 */
 	public boolean isHit() {
 		return hit;
+	}
+	
+	public int getMoveIndex() {
+		return moveIndex;
 	}
 	
 	/**

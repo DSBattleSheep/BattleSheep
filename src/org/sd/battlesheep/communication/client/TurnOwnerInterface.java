@@ -9,6 +9,6 @@ import org.sd.battlesheep.model.field.Move;
 
 public interface TurnOwnerInterface extends Remote {
 	
-	public Move connectToTurnOwner(String user) throws RemoteException, ServerNotActiveException, KickedOutPlayerException;
+	public Move connectToTurnOwner(String user, Move oldMove) throws RemoteException, ServerNotActiveException, KickedOutPlayerException;
 	
 }
