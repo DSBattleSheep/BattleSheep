@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.BattleshipPanel;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
 
@@ -57,8 +58,16 @@ public class LobbyAddressPanel extends BattleshipPanel
 	
 	
 	
-	public LobbyAddressPanel(final LobbyAddressPanelObserver observer) {
+	private LobbyAddressPanelObserver observer;
+	
+	
+	
+	public LobbyAddressPanel(LobbyAddressPanelObserver observer) {
 		super(new BorderLayout());
+		
+		/* model */
+		
+		this.observer = observer;
 		
 		/* items */
 		
@@ -71,8 +80,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onLobbyAddressPanelExitClick();
+				actionExit();
 			}
 		});
 		
@@ -80,8 +88,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onLobbyAddressPanelNextClick(addressTextField.getText());
+				actionNext();
 			}
 		});
 		
@@ -99,5 +106,20 @@ public class LobbyAddressPanel extends BattleshipPanel
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionExit() {
+		if (observer != null)
+			observer.onLobbyAddressPanelExitClick();
+	}
+	
+	private void actionNext() {
+		String text = addressTextField.getText();
+		if (text == null || text.isEmpty())
+			MessageFactory.informationDialog(this, "Please, fill the address field");
+		else if (observer != null)
+			observer.onLobbyAddressPanelNextClick(text);
 	}
 }

@@ -52,8 +52,16 @@ public class WaitingPanel extends WhitePanel
 	
 	
 	
-	public WaitingPanel(String host, int port, final WaitingPanelObserver observer) {
+	private WaitingPanelObserver observer;
+	
+	
+	
+	public WaitingPanel(String host, int port, WaitingPanelObserver observer) {
 		super(new BorderLayout());
+		
+		/* model */
+		
+		this.observer = observer;
 		
 		/* items */
 		
@@ -65,8 +73,7 @@ public class WaitingPanel extends WhitePanel
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onWaitingPanelExitClick();
+				actionExit();
 			}
 		});
 		
@@ -87,5 +94,12 @@ public class WaitingPanel extends WhitePanel
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionExit() {
+		if (observer != null)
+			observer.onWaitingPanelExitClick();
 	}
 }

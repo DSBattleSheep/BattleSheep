@@ -27,15 +27,17 @@ package org.sd.battlesheep.view.registration.panel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
 import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
 
 
 
@@ -45,56 +47,46 @@ import org.sd.battlesheep.view.TransparentPanel;
 @SuppressWarnings("serial")
 public class LockPanel extends BattlesheepPanel
 {
-	private TransparentPanel middlePanel;
-	
 	private JLabel waitingLabel;
-	
-	
-	
-	private TransparentPanel southPanel;
 	
 	private JButton exitButton;
 	
 	
 	
-	public LockPanel() {
+	private LockPanelObserver observer;
+	
+	
+	
+	public LockPanel(LockPanelObserver observer) {
 		super(new BorderLayout());
 		
-		/* middle panel */
+		/* model */
 		
-		middlePanel = new TransparentPanel(new GridBagLayout());
+		this.observer = observer;
+		
+		/* items */
 		
 		waitingLabel = new JLabel("Registration...", WAITING_ICON, JLabel.CENTER);
 		waitingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		waitingLabel.setForeground(Color.WHITE);
 		
-		middlePanel.add(
-			waitingLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
-		
 		exitButton = new JButton("Exit");
-		
-		southPanel.add(
-			exitButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 10),
-				0, 0
-			)
-		);
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionExit();
+			}
+		});
 		
 		/* this panel */
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		middlePanel.add(waitingLabel, BorderLayout.CENTER);
+		
+		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(exitButton);
 		
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
@@ -102,7 +94,8 @@ public class LockPanel extends BattlesheepPanel
 	
 	
 	
-	public JButton getExitButton() {
-		return exitButton;
+	private void actionExit() {
+		if (observer != null)
+			observer.onLockPanelExitClick();
 	}
 }

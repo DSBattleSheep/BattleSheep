@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
 
@@ -57,8 +58,16 @@ public class UsernamePanel extends BattlesheepPanel
 	
 	
 	
-	public UsernamePanel(final UsernamePanelObserver observer) {
+	private UsernamePanelObserver observer;
+	
+	
+	
+	public UsernamePanel(UsernamePanelObserver observer) {
 		super(new BorderLayout());
+		
+		/* model */
+		
+		this.observer = observer;
 		
 		/* items */
 		
@@ -71,8 +80,7 @@ public class UsernamePanel extends BattlesheepPanel
 		previousButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onUsernamePanelPreviousClick();
+				actionPrevious();
 			}
 		});
 		
@@ -80,8 +88,7 @@ public class UsernamePanel extends BattlesheepPanel
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onUsernamePanelNextClick(usernameTextField.getText());
+				actionNext();
 			}
 		});
 		
@@ -99,5 +106,20 @@ public class UsernamePanel extends BattlesheepPanel
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionPrevious() {
+		if (observer != null)
+			observer.onUsernamePanelPreviousClick();
+	}
+	
+	private void actionNext() {
+		String text = usernameTextField.getText();
+		if (text == null || text.isEmpty())
+			MessageFactory.informationDialog(this, "Please, fill the username field");
+		else if (observer != null)
+			observer.onUsernamePanelNextClick(text);
 	}
 }

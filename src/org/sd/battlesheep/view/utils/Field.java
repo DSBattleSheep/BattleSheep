@@ -25,15 +25,11 @@ package org.sd.battlesheep.view.utils;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 
 import org.sd.battlesheep.view.TransparentPanel;
 
@@ -45,14 +41,6 @@ import org.sd.battlesheep.view.TransparentPanel;
 @SuppressWarnings("serial")
 public class Field extends TransparentPanel
 {
-	private TransparentPanel northPanel;
-	
-	private JLabel usernameLabel;
-	
-	
-	
-	private TransparentPanel middlePanel;
-	
 	private Cell[][] cells;
 	
 	
@@ -67,7 +55,7 @@ public class Field extends TransparentPanel
 	
 	
 	
-	public Field(String username, int rows, int cols, FieldObserver observer) {
+	public Field(int rows, int cols, FieldObserver observer) {
 		super(new BorderLayout());
 		
 		/* model */
@@ -77,25 +65,9 @@ public class Field extends TransparentPanel
 		this.cols = cols;
 		this.observer = observer;
 		
-		/* north panel */
+		/* items */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
 		
-		usernameLabel = new JLabel(this.username, JLabel.CENTER);
-		
-		northPanel.add(
-			usernameLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 10, 0),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridLayout(rows, cols));
 		
 		cells = new Cell[rows][cols];
 		for (int r = 0; r < rows; r++) {
@@ -119,13 +91,17 @@ public class Field extends TransparentPanel
 						actionClick((Cell) e.getSource());
 					}
 				});
-				middlePanel.add(cells[r][c]);
 			}
 		}
 		
 		/* this panel */
 		
-		add(northPanel, BorderLayout.NORTH);
+		TransparentPanel middlePanel = new TransparentPanel(new GridLayout(rows, cols));
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		for (int r = 0; r < rows; r++)
+			for (int c = 0; c < cols; c++)
+				middlePanel.add(cells[r][c]);
+		
 		add(middlePanel, BorderLayout.CENTER);
 	}
 	
@@ -137,19 +113,6 @@ public class Field extends TransparentPanel
 	}
 	
 	
-	
-	public void setUsername(String username) {
-		this.username = username == null ? "" : username;
-		usernameLabel.setText(this.username);
-	}
-	
-	public void setUsernameForeground(Color color) {
-		usernameLabel.setForeground(color);
-	}
-	
-	public String getUsername() {
-		return username;
-	}
 	
 	public Cell getCell(int r, int c) {
 		return cells[r][c];

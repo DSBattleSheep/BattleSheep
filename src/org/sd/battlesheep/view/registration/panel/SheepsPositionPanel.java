@@ -26,16 +26,19 @@ package org.sd.battlesheep.view.registration.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.registration.observer.SheepsPositionPanelObserver;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -48,21 +51,11 @@ import org.sd.battlesheep.view.utils.FieldObserver;
 @SuppressWarnings("serial")
 public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserver
 {
-	private TransparentPanel northPanel;
-	
 	private JLabel positionLabel;
 	
 	private JLabel remainingLabel;
 	
-	
-	
-	private TransparentPanel middlePanel;
-	
 	private Field field;
-	
-	
-	
-	private TransparentPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -76,9 +69,11 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 	
 	private int sheeps;
 	
+	private SheepsPositionPanelObserver observer;
 	
 	
-	public SheepsPositionPanel(int rows, int cols, int sheeps) {
+	
+	public SheepsPositionPanel(int rows, int cols, int sheeps, SheepsPositionPanelObserver observer) {
 		super(new BorderLayout());
 		
 		/* model */
@@ -86,10 +81,9 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 		this.rows = rows;
 		this.cols = cols;
 		this.sheeps = sheeps;
+		this.observer = observer;
 		
-		/* north panel */
-		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		/* items */
 		
 		positionLabel = new JLabel("Sheeps Position:");
 		positionLabel.setForeground(Color.WHITE);
@@ -97,71 +91,39 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 		remainingLabel = new JLabel(sheeps + "");
 		remainingLabel.setForeground(Color.WHITE);
 		
-		northPanel.add(
-			positionLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 0.9, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 5),
-				0, 0
-			)
-		);
-		northPanel.add(
-			remainingLabel,
-			new GridBagConstraints(
-				1, 0, 1, 1, 0.1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 10, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridBagLayout());
-		
-		field = new Field("", rows, cols, this);
-		
-		field.setUsernameForeground(Color.WHITE);
-		
-		middlePanel.add(
-			field,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
+		field = new Field(rows, cols, this);
 		
 		previousButton = new JButton("Prevoius");
+		previousButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionPrevious();
+			}
+		});
 		
 		registrationButton = new JButton("Registration");
-		
-		southPanel.add(
-			previousButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		southPanel.add(
-			registrationButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
-				0, 0
-			)
-		);
+		registrationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionRegistration();
+			}
+		});
 		
 		/* this panel */
+		
+		TransparentPanel northPanel = new TransparentPanel(new BorderLayout(10, 10));
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(positionLabel, BorderLayout.WEST);
+		northPanel.add(remainingLabel, BorderLayout.EAST);
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		middlePanel.add(field, BorderLayout.CENTER);
+		
+		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(previousButton);
+		southPanel.add(registrationButton);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
@@ -187,29 +149,22 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 	
 	
 	
-	public void setUsername(String username) {
-		field.setUsername(username);
+	private void actionPrevious() {
+		if (observer != null)
+			observer.onSheepsPositionPanelPreviousClick();
 	}
 	
-	public int getRemainingSheeps() {
-		return sheeps;
-	}
-	
-	public boolean[][] getSheepsPosition() {
-		boolean[][] positions = new boolean[rows][cols];
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				positions[r][c] = field.getCell(r, c).isSheep();
-		return positions;
-	}
-	
-	
-	
-	public JButton getPreviousButton() {
-		return previousButton;
-	}
-	
-	public JButton getRegistrationButton() {
-		return registrationButton;
+	private void actionRegistration() {
+		if (sheeps == 1)
+			MessageFactory.informationDialog(this, "Please, add another " + sheeps + " sheep");
+		else if (sheeps != 0)
+			MessageFactory.informationDialog(this, "Please, add another " + sheeps + " sheeps");
+		else if (observer != null) {
+			boolean[][] sheepsPosition = new boolean[rows][cols];
+			for (int r = 0; r < rows; r++)
+				for (int c = 0; c < cols; c++)
+					sheepsPosition[r][c] = field.getCell(r, c).isSheep();
+			observer.onSheepsPositionPanelRegistrationClick(sheepsPosition);
+		}
 	}
 }

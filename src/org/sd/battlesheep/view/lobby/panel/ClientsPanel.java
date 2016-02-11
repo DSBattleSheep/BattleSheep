@@ -70,8 +70,16 @@ public class ClientsPanel extends WhitePanel
 	
 	
 	
-	public ClientsPanel(String host, int port, final ClientsPanelObserver observer) {
+	private ClientsPanelObserver observer;
+	
+	
+	
+	public ClientsPanel(String host, int port, ClientsPanelObserver observer) {
 		super(new BorderLayout());
+		
+		/* model */
+		
+		this.observer = observer;
 		
 		/* items */
 		
@@ -100,8 +108,7 @@ public class ClientsPanel extends WhitePanel
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onClientsPanelExitClick();
+				actionExit();
 			}
 		});
 		
@@ -109,8 +116,7 @@ public class ClientsPanel extends WhitePanel
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onClientsPanelStartClick();
+				actionStart();
 			}
 		});
 		
@@ -132,6 +138,18 @@ public class ClientsPanel extends WhitePanel
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionExit() {
+		if (observer != null)
+			observer.onClientsPanelExitClick();
+	}
+	
+	private void actionStart() {
+		if (observer != null)
+			observer.onClientsPanelStartClick();
 	}
 	
 	

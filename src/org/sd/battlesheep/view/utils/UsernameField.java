@@ -20,16 +20,42 @@
 
 
 
-package org.sd.battlesheep.view.registration.observer;
+package org.sd.battlesheep.view.utils;
+
+
+
+import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+
+import org.sd.battlesheep.view.TransparentPanel;
 
 
 
 /**
  * @author Giulio Biagini
  */
-public interface SheepsPositionPanelObserver
+@SuppressWarnings("serial")
+public class UsernameField extends Field
 {
-	public void onSheepsPositionPanelPreviousClick();
+	private JLabel usernameLabel;
 	
-	public void onSheepsPositionPanelRegistrationClick(boolean[][] sheepsPosition);
+	
+	
+	public UsernameField(String username, int rows, int cols, FieldObserver observer) {
+		super(rows, cols, observer);
+		
+		/* items */
+		
+		usernameLabel = new JLabel(username, JLabel.CENTER);
+		
+		/* this panel */
+		
+		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+		northPanel.add(usernameLabel, BorderLayout.CENTER);
+		
+		add(northPanel, BorderLayout.NORTH);
+	}
 }

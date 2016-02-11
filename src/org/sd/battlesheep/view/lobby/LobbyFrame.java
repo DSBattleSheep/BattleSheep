@@ -83,7 +83,7 @@ public class LobbyFrame extends BSFrame implements WaitingPanelObserver, Clients
 	@Override
 	public void onWaitingPanelExitClick() {
 		if (observer != null)
-			observer.onLobbyFrameStartClick();
+			observer.onLobbyFrameExitClick();
 	}
 	
 	@Override

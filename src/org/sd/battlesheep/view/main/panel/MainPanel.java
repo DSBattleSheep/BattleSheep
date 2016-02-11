@@ -63,8 +63,16 @@ public class MainPanel extends WhitePanel
 	
 	
 	
-	public MainPanel(final MainPanelObserver observer) {
+	private MainPanelObserver observer;
+	
+	
+	
+	public MainPanel(MainPanelObserver observer) {
 		super(new BorderLayout());
+		
+		/* model */
+		
+		this.observer = observer;
 		
 		/* itmes */
 		
@@ -86,8 +94,7 @@ public class MainPanel extends WhitePanel
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onMainPanelExitClick();
+				actionExit();
 			}
 		});
 		
@@ -95,8 +102,7 @@ public class MainPanel extends WhitePanel
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (observer != null)
-					observer.onMainPanelStartClick(serverRadioButton.isSelected());
+				actionStart();
 			}
 		});
 		
@@ -119,5 +125,17 @@ public class MainPanel extends WhitePanel
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	private void actionExit() {
+		if (observer != null)
+			observer.onMainPanelExitClick();
+	}
+	
+	private void actionStart() {
+		if (observer != null)
+			observer.onMainPanelStartClick(serverRadioButton.isSelected());
 	}
 }

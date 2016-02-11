@@ -29,5 +29,5 @@ package org.sd.battlesheep.view.registration.observer;
  */
 public interface LockPanelObserver
 {
-	
+	public void onLockPanelExitClick();
 }
