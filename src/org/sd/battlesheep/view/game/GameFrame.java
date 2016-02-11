@@ -58,7 +58,7 @@ import org.sd.battlesheep.view.utils.FieldObserver;
 @SuppressWarnings("serial")
 public class GameFrame extends BSFrame implements FieldObserver
 {
-	private static final Icon BANNER = new ImageIcon(IMGS_PATH + "banner.png");
+	private static final Icon BANNER = new ImageIcon("imgs/banner.png");
 	
 	
 	
@@ -337,12 +337,11 @@ public class GameFrame extends BSFrame implements FieldObserver
 	}
 	
 	
-	@Override
+	
 	public void lock() {
 		
 	}
 	
-	@Override
 	public void unlock() {
 		
 	}

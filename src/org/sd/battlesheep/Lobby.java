@@ -8,7 +8,7 @@ import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.communication.lobby.LobbyJoinInterface;
 import org.sd.battlesheep.communication.lobby.LobbyServerRMI;
 import org.sd.battlesheep.view.lobby.LobbyFrame;
-import org.sd.battlesheep.view.lobby.LobbyFrameObserver;
+import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
 
 
 

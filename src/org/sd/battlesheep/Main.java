@@ -56,9 +56,9 @@ public class Main implements MainFrameObserver
 	}
 	
 	@Override
-	public void onMainFrameStartClick(boolean serverMode) {
+	public void onMainFrameStartClick(boolean isServerSelected) {
 		mainFrame.dispose();
-		if (serverMode) 
+		if (isServerSelected) 
 			new Lobby();
 		else
 			new Battlesheep();

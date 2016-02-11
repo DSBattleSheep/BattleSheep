@@ -20,21 +20,21 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.registration.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
-import org.sd.battlesheep.view.BattleshipPanel;
+import org.sd.battlesheep.view.BattlesheepPanel;
 import org.sd.battlesheep.view.TransparentPanel;
 
 
@@ -43,13 +43,11 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends BattleshipPanel
+public class LockPanel extends BattlesheepPanel
 {
-	private TransparentPanel northPanel;
+	private TransparentPanel middlePanel;
 	
-	private JLabel addressLabel;
-	
-	private JTextField addressTextField;
+	private JLabel waitingLabel;
 	
 	
 	
@@ -57,42 +55,25 @@ public class LobbyAddressPanel extends BattleshipPanel
 	
 	private JButton exitButton;
 	
-	private JButton nextButton;
 	
 	
-	
-	/*
-	 * constructor
-	 */
-	
-	public LobbyAddressPanel() {
+	public LockPanel() {
 		super(new BorderLayout());
 		
-		/* north panel */
+		/* middle panel */
 		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		middlePanel = new TransparentPanel(new GridBagLayout());
 		
-		addressLabel = new JLabel("Lobby Ip Address:");
-		addressLabel.setForeground(Color.WHITE);
+		waitingLabel = new JLabel("Registration...", WAITING_ICON, JLabel.CENTER);
+		waitingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		waitingLabel.setForeground(Color.WHITE);
 		
-		addressTextField = new JTextField("127.0.0.1");
-		
-		northPanel.add(
-			addressLabel,
+		middlePanel.add(
+			waitingLabel,
 			new GridBagConstraints(
-				0, 0, 1, 1, 0.2, 1,
+				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		northPanel.add(
-			addressTextField,
-			new GridBagConstraints(
-				1, 0, 1, 1, 0.8, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 5, 10),
+				new Insets(10, 10, 5, 10),
 				0, 0
 			)
 		);
@@ -103,51 +84,25 @@ public class LobbyAddressPanel extends BattleshipPanel
 		
 		exitButton = new JButton("Exit");
 		
-		nextButton = new JButton("Next");
-		
 		southPanel.add(
 			exitButton,
 			new GridBagConstraints(
 				0, 0, 1, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		
-		southPanel.add(
-			nextButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
+				new Insets(5, 10, 10, 10),
 				0, 0
 			)
 		);
 		
 		/* this panel */
 		
-		add(northPanel, BorderLayout.NORTH);
+		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
-	}
-	
-	
-	
-	public boolean isAddressEmpty() {
-		return addressTextField.getText().isEmpty();
-	}
-	
-	public String getAddress() {
-		return addressTextField.getText();
 	}
 	
 	
 	
 	public JButton getExitButton() {
 		return exitButton;
-	}
-	
-	public JButton getNextButton() {
-		return nextButton;
 	}
 }

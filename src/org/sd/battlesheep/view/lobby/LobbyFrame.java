@@ -25,12 +25,14 @@ package org.sd.battlesheep.view.lobby;
 
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.BSFrame;
+import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
+import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
+import org.sd.battlesheep.view.lobby.panel.ClientsPanel;
+import org.sd.battlesheep.view.lobby.panel.WaitingPanel;
 
 
 
@@ -38,7 +40,7 @@ import org.sd.battlesheep.view.BSFrame;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends BSFrame
+public class LobbyFrame extends BSFrame implements WaitingPanelObserver, ClientsPanelObserver
 {
 	private static final int WIDTH = 400;
 	
@@ -63,31 +65,11 @@ public class LobbyFrame extends BSFrame
 		
 		this.observer = observer;
 		
-		/* waiting panel */
+		/* panels */
 		
-		waitingPanel = new WaitingPanel(host, port);
-		waitingPanel.getExitButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionExit();
-			}
-		});
+		waitingPanel = new WaitingPanel(host, port, this);
 		
-		/* table panel */
-		
-		clientsPanel = new ClientsPanel(host, port);
-		clientsPanel.getExitButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionExit();
-			}
-		});
-		clientsPanel.getStartButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionStart();
-			}
-		});
+		clientsPanel = new ClientsPanel(host, port, this);
 		
 		/* this frame */
 		
@@ -98,12 +80,20 @@ public class LobbyFrame extends BSFrame
 	
 	
 	
-	private void actionExit() {
+	@Override
+	public void onWaitingPanelExitClick() {
+		if (observer != null)
+			observer.onLobbyFrameStartClick();
+	}
+	
+	@Override
+	public void onClientsPanelExitClick() {
 		if (observer != null)
 			observer.onLobbyFrameExitClick();
 	}
 	
-	private void actionStart() {
+	@Override
+	public void onClientsPanelStartClick() {
 		if (observer != null)
 			observer.onLobbyFrameStartClick();
 	}

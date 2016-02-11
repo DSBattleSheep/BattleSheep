@@ -20,15 +20,17 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view;
 
 
 
-import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.LayoutManager;
+import java.io.File;
 
-import org.sd.battlesheep.view.BSFrame;
-import org.sd.battlesheep.view.main.observer.MainPanelObserver;
-import org.sd.battlesheep.view.main.panel.MainPanel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 
 
@@ -36,47 +38,34 @@ import org.sd.battlesheep.view.main.panel.MainPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainFrame extends BSFrame implements MainPanelObserver
+public class BSPanel extends JPanel
 {
-	private MainPanel mainPanel;
+	private static final String IMGS_PATH;
 	
 	
 	
-	private MainFrameObserver observer;
+	protected static final Image BATTLESHIP_BACKGROUND;
+	
+	protected static final Image BATTLESHEEP_BACKGROUND;
 	
 	
 	
-	public MainFrame(MainFrameObserver observer) {
-		super(new BorderLayout());
+	protected static final Icon WAITING_ICON;
+	
+	
+	
+	static {
+		IMGS_PATH = "imgs";
 		
-		/* model */
+		BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battleship.jpg").getImage();
+		BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battlesheep.jpg").getImage();
 		
-		this.observer = observer;
-		
-		/* panels */
-		
-		mainPanel = new MainPanel(this);
-		
-		/* this frame */
-		
-		add(mainPanel, BorderLayout.CENTER);
-		
-		pack();
-		
-		setVisible(true);
+		WAITING_ICON = new ImageIcon(IMGS_PATH + File.separator + "ajax-loader.gif");
 	}
 	
 	
 	
-	@Override
-	public void onMainPanelExitClick() {
-		if (observer != null)
-			observer.onMainFrameExitClick();
-	}
-	
-	@Override
-	public void onMainPanelStartClick(boolean isServerSelected) {
-		if (observer != null)
-			observer.onMainFrameStartClick(isServerSelected);
+	public BSPanel(LayoutManager manager) {
+		super(manager);
 	}
 }

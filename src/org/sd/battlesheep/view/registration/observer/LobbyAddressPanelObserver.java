@@ -20,52 +20,16 @@
 
 
 
-package org.sd.battlesheep.view.utils;
-
-
-
-import java.awt.Image;
-import java.awt.LayoutManager;
-import java.io.File;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+package org.sd.battlesheep.view.registration.observer;
 
 
 
 /**
  * @author Giulio Biagini
  */
-@SuppressWarnings("serial")
-public class BSPanel extends JPanel
+public interface LobbyAddressPanelObserver
 {
-	private static final String IMGS_PATH;
+	public void onLobbyAddressPanelExitClick();
 	
-	
-	
-	protected static final Image BATTLESHIP_BACKGROUND;
-	
-	protected static final Image BATTLESHEEP_BACKGROUND;
-	
-	
-	
-	protected static final Icon WAITING_ICON;
-	
-	
-	
-	static {
-		IMGS_PATH = "imgs";
-		
-		BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battleship.jpg").getImage();
-		BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battlesheep.jpg").getImage();
-		
-		WAITING_ICON = new ImageIcon(IMGS_PATH + File.separator + "ajax-loader.gif");
-	}
-	
-	
-	
-	public BSPanel(LayoutManager manager) {
-		super(manager);
-	}
+	public void onLobbyAddressPanelNextClick(String lobbyAddress);
 }

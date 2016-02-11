@@ -20,17 +20,15 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.registration.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.BattleshipPanel;
@@ -42,37 +40,27 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel2 extends BattleshipPanel
+public class WarningPanel1 extends BattleshipPanel
 {
-	private TransparentPanel middlePanel;
-	
-	private JLabel hackingLabel;
+	private JLabel loadingLabel;
 	
 	
 	
-	public WarningPanel2() {
+	public WarningPanel1() {
 		super(new BorderLayout());
 		
-		/* middle panel */
+		/* items */
 		
-		middlePanel = new TransparentPanel(new GridBagLayout());
-		
-		hackingLabel = new JLabel("The game is going to be hacked...", WAITING_ICON, JLabel.CENTER);
-		hackingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		hackingLabel.setBackground(new Color(0, 0, 0, 0));
-		hackingLabel.setForeground(Color.RED);
-		
-		middlePanel.add(
-			hackingLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
-				0, 0
-			)
-		);
+		loadingLabel = new JLabel("Loading...", WAITING_ICON, JLabel.CENTER);
+		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		loadingLabel.setBackground(new Color(0, 0, 0, 0));
+		loadingLabel.setForeground(Color.WHITE);
 		
 		/* this panel */
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		middlePanel.add(loadingLabel, BorderLayout.CENTER);
 		
 		add(middlePanel, BorderLayout.CENTER);
 	}

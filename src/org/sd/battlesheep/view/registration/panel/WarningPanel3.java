@@ -20,17 +20,15 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.registration.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
@@ -44,8 +42,6 @@ import org.sd.battlesheep.view.TransparentPanel;
 @SuppressWarnings("serial")
 public class WarningPanel3 extends BattlesheepPanel
 {
-	private TransparentPanel middlePanel;
-	
 	private JLabel hackedLabel;
 	
 	
@@ -53,26 +49,18 @@ public class WarningPanel3 extends BattlesheepPanel
 	public WarningPanel3() {
 		super(new BorderLayout());
 		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridBagLayout());
+		/* items */
 		
 		hackedLabel = new JLabel("The game has been hacked!", JLabel.CENTER);
 		hackedLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		hackedLabel.setBackground(new Color(0, 0, 0, 0));
 		hackedLabel.setForeground(Color.RED);
 		
-		middlePanel.add(
-			hackedLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 10, 10),
-				0, 0
-			)
-		);
-		
 		/* this panel */
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		middlePanel.add(hackedLabel, BorderLayout.CENTER);
 		
 		add(middlePanel, BorderLayout.CENTER);
 	}

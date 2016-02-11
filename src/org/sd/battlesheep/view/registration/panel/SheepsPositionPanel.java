@@ -20,7 +20,7 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.registration.panel;
 
 
 

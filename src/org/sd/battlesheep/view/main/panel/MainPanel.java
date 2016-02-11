@@ -20,17 +20,18 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.main.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,6 +39,7 @@ import javax.swing.JRadioButton;
 
 import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.main.observer.MainPanelObserver;
 
 
 
@@ -47,13 +49,7 @@ import org.sd.battlesheep.view.WhitePanel;
 @SuppressWarnings("serial")
 public class MainPanel extends WhitePanel
 {
-	private TransparentPanel northPanel;
-	
 	private JLabel modeLabel;
-	
-	
-	
-	private TransparentPanel middlePanel;
 	
 	private JRadioButton serverRadioButton;
 	
@@ -61,38 +57,18 @@ public class MainPanel extends WhitePanel
 	
 	private ButtonGroup radioButtonGroup;
 	
-	
-	
-	private TransparentPanel southPanel;
-	
 	private JButton exitButton;
 	
 	private JButton startButton;
 	
 	
 	
-	public MainPanel() {
+	public MainPanel(final MainPanelObserver observer) {
 		super(new BorderLayout());
 		
-		/* north panel */
-		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		/* itmes */
 		
 		modeLabel = new JLabel("Start the program as:", JLabel.CENTER);
-		
-		northPanel.add(
-			modeLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridBagLayout());
 		
 		serverRadioButton = new JRadioButton("Server", false);
 		serverRadioButton.setBackground(new Color(0, 0, 0, 0));
@@ -106,78 +82,42 @@ public class MainPanel extends WhitePanel
 		radioButtonGroup.add(serverRadioButton);
 		radioButtonGroup.add(clientRadioButton);
 		
-		middlePanel.add(
-			serverRadioButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		middlePanel.add(
-			clientRadioButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
-		
 		exitButton = new JButton("Exit");
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onMainPanelExitClick();
+			}
+		});
 		
 		startButton = new JButton("Start");
-		
-		southPanel.add(
-			exitButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		
-		southPanel.add(
-			startButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
-				0, 0
-			)
-		);
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onMainPanelStartClick(serverRadioButton.isSelected());
+			}
+		});
 		
 		/* this panel */
+		
+		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(modeLabel, BorderLayout.CENTER);
+		
+		TransparentPanel middlePanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		middlePanel.add(serverRadioButton);
+		middlePanel.add(clientRadioButton);
+		
+		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(exitButton);
+		southPanel.add(startButton);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
-	}
-	
-	
-	
-	public boolean isServerSelected() {
-		return serverRadioButton.isSelected();
-	}
-	
-	public boolean isClientSelected() {
-		return clientRadioButton.isSelected();
-	}
-	
-	
-	
-	public JButton getExitButton() {
-		return exitButton;
-	}
-	
-	public JButton getStartButton() {
-		return startButton;
 	}
 }

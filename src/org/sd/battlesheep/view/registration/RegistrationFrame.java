@@ -33,6 +33,15 @@ import javax.swing.Timer;
 
 import org.sd.battlesheep.view.BSFrame;
 import org.sd.battlesheep.view.MessageFactory;
+import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
+import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
+import org.sd.battlesheep.view.registration.panel.LobbyAddressPanel;
+import org.sd.battlesheep.view.registration.panel.LockPanel;
+import org.sd.battlesheep.view.registration.panel.SheepsPositionPanel;
+import org.sd.battlesheep.view.registration.panel.UsernamePanel;
+import org.sd.battlesheep.view.registration.panel.WarningPanel1;
+import org.sd.battlesheep.view.registration.panel.WarningPanel2;
+import org.sd.battlesheep.view.registration.panel.WarningPanel3;
 
 
 
@@ -40,7 +49,7 @@ import org.sd.battlesheep.view.MessageFactory;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends BSFrame
+public class RegistrationFrame extends BSFrame implements LobbyAddressPanelObserver, UsernamePanelObserver
 {
 	private static final int WIDTH = 500;
 	
@@ -72,6 +81,10 @@ public class RegistrationFrame extends BSFrame
 	
 	
 	
+	private String lobbyAddress;
+	
+	private String username;
+	
 	private RegistrationFrameObserver observer;
 	
 	
@@ -83,49 +96,17 @@ public class RegistrationFrame extends BSFrame
 		
 		this.observer = observer;
 		
-		/* lobby address panel */
+		/* panels */
 		
-		lobbyAddressPanel = new LobbyAddressPanel();
-		lobbyAddressPanel.getExitButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionExit();
-			}
-		});
-		lobbyAddressPanel.getNextButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionNextToWarningPanel1();
-			}
-		});
-		
-		/* warning panel 1 */
+		lobbyAddressPanel = new LobbyAddressPanel(this);
 		
 		warningPanel1 = new WarningPanel1();
 		
-		/* warning panel 2 */
-		
 		warningPanel2 = new WarningPanel2();
-		
-		/* warning panel 3 */
 		
 		warningPanel3 = new WarningPanel3();
 		
-		/* username panel */
-		
-		usernamePanel = new UsernamePanel();
-		usernamePanel.getPreviousButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionPreviousToLobbyAddressPanel();
-			}
-		});
-		usernamePanel.getNextButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				actionNextToSheepsPositionPanel();
-			}
-		});
+		usernamePanel = new UsernamePanel(this);
 		
 		/* sheeps position panel */
 		
@@ -166,22 +147,91 @@ public class RegistrationFrame extends BSFrame
 			observer.onRegistrationFrameExitClick();
 	}
 	
-	private void actionNextToWarningPanel1() {
-		if (lobbyAddressPanel.isAddressEmpty())
+	
+	
+	private void actionNextToUsernamePanel() {
+		remove(warningPanel3);
+		add(usernamePanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	private void actionPreviousToUsernamePanel() {
+		remove(sheepsPositionPanel);
+		add(usernamePanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	private void actionRegistration() {
+		int remainingSheeps = sheepsPositionPanel.getRemainingSheeps();
+		if (remainingSheeps == 1)
+			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheep");
+		else if (remainingSheeps != 0)
+			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheeps");
+		else if (observer != null) {
+			actionLock();
+			observer.onRegistrationFrameRegistrationClick(
+				lobbyAddress,
+				username,
+				sheepsPositionPanel.getSheepsPosition()
+			);
+		}
+	}
+	
+	private void actionLock() {
+		remove(sheepsPositionPanel);
+		add(lockPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	
+	
+	public void unlock() {
+		remove(lockPanel);
+		add(sheepsPositionPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void onLobbyAddressPanelExitClick() {
+		if (observer != null)
+			observer.onRegistrationFrameExitClick();
+	}
+	
+	@Override
+	public void onLobbyAddressPanelNextClick(String lobbyAddress) {
+		if (lobbyAddress.isEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the address field");
 		else {
-			remove(lobbyAddressPanel);
-			add(warningPanel1, BorderLayout.CENTER);
-			SwingUtilities.updateComponentTreeUI(this);
-			Timer timer = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					actionNextToWarningPanel2();
-				}
-			});
-			timer.setRepeats(false);
-			timer.start();
+			this.lobbyAddress = lobbyAddress;
+			actionNextToWarningPanel1();
 		}
+	}
+	
+	private void actionNextToWarningPanel1() {
+		remove(lobbyAddressPanel);
+		add(warningPanel1, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
+		Timer timer = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNextToWarningPanel2();
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
 	}
 	
 	private void actionNextToWarningPanel2() {
@@ -212,62 +262,23 @@ public class RegistrationFrame extends BSFrame
 		timer.start();
 	}
 	
-	private void actionNextToUsernamePanel() {
-		remove(warningPanel3);
-		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-	}
-	
-	private void actionPreviousToLobbyAddressPanel() {
+	@Override
+	public void onUsernamePanelPreviousClick() {
 		remove(usernamePanel);
 		add(lobbyAddressPanel, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
-	private void actionNextToSheepsPositionPanel() {
-		if (usernamePanel.isUsernameEmpty())
+	@Override
+	public void onUsernamePanelNextClick(String username) {
+		if (username.isEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the username field");
 		else {
-			sheepsPositionPanel.setUsername(usernamePanel.getUsername());
+			this.username = username;
+			sheepsPositionPanel.setUsername(username);
 			remove(usernamePanel);
 			add(sheepsPositionPanel, BorderLayout.CENTER);
 			SwingUtilities.updateComponentTreeUI(this);
 		}
-	}
-	
-	private void actionPreviousToUsernamePanel() {
-		remove(sheepsPositionPanel);
-		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-	}
-	
-	private void actionRegistration() {
-		int remainingSheeps = sheepsPositionPanel.getRemainingSheeps();
-		if (remainingSheeps == 1)
-			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheep");
-		else if (remainingSheeps != 0)
-			MessageFactory.informationDialog(this, "Please, add another " + remainingSheeps + " sheeps");
-		else if (observer != null) {
-			actionLock();
-			observer.onRegistrationFrameRegistrationClick(
-				lobbyAddressPanel.getAddress(),
-				usernamePanel.getUsername(),
-				sheepsPositionPanel.getSheepsPosition()
-			);
-		}
-	}
-	
-	private void actionLock() {
-		remove(sheepsPositionPanel);
-		add(lockPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-	}
-	
-	
-	
-	public void unlock() {
-		remove(lockPanel);
-		add(sheepsPositionPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
 	}
 }

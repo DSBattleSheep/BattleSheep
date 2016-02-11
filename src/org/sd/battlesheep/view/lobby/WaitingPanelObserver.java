@@ -20,16 +20,14 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.lobby;
 
 
 
 /**
  * @author Giulio Biagini
  */
-public interface MainFrameObserver
+public interface WaitingPanelObserver
 {
-	public void onMainFrameExitClick();
-	
-	public void onMainFrameStartClick(boolean isServerSelected);
+	public void onWaitingPanelExitClick();
 }

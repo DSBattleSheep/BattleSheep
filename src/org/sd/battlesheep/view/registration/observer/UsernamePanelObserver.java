@@ -20,16 +20,16 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.registration.observer;
 
 
 
 /**
  * @author Giulio Biagini
  */
-public interface MainFrameObserver
+public interface UsernamePanelObserver
 {
-	public void onMainFrameExitClick();
+	public void onUsernamePanelPreviousClick();
 	
-	public void onMainFrameStartClick(boolean isServerSelected);
+	public void onUsernamePanelNextClick(String username);
 }

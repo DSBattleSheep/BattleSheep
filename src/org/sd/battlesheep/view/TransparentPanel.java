@@ -27,8 +27,6 @@ package org.sd.battlesheep.view;
 import java.awt.Color;
 import java.awt.LayoutManager;
 
-import org.sd.battlesheep.view.utils.BSPanel;
-
 
 
 /**

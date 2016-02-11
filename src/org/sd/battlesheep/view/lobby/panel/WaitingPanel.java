@@ -20,20 +20,21 @@
 
 
 
-package org.sd.battlesheep.view.lobby;
+package org.sd.battlesheep.view.lobby.panel;
 
 
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.lobby.WaitingPanelObserver;
 
 
 
@@ -43,85 +44,48 @@ import org.sd.battlesheep.view.WhitePanel;
 @SuppressWarnings("serial")
 public class WaitingPanel extends WhitePanel
 {
-	private TransparentPanel northPanel;
-	
 	private JLabel addressLabel;
 	
-	
-	
-	private TransparentPanel middlePanel;
-	
 	private JLabel waitingLabel;
-	
-	
-	
-	private TransparentPanel southPanel;
 	
 	private JButton exitButton;
 	
 	
 	
-	public WaitingPanel(String host, int port) {
+	public WaitingPanel(String host, int port, final WaitingPanelObserver observer) {
 		super(new BorderLayout());
 		
-		/* north panel */
-		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		/* items */
 		
 		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
 		
-		northPanel.add(
-			addressLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridBagLayout());
-		
 		waitingLabel = new JLabel("Waiting for clients...", WAITING_ICON, JLabel.CENTER);
 		
-		middlePanel.add(
-			waitingLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
-		
 		exitButton = new JButton("Exit");
-		
-		southPanel.add(
-			exitButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 10),
-				0, 0
-			)
-		);
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onWaitingPanelExitClick();
+			}
+		});
 		
 		/* this panel */
+		
+		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(addressLabel, BorderLayout.CENTER);
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		middlePanel.add(waitingLabel, BorderLayout.CENTER);
+		
+		TransparentPanel southPanel = new TransparentPanel(new BorderLayout());
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(exitButton, BorderLayout.CENTER);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(southPanel, BorderLayout.SOUTH);
-	}
-	
-	
-	
-	public JButton getExitButton() {
-		return exitButton;
 	}
 }

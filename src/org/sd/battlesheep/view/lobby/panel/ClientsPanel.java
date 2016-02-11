@@ -20,16 +20,17 @@
 
 
 
-package org.sd.battlesheep.view.lobby;
+package org.sd.battlesheep.view.lobby.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -41,6 +42,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.sd.battlesheep.view.TransparentPanel;
 import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 
 
 
@@ -54,13 +56,7 @@ public class ClientsPanel extends WhitePanel
 	
 	
 	
-	private TransparentPanel northPanel;
-	
 	private JLabel addressLabel;
-	
-	
-	
-	private TransparentPanel middlePanel;
 	
 	private DefaultTableModel clientsTableModel;
 	
@@ -68,38 +64,18 @@ public class ClientsPanel extends WhitePanel
 	
 	private JScrollPane clientsScrollPane;
 	
-	
-	
-	private TransparentPanel southPanel;
-	
 	private JButton exitButton;
 	
 	private JButton startButton;
 	
 	
 	
-	public ClientsPanel(String host, int port) {
+	public ClientsPanel(String host, int port, final ClientsPanelObserver observer) {
 		super(new BorderLayout());
 		
-		/* north panel */
-		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		/* items */
 		
 		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
-		
-		northPanel.add(
-			addressLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new TransparentPanel(new GridBagLayout());
 		
 		clientsTableModel = new DefaultTableModel(COLUMN_NAMES, 0);
 		
@@ -120,45 +96,38 @@ public class ClientsPanel extends WhitePanel
 		
 		clientsScrollPane = new JScrollPane(clientsTable);
 		
-		middlePanel.add(
-			clientsScrollPane,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
-		
 		exitButton = new JButton("Exit");
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onClientsPanelExitClick();
+			}
+		});
 		
 		startButton = new JButton("Start");
-		
-		southPanel.add(
-			exitButton,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		
-		southPanel.add(
-			startButton,
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
-				0, 0
-			)
-		);
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onClientsPanelExitClick();
+			}
+		});
 		
 		/* this panel */
+		
+		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(addressLabel, BorderLayout.CENTER);
+		
+		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		middlePanel.add(clientsScrollPane, BorderLayout.CENTER);
+		
+		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(exitButton);
+		southPanel.add(startButton);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
@@ -173,15 +142,5 @@ public class ClientsPanel extends WhitePanel
 	
 	public void addClient(String username, String host, int port) {
 		clientsTableModel.addRow(new String[]{username, host, port + ""});
-	}
-	
-	
-	
-	public JButton getExitButton() {
-		return exitButton;
-	}
-	
-	public JButton getStartButton() {
-		return startButton;
 	}
 }

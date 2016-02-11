@@ -20,22 +20,24 @@
 
 
 
-package org.sd.battlesheep.view.registration;
+package org.sd.battlesheep.view.registration.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.BattlesheepPanel;
 import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
 
 
 
@@ -45,15 +47,9 @@ import org.sd.battlesheep.view.TransparentPanel;
 @SuppressWarnings("serial")
 public class UsernamePanel extends BattlesheepPanel
 {
-	private TransparentPanel northPanel;
-	
 	private JLabel usernameLabel;
 	
 	private JTextField usernameTextField;
-	
-	
-	
-	private TransparentPanel southPanel;
 	
 	private JButton previousButton;
 	
@@ -61,87 +57,47 @@ public class UsernamePanel extends BattlesheepPanel
 	
 	
 	
-	public UsernamePanel() {
+	public UsernamePanel(final UsernamePanelObserver observer) {
 		super(new BorderLayout());
 		
-		/* north panel */
-		
-		northPanel = new TransparentPanel(new GridBagLayout());
+		/* items */
 		
 		usernameLabel = new JLabel("Username:");
 		usernameLabel.setForeground(Color.WHITE);
 		
 		usernameTextField = new JTextField();
 		
-		northPanel.add(
-			usernameLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 0.2, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 5),
-				0, 0
-			)
-		);
-		northPanel.add(
-			usernameTextField,
-			new GridBagConstraints(
-				1, 0, 1, 1, 0.8, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 5, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new TransparentPanel(new GridBagLayout());
-		
 		previousButton = new JButton("Prevoius");
+		previousButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onUsernamePanelPreviousClick();
+			}
+		});
 		
 		nextButton = new JButton("Next");
-		
-		southPanel.add(
-			previousButton,
-			new GridBagConstraints(
-				0, 1, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 5),
-				0, 0
-			)
-		);
-		southPanel.add(
-			nextButton,
-			new GridBagConstraints(
-				1, 1, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 10, 10),
-				0, 0
-			)
-		);
+		nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (observer != null)
+					observer.onUsernamePanelNextClick(usernameTextField.getText());
+			}
+		});
 		
 		/* this panel */
 		
+		TransparentPanel northPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(usernameLabel);
+		northPanel.add(usernameTextField);
+		
+		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		southPanel.add(previousButton);
+		southPanel.add(nextButton);
+		
 		add(northPanel, BorderLayout.NORTH);
 		add(southPanel, BorderLayout.SOUTH);
-	}
-	
-	
-	
-	public boolean isUsernameEmpty() {
-		return usernameTextField.getText().isEmpty();
-	}
-	
-	public String getUsername() {
-		return usernameTextField.getText();
-	}
-	
-	
-	
-	public JButton getPreviousButton() {
-		return previousButton;
-	}
-	
-	public JButton getNextButton() {
-		return nextButton;
 	}
 }
