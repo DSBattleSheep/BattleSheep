@@ -110,7 +110,7 @@ public class ClientsPanel extends WhitePanel
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (observer != null)
-					observer.onClientsPanelExitClick();
+					observer.onClientsPanelStartClick();
 			}
 		});
 		
