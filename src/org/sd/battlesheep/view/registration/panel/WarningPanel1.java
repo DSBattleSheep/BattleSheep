@@ -59,7 +59,7 @@ public class WarningPanel1 extends BSPanel
 		/* this panel */
 		
 		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		middlePanel.add(loadingLabel, BorderLayout.CENTER);
 		
 		add(middlePanel, BorderLayout.CENTER);

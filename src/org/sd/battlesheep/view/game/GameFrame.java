@@ -33,6 +33,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -46,6 +47,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DefaultCaret;
 
 import org.sd.battlesheep.view.BSFrame;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.game.observer.ListPanelObserver;
+import org.sd.battlesheep.view.game.panel.BannerPanel;
+import org.sd.battlesheep.view.game.panel.FieldPanel;
+import org.sd.battlesheep.view.game.panel.ListPanel;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -56,47 +62,27 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class GameFrame extends BSFrame implements FieldObserver
+public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserver
 {
-	private static final Icon BANNER = new ImageIcon("imgs/banner.png");
-	
-	
-	
 	private static final int WIDTH = 800;
 	
 	private static final int HEIGHT = 600;
 	
 	
 	
-	private JPanel northPanel;
+	private BannerPanel bannerPanel;
 	
-	private JLabel bannerLabel;
+	private ListPanel listPanel;
 	
+	private FieldPanel myFieldPanel;
 	
-	
-	private JPanel rightPanel;
-	
-	private ArrayList<Field> opponentsField;
-	
-	private JList<String> opponentsUsernameList;
+	private FieldPanel opponentFieldPanel;
 	
 	
-	
-	private JPanel middlePanel;
 	
 	private Field myField;
 	
-	private Field opponentField;
-	
-	
-	
-	private JPanel southPanel;
-	
-	private JTextArea logTextArea;
-	
-	private JScrollPane logScrollPane;
-	
-	
+	private Field[] opponentsField;
 	
 	private GameFrameObserver observer;
 	
@@ -107,223 +93,89 @@ public class GameFrame extends BSFrame implements FieldObserver
 	 */
 	
 	public GameFrame(String myUsername, String[] opponentsUsername, int rows, int cols, GameFrameObserver observer) {
-		super(WIDTH, HEIGHT, new BorderLayout());
+		super(WIDTH, HEIGHT, new BorderLayout(10, 10));
 		
 		/* model */
 		
+		this.myField = new Field(rows, cols, myUsername, this);
+		
+		this.opponentsField = new Field[opponentsUsername.length];
+		for (int i = 0; i < this.opponentsField.length; i++)
+			this.opponentsField[i] = new Field(rows, cols, opponentsUsername[i], this);
+		
 		this.observer = observer;
 		
-		/* north panel */
+		/* panels */
 		
-		northPanel = new JPanel(new GridBagLayout());
-		northPanel.setBackground(new Color(0, 0, 0, 0));
+		bannerPanel = new BannerPanel();
 		
-		bannerLabel = new JLabel(BANNER);
-		bannerLabel.setOpaque(true);
-		bannerLabel.setBackground(new Color(0, 0, 0, 0));
+		listPanel = new ListPanel(opponentsField, this);
 		
-		northPanel.add(
-			bannerLabel,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(10, 10, 5, 10),
-				0, 0
-			)
-		);
+		// myFieldPanel = new FieldPanel(myField);
 		
-		/* right panel */
-		
-		rightPanel = new JPanel(new GridLayout(opponentsUsername.length, 1));
-		rightPanel.setBackground(new Color(0, 0, 0, 0));
-		
-		opponentsField = new ArrayList<>();
-		for (String opponentUsername : opponentsUsername)
-			opponentsField.add(new Field(opponentUsername, rows, cols, this));
-		
-		opponentsUsernameList = new JList<>(opponentsUsername);
-		opponentsUsernameList.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				actionList();
-			}
-		});
-		
-		rightPanel.add(
-			opponentsUsernameList,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 5, 5, 10),
-				0, 0
-			)
-		);
-		
-		/* middle panel */
-		
-		middlePanel = new JPanel(new GridBagLayout());
-		middlePanel.setBackground(new Color(0, 0, 0, 0));
-		
-		myField = new Field(myUsername, rows, cols, null);
-		
-		opponentField = opponentsField.get(0);
-		
-		middlePanel.add(
-			myField,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		middlePanel.add(
-			opponentsField.get(0),
-			new GridBagConstraints(
-				1, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 5),
-				0, 0
-			)
-		);
-		
-		/* south panel */
-		
-		southPanel = new JPanel(new GridBagLayout());
-		southPanel.setBackground(new Color(0, 0, 0, 0));
-		southPanel.setPreferredSize(new Dimension(southPanel.getWidth(), 75));
-		
-		logTextArea = new JTextArea();
-		logTextArea.setEditable(false);
-		logTextArea.setBackground(Color.BLACK);
-		logTextArea.setForeground(Color.WHITE);
-		logTextArea.setSelectionColor(Color.WHITE);
-		logTextArea.setSelectedTextColor(Color.BLACK);
-		
-		DefaultCaret caret = (DefaultCaret) logTextArea.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		logScrollPane = new JScrollPane(logTextArea);
-		
-		southPanel.add(
-			logScrollPane,
-			new GridBagConstraints(
-				0, 0, 1, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 10, 10),
-				0, 0
-			)
-		);
+		opponentFieldPanel = new FieldPanel(opponentsField[0]);
 		
 		/* this frame */
+		
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		northPanel.add(bannerPanel);
+		
+		BSPanel rightPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		rightPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
+		rightPanel.add(listPanel);
+		
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
+		middlePanel.add(opponentFieldPanel);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(rightPanel, BorderLayout.EAST);
 		add(middlePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
 		
 		setVisible(true);
 	}
 	
 	
 	
-	private void actionList() {
-		String opponentUsername = opponentsUsernameList.getSelectedValue();
-		if (opponentUsername != null) {
-			for (Field field : opponentsField)
-				if (field.getUsername().equals(opponentUsername)) {
-					middlePanel.remove(1);
-					middlePanel.add(
-						field,
-						new GridBagConstraints(
-							1, 0, 1, 1, 1, 1,
-							GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 5),
-							0, 0
-						)
-					);
-					break;
-				}
-			SwingUtilities.updateComponentTreeUI(this);
-		}
+	@Override
+	public void onListPanelListValueChanged(Field field) {
+		System.out.println("hanno cliccato sul giocatore: " + field.getUsername());
+		opponentFieldPanel.setField(field);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
-	
-	
 	
 	@Override
 	public void onFieldCellClick(Cell source) {
-		if (source.isGrass()) {
-			String opponentUsername = opponentField.getUsername();
-			int r = source.getRow();
-			int c = source.getCol();
-			logTextArea.append("\tI attack " + opponentUsername + " in [" + c + "," + r + "]\n");
-			if (observer != null)
-				observer.onGameFrameAttack(opponentUsername, c, r);
-		}
+		System.out.println("hanno cliccato sul campo di: ");
+		source.setSheep();
+		SwingUtilities.updateComponentTreeUI(this);
 	}
+	
+	
+	
+	
 	
 	
 	
 	public void setTurn(String username) {
-		// it's my turn
-		if (username.equals(myField.getUsername())) {
-			opponentsUsernameList.setEnabled(true);
-			opponentField.unlock();
-			logTextArea.append("TURN: mine\n");
-		// it's someone else turn
-		} else {
-			opponentsUsernameList.setEnabled(false);
-			opponentField.lock();
-			logTextArea.append("TURN: " + username + "\n");
-		}
+		
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		// I'm the attacker
-		if (usernameAttacker.equals(myField.getUsername()))
-			logTextArea.append("\tI " + (hit ? "HIT " : "didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
-		// I'm the defender
-		else if (usernameDefender.equals(myField.getUsername())) {
-			logTextArea.append("\t" + usernameAttacker + " attack ME in [" + x + "," + y + "]\n");
-			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT" : " didn't hit") + " ME in [" + x + "," + y + "]\n");
-		// someone attacked someone else
-		} else {
-			logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "]\n");
-			logTextArea.append("\t" + usernameAttacker + (hit ? " HIT " : " didn't hit ") + usernameDefender + " in [" + x + "," + y + "]\n");
-		}
 		
-		// I'm the defender
-		if (usernameAttacker.equals(myField.getUsername())) {
-			if (hit)
-				myField.getCell(y, x).setHitSheep();
-			else
-				myField.getCell(y, x).setHitGrass();
-		// someone else is the defender
-		} else {
-			for (int i = 0; i < opponentsField.size(); i++)
-				if (opponentsField.get(i).getUsername().equals(usernameDefender)) {
-					if (hit)
-						opponentsField.get(i).getCell(y, x).setHitSheep();
-					else
-						opponentsField.get(i).getCell(y, x).setHitGrass();
-					opponentField = opponentsField.get(i);
-					SwingUtilities.updateComponentTreeUI(this);
-					break;
-				}
-		}
 	}
 	
 	public void playerWon(String username) {
-		//TODO: il player 'username' ha vinto
-		// se username == me allora farei un popup "congratulazioni hai vinto" altrimenti semplice log.. 
+		
 	}
 	
 	public void playerCrashed(String username) {
-		//TODO: il player 'username' è stato eliminato dalla partita perchè è crashato
+		
 	}
 	
 	public void playerLost(String username, boolean kickedOut) {
+		/*
 		if (username.equals(myField.getUsername())) {
 			if (kickedOut) {
 				// sono stato eliminato dalla partita perchè ho laggato troppo e sono arrivato dopo l'inizio del turno
@@ -334,6 +186,7 @@ public class GameFrame extends BSFrame implements FieldObserver
 			// Il player 'username' è stato eliminato dalla partita perchè ha perso. 
 			// Per ora non viene differenziato se è stato buttato fuori per lag o per aver perso.
 		}
+		*/
 	}
 	
 	

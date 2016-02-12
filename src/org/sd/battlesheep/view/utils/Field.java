@@ -56,7 +56,7 @@ public class Field extends BSPanel
 	
 	
 	
-	public Field(int rows, int cols, FieldObserver observer) {
+	public Field(int rows, int cols, String username, FieldObserver observer) {
 		super(new Color(0, 0, 0, 0), new BorderLayout());
 		
 		/* model */
@@ -67,8 +67,6 @@ public class Field extends BSPanel
 		this.observer = observer;
 		
 		/* items */
-		
-		
 		
 		cells = new Cell[rows][cols];
 		for (int r = 0; r < rows; r++) {
@@ -115,6 +113,10 @@ public class Field extends BSPanel
 	
 	
 	
+	public String getUsername() {
+		return username;
+	}
+	
 	public Cell getCell(int r, int c) {
 		return cells[r][c];
 	}
@@ -131,5 +133,12 @@ public class Field extends BSPanel
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)
 				cells[r][c].setEnabled(true);
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return username;
 	}
 }

@@ -91,7 +91,7 @@ public class SheepsPositionPanel extends BSPanel implements FieldObserver
 		remainingLabel = new JLabel(sheeps + "");
 		remainingLabel.setForeground(Color.WHITE);
 		
-		field = new Field(rows, cols, this);
+		field = new Field(rows, cols, null, this);
 		
 		previousButton = new JButton("Prevoius");
 		previousButton.addActionListener(new ActionListener() {

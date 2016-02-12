@@ -20,17 +20,17 @@
 
 
 
-package org.sd.battlesheep.view.utils;
+package org.sd.battlesheep.view.game.panel;
 
 
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.utils.Field;
 
 
 
@@ -38,25 +38,33 @@ import org.sd.battlesheep.view.BSPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class UsernameField extends Field
+public class FieldPanel extends BSPanel
 {
 	private JLabel usernameLabel;
 	
+	private Field field;
 	
 	
-	public UsernameField(String username, int rows, int cols, FieldObserver observer) {
-		super(rows, cols, observer);
+	
+	public FieldPanel(Field field) {
+		super(Color.GREEN, new BorderLayout(10, 10));
 		
 		/* items */
 		
-		usernameLabel = new JLabel(username, JLabel.CENTER);
+		usernameLabel = new JLabel(field.getUsername().toUpperCase(), JLabel.CENTER);
+		
+		this.field = field;
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
-		northPanel.add(usernameLabel, BorderLayout.CENTER);
-		
-		add(northPanel, BorderLayout.NORTH);
+		add(usernameLabel, BorderLayout.NORTH);
+		add(this.field, BorderLayout.CENTER);
+	}
+	
+	
+	
+	public void setField(Field field) {
+		usernameLabel.setText(field.getUsername());
+		this.field = field;
 	}
 }
