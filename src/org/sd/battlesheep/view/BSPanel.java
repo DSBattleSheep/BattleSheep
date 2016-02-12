@@ -24,12 +24,11 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.LayoutManager;
-import java.io.File;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 
@@ -40,32 +39,33 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class BSPanel extends JPanel
 {
-	private static final String IMGS_PATH;
-	
-	
-	
-	protected static final Image BATTLESHIP_BACKGROUND;
-	
-	protected static final Image BATTLESHEEP_BACKGROUND;
-	
-	
-	
-	protected static final Icon WAITING_ICON;
-	
-	
-	
-	static {
-		IMGS_PATH = "imgs";
-		
-		BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battleship.jpg").getImage();
-		BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + File.separator + "battlesheep.jpg").getImage();
-		
-		WAITING_ICON = new ImageIcon(IMGS_PATH + File.separator + "ajax-loader.gif");
-	}
+	private Image background;
 	
 	
 	
 	public BSPanel(LayoutManager manager) {
 		super(manager);
+		this.background = null;
+	}
+	
+	public BSPanel(Color background, LayoutManager manager) {
+		super(manager);
+		setBackground(background);
+		this.background = null;
+	}
+	
+	public BSPanel(Image background, LayoutManager manager) {
+		super(manager);
+		this.background = background;
+	}
+	
+	
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		if (background != null)
+			g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+		else
+			super.paintComponent(g);
 	}
 }

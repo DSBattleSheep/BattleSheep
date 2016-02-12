@@ -25,6 +25,7 @@ package org.sd.battlesheep.view.lobby.panel;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,8 +33,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.TransparentPanel;
-import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.lobby.WaitingPanelObserver;
 
 
@@ -42,7 +43,7 @@ import org.sd.battlesheep.view.lobby.WaitingPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WaitingPanel extends WhitePanel
+public class WaitingPanel extends BSPanel
 {
 	private JLabel addressLabel;
 	
@@ -57,7 +58,7 @@ public class WaitingPanel extends WhitePanel
 	
 	
 	public WaitingPanel(String host, int port, WaitingPanelObserver observer) {
-		super(new BorderLayout());
+		super(Color.WHITE, new BorderLayout());
 		
 		/* model */
 		
@@ -67,7 +68,7 @@ public class WaitingPanel extends WhitePanel
 		
 		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
 		
-		waitingLabel = new JLabel("Waiting for clients...", WAITING_ICON, JLabel.CENTER);
+		waitingLabel = new JLabel("Waiting for clients...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
@@ -79,15 +80,15 @@ public class WaitingPanel extends WhitePanel
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		northPanel.add(addressLabel, BorderLayout.CENTER);
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		middlePanel.add(waitingLabel, BorderLayout.CENTER);
 		
-		TransparentPanel southPanel = new TransparentPanel(new BorderLayout());
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(exitButton, BorderLayout.CENTER);
 		

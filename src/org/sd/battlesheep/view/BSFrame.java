@@ -24,10 +24,8 @@ package org.sd.battlesheep.view;
 
 
 
-import java.awt.Image;
 import java.awt.LayoutManager;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 
@@ -38,23 +36,17 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class BSFrame extends JFrame
 {
-	protected static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
-	
-	private static final Image ICON = new ImageIcon("imgs/icon.png").getImage();
-	
-	
-	
 	public BSFrame(LayoutManager manager) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON);
+		super(ViewConst.PROGRAM_NAME);
+		setIconImage(ViewConst.PROGRAM_ICON);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setLayout(manager);
 	}
 	
 	public BSFrame(int width, int height, LayoutManager layout) {
-		super(PROGRAM_NAME);
-		setIconImage(ICON);
+		super(ViewConst.PROGRAM_NAME);
+		setIconImage(ViewConst.PROGRAM_ICON);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(width, height);
 		setLocationRelativeTo(null);

@@ -25,13 +25,14 @@ package org.sd.battlesheep.view.utils;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
 
 
 
@@ -39,7 +40,7 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class Field extends TransparentPanel
+public class Field extends BSPanel
 {
 	private Cell[][] cells;
 	
@@ -56,7 +57,7 @@ public class Field extends TransparentPanel
 	
 	
 	public Field(int rows, int cols, FieldObserver observer) {
-		super(new BorderLayout());
+		super(new Color(0, 0, 0, 0), new BorderLayout());
 		
 		/* model */
 		
@@ -96,7 +97,7 @@ public class Field extends TransparentPanel
 		
 		/* this panel */
 		
-		TransparentPanel middlePanel = new TransparentPanel(new GridLayout(rows, cols));
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(rows, cols));
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)

@@ -25,6 +25,7 @@ package org.sd.battlesheep.view.lobby.panel;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -40,8 +41,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.sd.battlesheep.view.TransparentPanel;
-import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.BSPanel;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 
 
@@ -50,7 +50,7 @@ import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class ClientsPanel extends WhitePanel
+public class ClientsPanel extends BSPanel
 {
 	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
 	
@@ -75,7 +75,7 @@ public class ClientsPanel extends WhitePanel
 	
 	
 	public ClientsPanel(String host, int port, ClientsPanelObserver observer) {
-		super(new BorderLayout());
+		super(Color.WHITE, new BorderLayout());
 		
 		/* model */
 		
@@ -122,15 +122,15 @@ public class ClientsPanel extends WhitePanel
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		northPanel.add(addressLabel, BorderLayout.CENTER);
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		middlePanel.add(clientsScrollPane, BorderLayout.CENTER);
 		
-		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(exitButton);
 		southPanel.add(startButton);

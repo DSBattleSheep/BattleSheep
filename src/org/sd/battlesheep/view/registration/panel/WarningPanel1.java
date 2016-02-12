@@ -31,8 +31,8 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BattleshipPanel;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -40,25 +40,25 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel1 extends BattleshipPanel
+public class WarningPanel1 extends BSPanel
 {
 	private JLabel loadingLabel;
 	
 	
 	
 	public WarningPanel1() {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHIP_BACKGROUND, new BorderLayout());
 		
 		/* items */
 		
-		loadingLabel = new JLabel("Loading...", WAITING_ICON, JLabel.CENTER);
+		loadingLabel = new JLabel("Loading...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		loadingLabel.setBackground(new Color(0, 0, 0, 0));
 		loadingLabel.setForeground(Color.WHITE);
 		
 		/* this panel */
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		middlePanel.add(loadingLabel, BorderLayout.CENTER);
 		

@@ -37,8 +37,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
-import org.sd.battlesheep.view.TransparentPanel;
-import org.sd.battlesheep.view.WhitePanel;
+import org.sd.battlesheep.view.BSPanel;
 import org.sd.battlesheep.view.main.observer.MainPanelObserver;
 
 
@@ -47,7 +46,7 @@ import org.sd.battlesheep.view.main.observer.MainPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainPanel extends WhitePanel
+public class MainPanel extends BSPanel
 {
 	private JLabel modeLabel;
 	
@@ -68,7 +67,7 @@ public class MainPanel extends WhitePanel
 	
 	
 	public MainPanel(MainPanelObserver observer) {
-		super(new BorderLayout());
+		super(Color.WHITE, new BorderLayout());
 		
 		/* model */
 		
@@ -108,16 +107,16 @@ public class MainPanel extends WhitePanel
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		northPanel.add(modeLabel, BorderLayout.CENTER);
 		
-		TransparentPanel middlePanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		middlePanel.add(serverRadioButton);
 		middlePanel.add(clientRadioButton);
 		
-		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(exitButton);
 		southPanel.add(startButton);

@@ -35,12 +35,8 @@ import javax.swing.JOptionPane;
  */
 public class MessageFactory
 {
-	private static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
-	
-	
-	
 	private static void showDialog(Component parent, String message, int type) {
-		JOptionPane.showMessageDialog(parent, message, PROGRAM_NAME, type);
+		JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
 	}
 	
 	

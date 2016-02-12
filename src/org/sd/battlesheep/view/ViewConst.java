@@ -24,29 +24,34 @@ package org.sd.battlesheep.view;
 
 
 
-import java.awt.Graphics;
-import java.awt.LayoutManager;
+import java.awt.Image;
+import java.io.File;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 
 
 /**
  * @author Giulio Biagini
  */
-@SuppressWarnings("serial")
-public class BattleshipPanel extends BSPanel
+public class ViewConst
 {
-	public BattleshipPanel(LayoutManager manager) {
-		super(manager);
-	}
+	public static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
 	
 	
 	
-	@Override
-	public void paintComponent(Graphics g) {
-		g.drawImage(
-			BATTLESHIP_BACKGROUND,
-			0, 0, getWidth(), getHeight(),
-			null
-		);
-	}
+	private static final String IMGS_PATH = "imgs" + File.separator;
+	
+	
+	
+	public static final Image PROGRAM_ICON = new ImageIcon(IMGS_PATH + "icon.png").getImage();
+	
+	public static final Icon WAITING_ICON = new ImageIcon(IMGS_PATH + "ajax-loader.gif");
+	
+	
+	
+	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
+	
+	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
 }

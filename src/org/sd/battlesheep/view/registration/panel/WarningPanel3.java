@@ -31,8 +31,8 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BattlesheepPanel;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -40,14 +40,14 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel3 extends BattlesheepPanel
+public class WarningPanel3 extends BSPanel
 {
 	private JLabel hackedLabel;
 	
 	
 	
 	public WarningPanel3() {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHEEP_BACKGROUND, new BorderLayout());
 		
 		/* items */
 		
@@ -58,7 +58,7 @@ public class WarningPanel3 extends BattlesheepPanel
 		
 		/* this panel */
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		middlePanel.add(hackedLabel, BorderLayout.CENTER);
 		

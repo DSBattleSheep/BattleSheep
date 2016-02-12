@@ -35,9 +35,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.sd.battlesheep.view.BattleshipPanel;
+import org.sd.battlesheep.view.BSPanel;
 import org.sd.battlesheep.view.MessageFactory;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
 
 
@@ -46,7 +46,7 @@ import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends BattleshipPanel
+public class LobbyAddressPanel extends BSPanel
 {
 	private JLabel addressLabel;
 	
@@ -63,7 +63,7 @@ public class LobbyAddressPanel extends BattleshipPanel
 	
 	
 	public LobbyAddressPanel(LobbyAddressPanelObserver observer) {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHIP_BACKGROUND, new BorderLayout());
 		
 		/* model */
 		
@@ -94,12 +94,12 @@ public class LobbyAddressPanel extends BattleshipPanel
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		northPanel.add(addressLabel);
 		northPanel.add(addressTextField);
 		
-		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(exitButton);
 		southPanel.add(nextButton);

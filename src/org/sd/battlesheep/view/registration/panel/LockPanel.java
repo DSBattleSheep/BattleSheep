@@ -35,8 +35,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BattlesheepPanel;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
 
 
@@ -45,7 +45,7 @@ import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LockPanel extends BattlesheepPanel
+public class LockPanel extends BSPanel
 {
 	private JLabel waitingLabel;
 	
@@ -58,7 +58,7 @@ public class LockPanel extends BattlesheepPanel
 	
 	
 	public LockPanel(LockPanelObserver observer) {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHEEP_BACKGROUND, new BorderLayout());
 		
 		/* model */
 		
@@ -66,7 +66,7 @@ public class LockPanel extends BattlesheepPanel
 		
 		/* items */
 		
-		waitingLabel = new JLabel("Registration...", WAITING_ICON, JLabel.CENTER);
+		waitingLabel = new JLabel("Registration...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		waitingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		waitingLabel.setForeground(Color.WHITE);
 		
@@ -80,11 +80,11 @@ public class LockPanel extends BattlesheepPanel
 		
 		/* this panel */
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		middlePanel.add(waitingLabel, BorderLayout.CENTER);
 		
-		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(exitButton);
 		

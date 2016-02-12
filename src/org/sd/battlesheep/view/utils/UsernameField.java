@@ -25,11 +25,12 @@ package org.sd.battlesheep.view.utils;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
 
 
 
@@ -52,7 +53,7 @@ public class UsernameField extends Field
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new BorderLayout());
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 		northPanel.add(usernameLabel, BorderLayout.CENTER);
 		

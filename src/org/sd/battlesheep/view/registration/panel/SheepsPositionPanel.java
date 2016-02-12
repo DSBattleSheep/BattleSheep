@@ -35,9 +35,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import org.sd.battlesheep.view.BattlesheepPanel;
+import org.sd.battlesheep.view.BSPanel;
 import org.sd.battlesheep.view.MessageFactory;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.SheepsPositionPanelObserver;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
@@ -49,7 +49,7 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserver
+public class SheepsPositionPanel extends BSPanel implements FieldObserver
 {
 	private JLabel positionLabel;
 	
@@ -74,7 +74,7 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 	
 	
 	public SheepsPositionPanel(int rows, int cols, int sheeps, SheepsPositionPanelObserver observer) {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHEEP_BACKGROUND, new BorderLayout());
 		
 		/* model */
 		
@@ -111,16 +111,16 @@ public class SheepsPositionPanel extends BattlesheepPanel implements FieldObserv
 		
 		/* this panel */
 		
-		TransparentPanel northPanel = new TransparentPanel(new BorderLayout(10, 10));
+		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout(10, 10));
 		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		northPanel.add(positionLabel, BorderLayout.WEST);
 		northPanel.add(remainingLabel, BorderLayout.EAST);
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		middlePanel.add(field, BorderLayout.CENTER);
 		
-		TransparentPanel southPanel = new TransparentPanel(new GridLayout(1, 2, 10, 10));
+		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		southPanel.add(previousButton);
 		southPanel.add(registrationButton);

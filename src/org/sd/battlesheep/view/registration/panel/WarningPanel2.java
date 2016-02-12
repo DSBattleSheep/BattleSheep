@@ -31,8 +31,8 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BattleshipPanel;
-import org.sd.battlesheep.view.TransparentPanel;
+import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -40,25 +40,25 @@ import org.sd.battlesheep.view.TransparentPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel2 extends BattleshipPanel
+public class WarningPanel2 extends BSPanel
 {
 	private JLabel hackingLabel;
 	
 	
 	
 	public WarningPanel2() {
-		super(new BorderLayout());
+		super(ViewConst.BATTLESHIP_BACKGROUND, new BorderLayout());
 		
 		/* items */
 		
-		hackingLabel = new JLabel("The game is going to be hacked...", WAITING_ICON, JLabel.CENTER);
+		hackingLabel = new JLabel("The game is going to be hacked...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		hackingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		hackingLabel.setBackground(new Color(0, 0, 0, 0));
 		hackingLabel.setForeground(Color.RED);
 		
 		/* this panel */
 		
-		TransparentPanel middlePanel = new TransparentPanel(new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		middlePanel.add(hackingLabel, BorderLayout.CENTER);
 		
