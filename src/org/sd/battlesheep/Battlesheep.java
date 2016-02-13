@@ -229,6 +229,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		}
 	}
 	
+	private void unlockRegistration() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				registrationFrame.unlock();
+			}
+		});
+	}
 	
 	@Override
 	public void onRegistrationFrameRegistrationClick(final String lobbyAddress, final String myUsername, final boolean[][] sheepsPosition) {
@@ -257,18 +264,22 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					players = PlayerRegistration.Join(lobbyAddress, myUsername, playerServer.getPort());
 					
 				} catch (UsernameAlreadyTakenException e) {
-					MessageFactory.errorDialog(null, e.getMessage());
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							registrationFrame.unlock();
-						}
-					});
-					return;
+					MessageFactory.errorDialog(registrationFrame, e.getMessage());
+					unlockRegistration();
+					return;		
+				} catch (ConnectException e) {
+					MessageFactory.errorDialog(registrationFrame, "Can't reach the lobby server!");
+					unlockRegistration();
+					return;		
+				} catch (UnmarshalException e) {
+					MessageFactory.errorDialog(registrationFrame, "Lobby server seems to be crashed! Please restart it and retry..");
+					unlockRegistration();
+					return;					
 				} catch (MaxPortRetryException e) {
-					MessageFactory.errorDialog(null, e.getMessage());
+					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					System.exit(1);
-				} catch (NotBoundException | ServerNotActiveException | ConnectException | UnmarshalException | MalformedURLException e) {
-					MessageFactory.errorDialog(null, e.getMessage());
+				} catch (NotBoundException | ServerNotActiveException | MalformedURLException e) {
+					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					e.printStackTrace();
 					return;
 				} catch (RemoteException e) {

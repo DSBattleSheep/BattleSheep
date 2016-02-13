@@ -2,6 +2,11 @@ package org.sd.battlesheep;
 
 
 
+import java.net.BindException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.ExportException;
+
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.CommunicationConst;
@@ -58,16 +63,24 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 			String currHost = Utils.getLocalAddress().getHostAddress();
 			if (currHost == null)
 				currHost = "127.0.0.1";
+			
 			System.out.println("Thread.activeCount()=" + Thread.activeCount());
 			
 			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT, this);
+			
 			System.out.println("Thread.activeCount()=" + Thread.activeCount());
 			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
 			System.out.println("Thread.activeCount()=" + Thread.activeCount());
+		
+		} catch (RemoteException | AlreadyBoundException e) {
+			if (e instanceof ExportException) {
+				System.out.println("Port " + CommunicationConst.LOBBY_PORT + " already bound! Lobby server cannot start..");
+				System.exit(1);
+			}
 			
-		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
