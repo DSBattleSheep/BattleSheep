@@ -51,7 +51,7 @@ public class FieldPanel extends BSPanel
 		
 		/* items */
 		
-		usernameLabel = new JLabel(field.getUsername().toUpperCase(), JLabel.CENTER);
+		usernameLabel = new JLabel(field.getUsername(), JLabel.CENTER);
 		
 		this.field = field;
 		
@@ -64,7 +64,11 @@ public class FieldPanel extends BSPanel
 	
 	
 	public void setField(Field field) {
-		usernameLabel.setText(field.getUsername());
-		this.field = field;
+		if (field != null) {
+			usernameLabel.setText(field.getUsername());
+			remove(this.field);
+			this.field = field;
+			add(this.field, BorderLayout.CENTER);
+		}
 	}
 }

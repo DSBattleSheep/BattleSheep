@@ -111,7 +111,7 @@ public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserv
 		
 		listPanel = new ListPanel(opponentsField, this);
 		
-		// myFieldPanel = new FieldPanel(myField);
+		myFieldPanel = new FieldPanel(myField);
 		
 		opponentFieldPanel = new FieldPanel(opponentsField[0]);
 		
@@ -125,9 +125,14 @@ public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserv
 		rightPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
 		rightPanel.add(listPanel);
 		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
-		middlePanel.add(opponentFieldPanel);
+		BSPanel middleLeftPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		middleLeftPanel.add(myFieldPanel, BorderLayout.CENTER);
+		BSPanel middleRightPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
+		middleRightPanel.add(opponentFieldPanel, BorderLayout.CENTER);
+		middlePanel.add(middleLeftPanel);
+		middlePanel.add(middleRightPanel);
 		
 		add(northPanel, BorderLayout.NORTH);
 		add(rightPanel, BorderLayout.EAST);
@@ -140,16 +145,14 @@ public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserv
 	
 	@Override
 	public void onListPanelListValueChanged(Field field) {
-		System.out.println("hanno cliccato sul giocatore: " + field.getUsername());
 		opponentFieldPanel.setField(field);
-		SwingUtilities.updateComponentTreeUI(this);
+		SwingUtilities.updateComponentTreeUI(opponentFieldPanel);
 	}
 	
 	@Override
 	public void onFieldCellClick(Cell source) {
-		System.out.println("hanno cliccato sul campo di: ");
 		source.setSheep();
-		SwingUtilities.updateComponentTreeUI(this);
+		SwingUtilities.updateComponentTreeUI(source);
 	}
 	
 	
