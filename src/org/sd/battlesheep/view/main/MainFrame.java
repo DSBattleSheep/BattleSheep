@@ -24,9 +24,7 @@ package org.sd.battlesheep.view.main;
 
 
 
-import java.awt.BorderLayout;
-
-import org.sd.battlesheep.view.BSFrame;
+import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.main.observer.MainPanelObserver;
 import org.sd.battlesheep.view.main.panel.MainPanel;
 
@@ -36,7 +34,7 @@ import org.sd.battlesheep.view.main.panel.MainPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainFrame extends BSFrame implements MainPanelObserver
+public class MainFrame extends AFrame implements MainPanelObserver
 {
 	private MainPanel mainPanel;
 	
@@ -47,10 +45,12 @@ public class MainFrame extends BSFrame implements MainPanelObserver
 	
 	
 	public MainFrame(MainFrameObserver observer) {
-		super(new BorderLayout());
+		super();
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* panels */
@@ -59,10 +59,8 @@ public class MainFrame extends BSFrame implements MainPanelObserver
 		
 		/* this frame */
 		
-		add(mainPanel, BorderLayout.CENTER);
-		
+		addPanel(mainPanel);
 		pack();
-		
 		setVisible(true);
 	}
 	
@@ -70,13 +68,11 @@ public class MainFrame extends BSFrame implements MainPanelObserver
 	
 	@Override
 	public void onMainPanelExitClick() {
-		if (observer != null)
-			observer.onMainFrameExitClick();
+		observer.onMainFrameExitClick();
 	}
 	
 	@Override
 	public void onMainPanelStartClick(boolean isServerSelected) {
-		if (observer != null)
-			observer.onMainFrameStartClick(isServerSelected);
+		observer.onMainFrameStartClick(isServerSelected);
 	}
 }

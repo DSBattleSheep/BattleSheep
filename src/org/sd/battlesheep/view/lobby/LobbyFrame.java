@@ -23,12 +23,7 @@
 package org.sd.battlesheep.view.lobby;
 
 
-
-import java.awt.BorderLayout;
-
-import javax.swing.SwingUtilities;
-
-import org.sd.battlesheep.view.BSFrame;
+import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
 import org.sd.battlesheep.view.lobby.panel.ClientsPanel;
@@ -40,7 +35,7 @@ import org.sd.battlesheep.view.lobby.panel.WaitingPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends BSFrame implements WaitingPanelObserver, ClientsPanelObserver
+public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsPanelObserver
 {
 	private static final int WIDTH = 400;
 	
@@ -59,10 +54,12 @@ public class LobbyFrame extends BSFrame implements WaitingPanelObserver, Clients
 	
 	
 	public LobbyFrame(String host, int port, LobbyFrameObserver observer) {
-		super(WIDTH, HEIGHT, new BorderLayout());
+		super(WIDTH, HEIGHT);
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* panels */
@@ -73,8 +70,7 @@ public class LobbyFrame extends BSFrame implements WaitingPanelObserver, Clients
 		
 		/* this frame */
 		
-		add(waitingPanel, BorderLayout.CENTER);
-		
+		addPanel(waitingPanel);
 		setVisible(true);
 	}
 	
@@ -82,30 +78,24 @@ public class LobbyFrame extends BSFrame implements WaitingPanelObserver, Clients
 	
 	@Override
 	public void onWaitingPanelExitClick() {
-		if (observer != null)
-			observer.onLobbyFrameExitClick();
+		observer.onLobbyFrameExitClick();
 	}
 	
 	@Override
 	public void onClientsPanelExitClick() {
-		if (observer != null)
-			observer.onLobbyFrameExitClick();
+		observer.onLobbyFrameExitClick();
 	}
 	
 	@Override
 	public void onClientsPanelStartClick() {
-		if (observer != null)
-			observer.onLobbyFrameStartClick();
+		observer.onLobbyFrameStartClick();
 	}
 	
 	
 	
 	public void addClient(String username, String host, int port) {
-		if (clientsPanel.getClientsNumber() == 0) {
-			remove(waitingPanel);
-			add(clientsPanel, BorderLayout.CENTER);
-		}
 		clientsPanel.addClient(username, host, port);
-		SwingUtilities.updateComponentTreeUI(this);
+		if (clientsPanel.getClientsNumber() == 1)
+			replacePanel(waitingPanel, clientsPanel);
 	}
 }

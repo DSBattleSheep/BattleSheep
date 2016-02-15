@@ -25,33 +25,17 @@ package org.sd.battlesheep.view.game;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.DefaultCaret;
 
-import org.sd.battlesheep.view.BSFrame;
-import org.sd.battlesheep.view.BSPanel;
-import org.sd.battlesheep.view.game.observer.ListPanelObserver;
-import org.sd.battlesheep.view.game.panel.BannerPanel;
-import org.sd.battlesheep.view.game.panel.FieldPanel;
-import org.sd.battlesheep.view.game.panel.ListPanel;
+import org.sd.battlesheep.view.AFrame;
+import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -62,7 +46,7 @@ import org.sd.battlesheep.view.utils.FieldObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserver
+public class GameFrame extends AFrame implements FieldObserver
 {
 	private static final int WIDTH = 800;
 	
@@ -70,19 +54,37 @@ public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserv
 	
 	
 	
-	private BannerPanel bannerPanel;
+	private APanel bannerPanel;
 	
-	private ListPanel listPanel;
-	
-	private FieldPanel myFieldPanel;
-	
-	private FieldPanel opponentFieldPanel;
+	private JLabel bannerLabel;
 	
 	
+	
+	private APanel listPanel;
+	
+	private JLabel opponentsListLabel;
+	
+	private JList<Field> fieldsList;
+	
+	private JScrollPane fieldListScrollPane;
+	
+	
+	
+	private APanel playerPanel;
+	
+	private APanel myPanel;
+	
+	private JLabel myUsernameLabel;
 	
 	private Field myField;
 	
+	private APanel opponentPanel;
+	
+	private JLabel opponentUsernameLabel;
+	
 	private Field[] opponentsField;
+	
+	
 	
 	private GameFrameObserver observer;
 	
@@ -93,71 +95,108 @@ public class GameFrame extends BSFrame implements ListPanelObserver, FieldObserv
 	 */
 	
 	public GameFrame(String myUsername, String[] opponentsUsername, int rows, int cols, GameFrameObserver observer) {
-		super(WIDTH, HEIGHT, new BorderLayout(10, 10));
+		super(WIDTH, HEIGHT);
 		
 		/* model */
 		
-		this.myField = new Field(rows, cols, myUsername, this);
+		if (myUsername == null)
+			throw new IllegalArgumentException("My username: null string");
+		if (myUsername.isEmpty())
+			throw new IllegalArgumentException("My username: empty string");
+		myField = new Field(myUsername, rows, cols, this);
 		
-		this.opponentsField = new Field[opponentsUsername.length];
-		for (int i = 0; i < this.opponentsField.length; i++)
-			this.opponentsField[i] = new Field(rows, cols, opponentsUsername[i], this);
+		if (opponentsUsername == null)
+			throw new IllegalArgumentException("Opponents username: null array");
+		if (opponentsUsername.length < 1)
+			throw new IllegalArgumentException("Opponents username: less than 1");
+		opponentsField = new Field[opponentsUsername.length];
+		for (int i = 0; i < opponentsUsername.length; i++) {
+			if (opponentsUsername[i] == null)
+				throw new IllegalArgumentException("Opponent username " + (i + 1) + ": null string");
+			if (opponentsUsername[i].isEmpty())
+				throw new IllegalArgumentException("Opponent username " + (i + 1) + ": empty string");
+			opponentsField[i] = new Field(opponentsUsername[i], rows, cols, this);
+		}
 		
+		/*
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");*/// TODO - DECOMMENTARE!
 		this.observer = observer;
 		
-		/* panels */
+		/* banner panel */
 		
-		bannerPanel = new BannerPanel();
+		bannerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		
-		listPanel = new ListPanel(opponentsField, this);
+		bannerLabel= new JLabel(ViewConst.BANNER_ICON, JLabel.CENTER);
 		
-		myFieldPanel = new FieldPanel(myField);
+		bannerPanel.addNorthPanel(bannerLabel);
 		
-		opponentFieldPanel = new FieldPanel(opponentsField[0]);
+		/* list panel */
+		
+		listPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
+		
+		opponentsListLabel = new JLabel("Opponents", JLabel.CENTER);
+		
+		fieldsList = new JList<Field>(opponentsField);
+		fieldsList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// neither press nor adjust event but release event
+				if (!fieldsList.getValueIsAdjusting())
+					actionList();
+			}
+		});
+		
+		fieldListScrollPane = new JScrollPane(fieldsList);
+		
+		listPanel.addNorthPanel(opponentsListLabel);
+		listPanel.addMiddlePanel(fieldListScrollPane);
+		
+		/* player panel */
+		
+		playerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
+		
+		myPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
+		
+		myUsernameLabel = new JLabel(myField.getUsername(), JLabel.CENTER);
+		
+		myPanel.addNorthPanel(myUsernameLabel);
+		myPanel.addMiddlePanel(myField);
+		
+		opponentPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
+		
+		opponentUsernameLabel = new JLabel(opponentsField[0].getUsername(), JLabel.CENTER);
+		
+		opponentPanel.addNorthPanel(opponentUsernameLabel);
+		opponentPanel.addMiddlePanel(opponentsField[0]);
+		
+		playerPanel.addMiddlePanel(myPanel, opponentPanel);
 		
 		/* this frame */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(bannerPanel);
-		
-		BSPanel rightPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		rightPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
-		rightPanel.add(listPanel);
-		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
-		BSPanel middleLeftPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middleLeftPanel.add(myFieldPanel, BorderLayout.CENTER);
-		BSPanel middleRightPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middleRightPanel.add(opponentFieldPanel, BorderLayout.CENTER);
-		middlePanel.add(middleLeftPanel);
-		middlePanel.add(middleRightPanel);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(rightPanel, BorderLayout.EAST);
-		add(middlePanel, BorderLayout.CENTER);
-		
+		add(bannerPanel, BorderLayout.NORTH);
+		add(listPanel, BorderLayout.EAST);
+		add(playerPanel, BorderLayout.CENTER);
 		setVisible(true);
 	}
 	
 	
 	
-	@Override
-	public void onListPanelListValueChanged(Field field) {
-		opponentFieldPanel.setField(field);
-		SwingUtilities.updateComponentTreeUI(opponentFieldPanel);
+	private void actionList() {
+		int index = fieldsList.getSelectedIndex();
+		if (index != -1) {
+			opponentUsernameLabel.setText(opponentsField[index].getUsername());
+			opponentPanel.remove(1);
+			opponentPanel.add(opponentsField[index]);
+			SwingUtilities.updateComponentTreeUI(opponentPanel);
+		}
 	}
 	
 	@Override
-	public void onFieldCellClick(Cell source) {
-		source.setSheep();
-		SwingUtilities.updateComponentTreeUI(source);
+	public void onFieldCellClick(String username, Cell source) {
+		if (source.isGrass())
+			source.setSheep();
 	}
-	
-	
-	
-	
 	
 	
 	

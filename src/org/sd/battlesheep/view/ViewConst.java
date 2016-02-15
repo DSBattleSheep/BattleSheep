@@ -24,6 +24,7 @@ package org.sd.battlesheep.view;
 
 
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 
@@ -56,4 +57,12 @@ public class ViewConst
 	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
+	
+	
+	
+	public static final Color TRANSPARENT_BACKGROUND = new Color(0, 0, 0, 0);
+	
+	public static final Color WHITE_BACKGROUND = Color.WHITE;
+	
+	public static final Color GREEN_BACKGROUND = Color.GREEN;
 }

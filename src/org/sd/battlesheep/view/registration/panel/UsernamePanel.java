@@ -24,18 +24,15 @@ package org.sd.battlesheep.view.registration.panel;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
@@ -46,7 +43,7 @@ import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class UsernamePanel extends BSPanel
+public class UsernamePanel extends APanel
 {
 	private JLabel usernameLabel;
 	
@@ -63,10 +60,12 @@ public class UsernamePanel extends BSPanel
 	
 	
 	public UsernamePanel(UsernamePanelObserver observer) {
-		super(ViewConst.BATTLESHEEP_BACKGROUND, new BorderLayout());
+		super(ViewConst.BATTLESHEEP_BACKGROUND);
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
@@ -94,32 +93,21 @@ public class UsernamePanel extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(usernameLabel);
-		northPanel.add(usernameTextField);
-		
-		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		southPanel.add(previousButton);
-		southPanel.add(nextButton);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(southPanel, BorderLayout.SOUTH);
+		addNorthPanel(usernameLabel, usernameTextField);
+		addSouthPanel(previousButton, nextButton);
 	}
 	
 	
 	
 	private void actionPrevious() {
-		if (observer != null)
-			observer.onUsernamePanelPreviousClick();
+		observer.onUsernamePanelPreviousClick();
 	}
 	
 	private void actionNext() {
 		String text = usernameTextField.getText();
 		if (text == null || text.isEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the username field");
-		else if (observer != null)
+		else
 			observer.onUsernamePanelNextClick(text);
 	}
 }

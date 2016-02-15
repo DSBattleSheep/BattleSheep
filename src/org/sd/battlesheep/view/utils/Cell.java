@@ -31,6 +31,7 @@ import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 
 
@@ -64,10 +65,13 @@ public class Cell extends JLabel
 	
 	public Cell(int r, int c) {
 		setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		background = GRASS;
 		
-		this.background = GRASS;
-		
+		if (r < 0)
+			throw new IllegalArgumentException("Row: less than 0");
 		this.r = r;
+		if (c < 0)
+			throw new IllegalArgumentException("Column: less than 0");
 		this.c = c;
 	}
 	
@@ -85,18 +89,22 @@ public class Cell extends JLabel
 	
 	public void setGrass() {
 		background = GRASS;
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setSheep() {
 		background = SHEEP;
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setHitGrass() {
 		background = HIT_GRASS;
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setHitSheep() {
 		background = HIT_SHEEP;
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public boolean isGrass() {

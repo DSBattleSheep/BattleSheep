@@ -24,20 +24,18 @@ package org.sd.battlesheep.view.main.panel;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.main.observer.MainPanelObserver;
 
 
@@ -46,7 +44,7 @@ import org.sd.battlesheep.view.main.observer.MainPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainPanel extends BSPanel
+public class MainPanel extends APanel
 {
 	private JLabel modeLabel;
 	
@@ -67,10 +65,12 @@ public class MainPanel extends BSPanel
 	
 	
 	public MainPanel(MainPanelObserver observer) {
-		super(Color.WHITE, new BorderLayout());
+		super(ViewConst.WHITE_BACKGROUND);
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* itmes */
@@ -107,34 +107,18 @@ public class MainPanel extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(modeLabel, BorderLayout.CENTER);
-		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		middlePanel.add(serverRadioButton);
-		middlePanel.add(clientRadioButton);
-		
-		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		southPanel.add(exitButton);
-		southPanel.add(startButton);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
+		addNorthPanel(modeLabel);
+		addMiddlePanel(serverRadioButton, clientRadioButton);
+		addSouthPanel(exitButton, startButton);
 	}
 	
 	
 	
 	private void actionExit() {
-		if (observer != null)
-			observer.onMainPanelExitClick();
+		observer.onMainPanelExitClick();
 	}
 	
 	private void actionStart() {
-		if (observer != null)
-			observer.onMainPanelStartClick(serverRadioButton.isSelected());
+		observer.onMainPanelStartClick(serverRadioButton.isSelected());
 	}
 }

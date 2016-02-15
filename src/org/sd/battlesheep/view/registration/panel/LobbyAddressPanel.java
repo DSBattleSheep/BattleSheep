@@ -24,18 +24,15 @@ package org.sd.battlesheep.view.registration.panel;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
@@ -46,7 +43,7 @@ import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends BSPanel
+public class LobbyAddressPanel extends APanel
 {
 	private JLabel addressLabel;
 	
@@ -63,10 +60,12 @@ public class LobbyAddressPanel extends BSPanel
 	
 	
 	public LobbyAddressPanel(LobbyAddressPanelObserver observer) {
-		super(ViewConst.BATTLESHIP_BACKGROUND, new BorderLayout());
+		super(ViewConst.BATTLESHIP_BACKGROUND);
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
@@ -94,32 +93,21 @@ public class LobbyAddressPanel extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(addressLabel);
-		northPanel.add(addressTextField);
-		
-		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		southPanel.add(exitButton);
-		southPanel.add(nextButton);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(southPanel, BorderLayout.SOUTH);
+		addNorthPanel(addressLabel, addressTextField);
+		addSouthPanel(exitButton, nextButton);
 	}
 	
 	
 	
 	private void actionExit() {
-		if (observer != null)
-			observer.onLobbyAddressPanelExitClick();
+		observer.onLobbyAddressPanelExitClick();
 	}
 	
 	private void actionNext() {
 		String text = addressTextField.getText();
 		if (text == null || text.isEmpty())
 			MessageFactory.informationDialog(this, "Please, fill the address field");
-		else if (observer != null)
+		else
 			observer.onLobbyAddressPanelNextClick(text);
 	}
 }

@@ -24,16 +24,13 @@ package org.sd.battlesheep.view.lobby.panel;
 
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.lobby.WaitingPanelObserver;
 
@@ -43,7 +40,7 @@ import org.sd.battlesheep.view.lobby.WaitingPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WaitingPanel extends BSPanel
+public class WaitingPanel extends APanel
 {
 	private JLabel addressLabel;
 	
@@ -58,10 +55,22 @@ public class WaitingPanel extends BSPanel
 	
 	
 	public WaitingPanel(String host, int port, WaitingPanelObserver observer) {
-		super(Color.WHITE, new BorderLayout());
+		super(ViewConst.WHITE_BACKGROUND);
 		
 		/* model */
 		
+		if (host == null)
+			throw new IllegalArgumentException("Host: null string");
+		if (host.isEmpty())
+			throw new IllegalArgumentException("Host: empty string");
+		
+		if (port < 0)
+			throw new IllegalArgumentException("Port: less than 0");
+		if (port > 65535)
+			throw new IllegalArgumentException("Port: greater than 65535");
+		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
@@ -80,27 +89,14 @@ public class WaitingPanel extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(addressLabel, BorderLayout.CENTER);
-		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		middlePanel.add(waitingLabel, BorderLayout.CENTER);
-		
-		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		southPanel.add(exitButton, BorderLayout.CENTER);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
+		addNorthPanel(addressLabel);
+		addMiddlePanel(waitingLabel);
+		addSouthPanel(exitButton);
 	}
 	
 	
 	
 	private void actionExit() {
-		if (observer != null)
-			observer.onWaitingPanelExitClick();
+		observer.onWaitingPanelExitClick();
 	}
 }

@@ -24,12 +24,10 @@ package org.sd.battlesheep.view;
 
 
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.LayoutManager;
+import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 
 
@@ -37,35 +35,34 @@ import javax.swing.JPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class BSPanel extends JPanel
+public abstract class AFrame extends JFrame
 {
-	private Image background;
-	
-	
-	
-	public BSPanel(LayoutManager manager) {
-		super(manager);
-		this.background = null;
+	public AFrame() {
+		super(ViewConst.PROGRAM_NAME);
+		setIconImage(ViewConst.PROGRAM_ICON);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setLayout(new BorderLayout());
 	}
 	
-	public BSPanel(Color background, LayoutManager manager) {
-		super(manager);
-		setBackground(background);
-		this.background = null;
-	}
-	
-	public BSPanel(Image background, LayoutManager manager) {
-		super(manager);
-		this.background = background;
+	public AFrame(int width, int height) {
+		super(ViewConst.PROGRAM_NAME);
+		setIconImage(ViewConst.PROGRAM_ICON);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(width, height);
+		setLocationRelativeTo(null);
+		setLayout(new BorderLayout());
 	}
 	
 	
 	
-	@Override
-	public void paintComponent(Graphics g) {
-		if (background != null)
-			g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-		else
-			super.paintComponent(g);
+	public void addPanel(APanel panel) {
+		add(panel, BorderLayout.CENTER);
+	}
+	
+	public void replacePanel(APanel oldPanel, APanel newPanel) {
+		remove(oldPanel);
+		add(newPanel, BorderLayout.CENTER);
+		SwingUtilities.updateComponentTreeUI(this);
 	}
 }

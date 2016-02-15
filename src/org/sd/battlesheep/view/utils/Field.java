@@ -24,15 +24,11 @@ package org.sd.battlesheep.view.utils;
 
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-
-import org.sd.battlesheep.view.BSPanel;
+import javax.swing.JPanel;
 
 
 
@@ -40,7 +36,7 @@ import org.sd.battlesheep.view.BSPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class Field extends BSPanel
+public class Field extends JPanel
 {
 	private Cell[][] cells;
 	
@@ -56,14 +52,22 @@ public class Field extends BSPanel
 	
 	
 	
-	public Field(int rows, int cols, String username, FieldObserver observer) {
-		super(new Color(0, 0, 0, 0), new BorderLayout());
+	public Field(String username, int rows, int cols, FieldObserver observer) {
 		
 		/* model */
 		
-		this.username = username == null ? "" : username;
+		this.username = username;
+		
+		if (rows < 1)
+			throw new IllegalArgumentException("Rows: less than 1");
 		this.rows = rows;
+		
+		if (cols < 1)
+			throw new IllegalArgumentException("Columns: less than 1");
 		this.cols = cols;
+		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
@@ -95,20 +99,16 @@ public class Field extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(rows, cols));
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		setLayout(new GridLayout(rows, cols));
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)
-				middlePanel.add(cells[r][c]);
-		
-		add(middlePanel, BorderLayout.CENTER);
+				add(cells[r][c]);
 	}
 	
 	
 	
 	private void actionClick(Cell source) {
-		if (observer != null)
-			observer.onFieldCellClick(source);
+		observer.onFieldCellClick(username, source);
 	}
 	
 	
@@ -117,8 +117,12 @@ public class Field extends BSPanel
 		return username;
 	}
 	
-	public Cell getCell(int r, int c) {
-		return cells[r][c];
+	public boolean[][] getSheeps() {
+		boolean[][] sheeps = new boolean[rows][cols];
+		for (int r = 0; r < rows; r++)
+			for (int c = 0; c < cols; c++)
+				sheeps[r][c] = cells[r][c].isSheep();
+		return sheeps;
 	}
 	
 	

@@ -24,14 +24,10 @@ package org.sd.battlesheep.view.lobby.panel;
 
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -41,7 +37,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 
 
@@ -50,7 +47,7 @@ import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class ClientsPanel extends BSPanel
+public class ClientsPanel extends APanel
 {
 	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
 	
@@ -75,10 +72,22 @@ public class ClientsPanel extends BSPanel
 	
 	
 	public ClientsPanel(String host, int port, ClientsPanelObserver observer) {
-		super(Color.WHITE, new BorderLayout());
+		super(ViewConst.WHITE_BACKGROUND);
 		
 		/* model */
 		
+		if (host == null)
+			throw new IllegalArgumentException("Host: null string");
+		if (host.isEmpty())
+			throw new IllegalArgumentException("Host: empty string");
+		
+		if (port < 0)
+			throw new IllegalArgumentException("Port: less than 0");
+		if (port > 65535)
+			throw new IllegalArgumentException("Port: greater than 65535");
+		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
@@ -122,34 +131,19 @@ public class ClientsPanel extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel northPanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		northPanel.add(addressLabel, BorderLayout.CENTER);
-		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		middlePanel.add(clientsScrollPane, BorderLayout.CENTER);
-		
-		BSPanel southPanel = new BSPanel(new Color(0, 0, 0, 0), new GridLayout(1, 2, 10, 10));
-		southPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		southPanel.add(exitButton);
-		southPanel.add(startButton);
-		
-		add(northPanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
+		addNorthPanel(addressLabel);
+		addMiddlePanel(clientsScrollPane);
+		addSouthPanel(exitButton, startButton);
 	}
 	
 	
 	
 	private void actionExit() {
-		if (observer != null)
-			observer.onClientsPanelExitClick();
+		observer.onClientsPanelExitClick();
 	}
 	
 	private void actionStart() {
-		if (observer != null)
-			observer.onClientsPanelStartClick();
+		observer.onClientsPanelStartClick();
 	}
 	
 	
@@ -159,6 +153,18 @@ public class ClientsPanel extends BSPanel
 	}
 	
 	public void addClient(String username, String host, int port) {
+		if (username == null)
+			throw new IllegalArgumentException("Username: null string");
+		if (username.isEmpty())
+			throw new IllegalArgumentException("Username: empty string");
+		if (host == null)
+			throw new IllegalArgumentException("Host: null string");
+		if (host.isEmpty())
+			throw new IllegalArgumentException("Host: empty string");
+		if (port < 0)
+			throw new IllegalArgumentException("Port: less than 0");
+		if (port > 65535)
+			throw new IllegalArgumentException("Port: greater than 65535");
 		clientsTableModel.addRow(new String[]{username, host, port + ""});
 	}
 }

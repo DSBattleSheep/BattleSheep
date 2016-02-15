@@ -29,5 +29,5 @@ package org.sd.battlesheep.view.utils;
  */
 public interface FieldObserver
 {
-	public void onFieldCellClick(Cell source);
+	public void onFieldCellClick(String username, Cell source);
 }

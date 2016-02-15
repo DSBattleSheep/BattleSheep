@@ -24,14 +24,12 @@ package org.sd.battlesheep.view.registration;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.sd.battlesheep.view.BSFrame;
+import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
 import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
 import org.sd.battlesheep.view.registration.observer.SheepsPositionPanelObserver;
@@ -50,7 +48,7 @@ import org.sd.battlesheep.view.registration.panel.WarningPanel3;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends BSFrame implements LobbyAddressPanelObserver, UsernamePanelObserver, SheepsPositionPanelObserver, LockPanelObserver
+public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserver, UsernamePanelObserver, SheepsPositionPanelObserver, LockPanelObserver
 {
 	private static final int WIDTH = 500;
 	
@@ -91,10 +89,12 @@ public class RegistrationFrame extends BSFrame implements LobbyAddressPanelObser
 	
 	
 	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
-		super(WIDTH, HEIGHT, new BorderLayout());
+		super(WIDTH, HEIGHT);
 		
 		/* model */
 		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* panels */
@@ -115,7 +115,7 @@ public class RegistrationFrame extends BSFrame implements LobbyAddressPanelObser
 		
 		/* this frame */
 		
-		add(lobbyAddressPanel, BorderLayout.CENTER);
+		addPanel(lobbyAddressPanel);
 		setVisible(true);
 	}
 	
@@ -123,106 +123,69 @@ public class RegistrationFrame extends BSFrame implements LobbyAddressPanelObser
 	
 	@Override
 	public void onLobbyAddressPanelExitClick() {
-		if (observer != null)
-			observer.onRegistrationFrameExitClick();
+		observer.onRegistrationFrameExitClick();
 	}
 	
 	@Override
 	public void onLobbyAddressPanelNextClick(String lobbyAddress) {
 		this.lobbyAddress = lobbyAddress;
-		nextToWarningPanel1();
-	}
-	
-	private void nextToWarningPanel1() {
-		remove(lobbyAddressPanel);
-		add(warningPanel1, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-		Timer timer = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
+		replacePanel(lobbyAddressPanel, warningPanel1);
+		Timer timer1 = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				nextToWarningPanel2();
+				replacePanel(warningPanel1, warningPanel2);
+				Timer timer2 = new Timer(WARNING_PANEL_2_DURATION, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						replacePanel(warningPanel2, warningPanel3);
+						Timer timer3 = new Timer(WARNING_PANEL_3_DURATION, new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								replacePanel(warningPanel3, usernamePanel);
+							}
+						});
+						timer3.setRepeats(false);
+						timer3.start();
+					}
+				});
+				timer2.setRepeats(false);
+				timer2.start();
 			}
 		});
-		timer.setRepeats(false);
-		timer.start();
-	}
-	
-	private void nextToWarningPanel2() {
-		remove(warningPanel1);
-		add(warningPanel2, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-		Timer timer = new Timer(WARNING_PANEL_2_DURATION, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				nextToWarningPanel3();
-			}
-		});
-		timer.setRepeats(false);
-		timer.start();
-	}
-	
-	private void nextToWarningPanel3() {
-		remove(warningPanel2);
-		add(warningPanel3, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-		Timer timer = new Timer(WARNING_PANEL_3_DURATION, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				nextToUsernamePanel();
-			}
-		});
-		timer.setRepeats(false);
-		timer.start();
-	}
-	
-	private void nextToUsernamePanel() {
-		remove(warningPanel3);
-		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		timer1.setRepeats(false);
+		timer1.start();
 	}
 	
 	@Override
 	public void onUsernamePanelPreviousClick() {
-		remove(usernamePanel);
-		add(lobbyAddressPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		replacePanel(usernamePanel, lobbyAddressPanel);
 	}
 	
 	@Override
 	public void onUsernamePanelNextClick(String username) {
 		this.username = username;
-		remove(usernamePanel);
-		add(sheepsPositionPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		replacePanel(usernamePanel, sheepsPositionPanel);
 	}
 	
 	@Override
 	public void onSheepsPositionPanelPreviousClick() {
-		remove(sheepsPositionPanel);
-		add(usernamePanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		replacePanel(sheepsPositionPanel, usernamePanel);
 	}
 	
 	@Override
 	public void onSheepsPositionPanelRegistrationClick(boolean[][] sheepsPosition) {
-		remove(sheepsPositionPanel);
-		add(lockPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
-		if (observer != null)
-			observer.onRegistrationFrameRegistrationClick(lobbyAddress, username, sheepsPosition);
+		replacePanel(sheepsPositionPanel, lockPanel);
+		observer.onRegistrationFrameRegistrationClick(lobbyAddress, username, sheepsPosition);
 	}
 	
 	@Override
 	public void onLockPanelExitClick() {
-		if (observer != null)
-			observer.onRegistrationFrameExitClick();
+		observer.onRegistrationFrameExitClick();
 	}
 	
 	
 	
 	public void unlock() {
-		remove(lockPanel);
-		add(sheepsPositionPanel, BorderLayout.CENTER);
-		SwingUtilities.updateComponentTreeUI(this);
+		replacePanel(lockPanel, sheepsPositionPanel);
 	}
 }

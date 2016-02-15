@@ -24,14 +24,12 @@ package org.sd.battlesheep.view.registration.panel;
 
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import org.sd.battlesheep.view.BSPanel;
+import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
 
 
@@ -40,14 +38,14 @@ import org.sd.battlesheep.view.ViewConst;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel2 extends BSPanel
+public class WarningPanel2 extends APanel
 {
 	private JLabel hackingLabel;
 	
 	
 	
 	public WarningPanel2() {
-		super(ViewConst.BATTLESHIP_BACKGROUND, new BorderLayout());
+		super(ViewConst.BATTLESHIP_BACKGROUND);
 		
 		/* items */
 		
@@ -58,10 +56,6 @@ public class WarningPanel2 extends BSPanel
 		
 		/* this panel */
 		
-		BSPanel middlePanel = new BSPanel(new Color(0, 0, 0, 0), new BorderLayout());
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		middlePanel.add(hackingLabel, BorderLayout.CENTER);
-		
-		add(middlePanel, BorderLayout.CENTER);
+		addMiddlePanel(hackingLabel);
 	}
 }
