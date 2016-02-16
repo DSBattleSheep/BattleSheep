@@ -38,13 +38,21 @@ import javax.swing.ImageIcon;
  */
 public class ViewConst
 {
+	/*
+	 * program name
+	 */
+	
 	public static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
 	
 	
 	
+	/*
+	 * images
+	 */
+	
 	private static final String IMGS_PATH = "imgs" + File.separator;
 	
-	
+	/* icons */
 	
 	public static final Image PROGRAM_ICON = new ImageIcon(IMGS_PATH + "icon.png").getImage();
 	
@@ -52,17 +60,27 @@ public class ViewConst
 	
 	public static final Icon BANNER_ICON = new ImageIcon(IMGS_PATH + "banner.png");
 	
-	
+	/* background images */
 	
 	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
 	
-	
+	/* background colors */
 	
 	public static final Color TRANSPARENT_BACKGROUND = new Color(0, 0, 0, 0);
 	
 	public static final Color WHITE_BACKGROUND = Color.WHITE;
 	
 	public static final Color GREEN_BACKGROUND = Color.GREEN;
+	
+	/* sheeps */
+	
+	public static final Image GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
+	
+	public static final Image SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
+	
+	public static final Image HIT_GRASS = new ImageIcon(IMGS_PATH + "hit_grass.png").getImage();
+	
+	public static final Image HIT_SHEEP = new ImageIcon(IMGS_PATH + "hit_sheep.png").getImage();
 }

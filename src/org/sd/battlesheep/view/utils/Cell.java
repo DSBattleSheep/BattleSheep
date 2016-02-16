@@ -29,9 +29,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -41,18 +42,6 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class Cell extends JLabel
 {
-	private static final String IMGS_PATH = "./imgs/";
-	
-	private static final Image GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
-	
-	private static final Image SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
-	
-	private static final Image HIT_GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
-	
-	private static final Image HIT_SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
-	
-	
-	
 	private Image background;
 	
 	
@@ -65,7 +54,7 @@ public class Cell extends JLabel
 	
 	public Cell(int r, int c) {
 		setBorder(BorderFactory.createLineBorder(Color.GREEN));
-		background = GRASS;
+		background = ViewConst.GRASS;
 		
 		if (r < 0)
 			throw new IllegalArgumentException("Row: less than 0");
@@ -88,39 +77,39 @@ public class Cell extends JLabel
 	
 	
 	public void setGrass() {
-		background = GRASS;
+		background = ViewConst.GRASS;
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setSheep() {
-		background = SHEEP;
+		background = ViewConst.SHEEP;
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setHitGrass() {
-		background = HIT_GRASS;
+		background = ViewConst.HIT_GRASS;
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public void setHitSheep() {
-		background = HIT_SHEEP;
+		background = ViewConst.HIT_SHEEP;
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
 	public boolean isGrass() {
-		return background.equals(GRASS);
+		return background.equals(ViewConst.GRASS);
 	}
 	
 	public boolean isSheep() {
-		return background.equals(SHEEP);
+		return background.equals(ViewConst.SHEEP);
 	}
 	
 	public boolean isHitGrass() {
-		return background.equals(HIT_GRASS);
+		return background.equals(ViewConst.HIT_GRASS);
 	}
 	
 	public boolean isHitSheep() {
-		return background.equals(HIT_SHEEP);
+		return background.equals(ViewConst.HIT_SHEEP);
 	}
 	
 	

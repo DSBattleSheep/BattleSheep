@@ -25,16 +25,21 @@ package org.sd.battlesheep.view.game;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.DefaultCaret;
 
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
@@ -86,6 +91,14 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	
 	
+	private APanel logPanel;
+	
+	private JTextArea logTextArea;
+	
+	private JScrollPane logScrollPane;
+	
+	
+	
 	private GameFrameObserver observer;
 	
 	
@@ -103,7 +116,7 @@ public class GameFrame extends AFrame implements FieldObserver
 			throw new IllegalArgumentException("My username: null string");
 		if (myUsername.isEmpty())
 			throw new IllegalArgumentException("My username: empty string");
-		myField = new Field(myUsername, rows, cols, this);
+		myField = new Field(myUsername, rows, cols, null);
 		
 		if (opponentsUsername == null)
 			throw new IllegalArgumentException("Opponents username: null array");
@@ -118,22 +131,18 @@ public class GameFrame extends AFrame implements FieldObserver
 			opponentsField[i] = new Field(opponentsUsername[i], rows, cols, this);
 		}
 		
-		/*
 		if (observer == null)
-			throw new IllegalArgumentException("Observer: null object");*/// TODO - DECOMMENTARE!
+			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* banner panel */
 		
-		bannerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
-		
 		bannerLabel= new JLabel(ViewConst.BANNER_ICON, JLabel.CENTER);
 		
+		bannerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		bannerPanel.addNorthPanel(bannerLabel);
 		
 		/* list panel */
-		
-		listPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		
 		opponentsListLabel = new JLabel("Opponents", JLabel.CENTER);
 		
@@ -149,34 +158,48 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		fieldListScrollPane = new JScrollPane(fieldsList);
 		
+		listPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		listPanel.addNorthPanel(opponentsListLabel);
 		listPanel.addMiddlePanel(fieldListScrollPane);
 		
 		/* player panel */
 		
-		playerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
-		
-		myPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
-		
 		myUsernameLabel = new JLabel(myField.getUsername(), JLabel.CENTER);
 		
+		opponentUsernameLabel = new JLabel(opponentsField[0].getUsername(), JLabel.CENTER);
+		
+		myPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		myPanel.addNorthPanel(myUsernameLabel);
 		myPanel.addMiddlePanel(myField);
 		
 		opponentPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
-		
-		opponentUsernameLabel = new JLabel(opponentsField[0].getUsername(), JLabel.CENTER);
-		
 		opponentPanel.addNorthPanel(opponentUsernameLabel);
 		opponentPanel.addMiddlePanel(opponentsField[0]);
 		
+		playerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		playerPanel.addMiddlePanel(myPanel, opponentPanel);
+		
+		/* log panel */
+		
+		logTextArea = new JTextArea();
+		logTextArea.setEditable(false);
+		logTextArea.setBackground(Color.BLACK);
+		logTextArea.setForeground(Color.GREEN);
+		
+		((DefaultCaret) logTextArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		logScrollPane = new JScrollPane(logTextArea);
+		
+		logPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
+		logPanel.setPreferredSize(new Dimension(getWidth(), 100));
+		logPanel.addMiddlePanel(logScrollPane);
 		
 		/* this frame */
 		
 		add(bannerPanel, BorderLayout.NORTH);
 		add(listPanel, BorderLayout.EAST);
 		add(playerPanel, BorderLayout.CENTER);
+		add(logPanel, BorderLayout.SOUTH);
 		setVisible(true);
 	}
 	
@@ -187,7 +210,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		if (index != -1) {
 			opponentUsernameLabel.setText(opponentsField[index].getUsername());
 			opponentPanel.remove(1);
-			opponentPanel.add(opponentsField[index]);
+			opponentPanel.addMiddlePanel(opponentsField[index]);
 			SwingUtilities.updateComponentTreeUI(opponentPanel);
 		}
 	}
@@ -195,29 +218,60 @@ public class GameFrame extends AFrame implements FieldObserver
 	@Override
 	public void onFieldCellClick(String username, Cell source) {
 		if (source.isGrass())
-			source.setSheep();
+			observer.onGameFrameAttack(username, source.getCol(), source.getRow());
 	}
 	
 	
 	
 	public void setTurn(String username) {
-		
+		if (username.equals(myField.getUsername())) {
+			for (Field opponentField : opponentsField)
+				opponentField.unlock();
+			logTextArea.append("TURNO: MIO\n");
+		} else {
+			for (Field opponentField : opponentsField)
+				opponentField.lock();
+			logTextArea.append("TURNO: " + username + "\n");
+		}
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		
+		logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "] -> " + (hit ? "HIT" : "don't hit") + "\n");
+		// I'm the defender, change image in my field
+		if (usernameDefender.equals(myField.getUsername())) {
+			if (hit)
+				myField.setHitSheep(y, x);
+			else
+				myField.setHitGrass(y, x);
+		// someone else is the defender, chenge the image in its field and show it
+		} else
+			for (int i = 0; i < opponentsField.length; i++)
+				if (opponentsField[i].getUsername().equals(usernameDefender)) {
+					if (hit)
+						opponentsField[i].setHitSheep(y, x);
+					else
+						opponentsField[i].setHitGrass(y, x);
+					fieldsList.setSelectedIndex(i);
+					actionList();
+				}
 	}
 	
-	public void playerWon(String username) {
-		
-	}
-	
-	public void playerCrashed(String username) {
-		
+	public void playerWon(String username, int position) {
+		// lock the fields
+		for (Field opponentField : opponentsField)
+			opponentField.lock();
+		// I'm the winner
+		if (myField.getUsername().equals(username)) {
+			logTextArea.append("I WON!");
+			MessageFactory.informationDialog(this, "I WON!");
+		// someone else is the winner
+		} else {
+			logTextArea.append(username + " WON!");
+			MessageFactory.informationDialog(this, username + " WON!");
+		}
 	}
 	
 	public void playerLost(String username, boolean kickedOut) {
-		/*
 		if (username.equals(myField.getUsername())) {
 			if (kickedOut) {
 				// sono stato eliminato dalla partita perchè ho laggato troppo e sono arrivato dopo l'inizio del turno
@@ -228,16 +282,17 @@ public class GameFrame extends AFrame implements FieldObserver
 			// Il player 'username' è stato eliminato dalla partita perchè ha perso. 
 			// Per ora non viene differenziato se è stato buttato fuori per lag o per aver perso.
 		}
-		*/
 	}
 	
-	
-	
-	public void lock() {
-		
-	}
-	
-	public void unlock() {
-		
+	public void playerCrashed(String username) {
+		Field[] newOpponentsField = new Field[opponentsField.length - 1];
+		for (int i = 0, j = 0; i < opponentsField.length; i++)
+			if (!opponentsField[i].getUsername().equals(username))
+				newOpponentsField[j++] = opponentsField[i];
+			else
+				fieldsList.remove(i);
+		opponentsField = newOpponentsField;
+		logTextArea.append(username + " CRASHED!");
+		MessageFactory.informationDialog(this, username + " CRASHED!");
 	}
 }

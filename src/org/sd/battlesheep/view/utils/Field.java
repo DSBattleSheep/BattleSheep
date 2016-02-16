@@ -48,6 +48,8 @@ public class Field extends JPanel
 	
 	private int cols;
 	
+	private boolean locked;
+	
 	private FieldObserver observer;
 	
 	
@@ -66,8 +68,8 @@ public class Field extends JPanel
 			throw new IllegalArgumentException("Columns: less than 1");
 		this.cols = cols;
 		
-		if (observer == null)
-			throw new IllegalArgumentException("Observer: null object");
+		this.locked = false;
+		
 		this.observer = observer;
 		
 		/* items */
@@ -108,7 +110,8 @@ public class Field extends JPanel
 	
 	
 	private void actionClick(Cell source) {
-		observer.onFieldCellClick(username, source);
+		if (observer != null && !locked)
+			observer.onFieldCellClick(username, source);
 	}
 	
 	
@@ -125,18 +128,30 @@ public class Field extends JPanel
 		return sheeps;
 	}
 	
+	public void setGrass(int r, int c) {
+		cells[r][c].setGrass();
+	}
+	
+	public void setSheep(int r, int c) {
+		cells[r][c].setSheep();
+	}
+	
+	public void setHitGrass(int r, int c) {
+		cells[r][c].setHitGrass();
+	}
+	
+	public void setHitSheep(int r, int c) {
+		cells[r][c].setHitSheep();
+	}
+	
 	
 	
 	public void lock() {
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				cells[r][c].setEnabled(false);
+		locked = true;
 	}
 	
 	public void unlock() {
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				cells[r][c].setEnabled(true);
+		locked = false;
 	}
 	
 	

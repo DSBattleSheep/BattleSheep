@@ -27,7 +27,6 @@ package org.sd.battlesheep;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.main.MainFrame;
 import org.sd.battlesheep.view.main.MainFrameObserver;
 
@@ -44,8 +43,7 @@ public class Main implements MainFrameObserver
 	
 	
 	private Main() {
-		// mainFrame = new MainFrame(this);
-		new GameFrame("Biagio", new String[]{"Ise", "Minizinc", "Bera", "Danger"}, 10, 10, null);
+		mainFrame = new MainFrame(this);
 	}
 	
 	
