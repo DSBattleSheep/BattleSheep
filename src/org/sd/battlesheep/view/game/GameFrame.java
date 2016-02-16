@@ -256,7 +256,7 @@ public class GameFrame extends AFrame implements FieldObserver
 				}
 	}
 	
-	public void playerWon(String username, int position) {
+	public void playerWon(String username) {
 		// lock the fields
 		for (Field opponentField : opponentsField)
 			opponentField.lock();
@@ -271,7 +271,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		}
 	}
 	
-	public void playerLost(String username, boolean kickedOut) {
+	public void playerLost(String username, int position, boolean kickedOut) {
 		if (username.equals(myField.getUsername())) {
 			if (kickedOut) {
 				// sono stato eliminato dalla partita perchè ho laggato troppo e sono arrivato dopo l'inizio del turno
