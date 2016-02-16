@@ -74,7 +74,7 @@ public class ViewConst
 	
 	public static final Color GREEN_BACKGROUND = Color.GREEN;
 	
-	/* sheeps */
+	/* field */
 	
 	public static final Image GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
 	
@@ -84,9 +84,8 @@ public class ViewConst
 	
 	public static final Image HIT_SHEEP = new ImageIcon(IMGS_PATH + "hit_sheep.png").getImage();
 	
-	
 	/* medallions */
-
+	
 	public static final ImageIcon IMG_1_PLACE = new ImageIcon(IMGS_PATH + "medallion1.jpg");
 	
 	public static final ImageIcon IMG_2_PLACE = new ImageIcon(IMGS_PATH + "medallion2.jpg");
@@ -94,6 +93,4 @@ public class ViewConst
 	public static final ImageIcon IMG_3_PLACE = new ImageIcon(IMGS_PATH + "medallion3.jpg");
 	
 	public static final ImageIcon IMG_LOST = new ImageIcon(IMGS_PATH + "medallion4.jpg");
-	
-	
 }

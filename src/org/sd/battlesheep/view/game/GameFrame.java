@@ -261,28 +261,22 @@ public class GameFrame extends AFrame implements FieldObserver
 		logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "] -> " + (hit ? "HIT" : "don't hit") + "\n");
 	}
 	
-	public void matchResult(int position) {
+	public void matchResult(int position, boolean kickedOut) {
 		// lock the fields
 		for (Field opponentField : opponentsField)
 			opponentField.lock();
 		// show message
-		switch (position) {
-			case 1:
-				logTextArea.append("I WON!");
-				MessageFactory.informationDialog(this, "I WON!");
-				break;
-			case 2:
-				logTextArea.append("I WON!");
-				MessageFactory.informationDialog(this, "I WON!");
-				break;
-			case 3:
-				logTextArea.append("I WON!");
-				MessageFactory.informationDialog(this, "I WON!");
-				break;
-			default:
-				logTextArea.append("I WON!");
-				MessageFactory.informationDialog(this, "I WON!");
-		}
+		if (kickedOut)
+			logTextArea.append("HERE IS A NICKEL, KID GET YOURSELF A BETTER CONNECTION\n");
+		if (position == 1)
+			logTextArea.append("I WON!");
+		else if (position == 2)
+			logTextArea.append("SECOND PLACE FOR ME!");
+		else if (position == 3)
+			logTextArea.append("THIRD PLACE FOR ME!");
+		else
+			logTextArea.append("I LOST!");
+		MessageFactory.endGameDialog(position);
 	}
 	
 	public void playerLost(String username) {
