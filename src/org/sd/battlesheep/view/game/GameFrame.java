@@ -108,8 +108,14 @@ public class GameFrame extends AFrame implements FieldObserver
 	 * constructor
 	 */
 	
-	public GameFrame(String myUsername, String[] opponentsUsername, int rows, int cols, GameFrameObserver observer) {
+	public GameFrame(String myUsername, boolean[][] mySheepsPosition, String[] opponentsUsername, GameFrameObserver observer) {
 		super(WIDTH, HEIGHT);
+		
+
+		// TODO BIAGIO FIXA
+		int rows = mySheepsPosition[0].length;
+		int cols = mySheepsPosition.length;
+		
 		
 		/* model */
 		

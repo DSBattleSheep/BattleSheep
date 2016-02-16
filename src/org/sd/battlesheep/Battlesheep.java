@@ -108,10 +108,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 		private String username;
 
+		private boolean[][] sheepsPosition;
+		
 		private ArrayList<String> opponentList;
 
-		private DisposeRegistrationFrameAndCreateGameFrame(String username, ArrayList<String> opponentList) {
+		private DisposeRegistrationFrameAndCreateGameFrame(String username, boolean[][] sheepsPosition, ArrayList<String> opponentList) {
 			this.username = username;
+			this.sheepsPosition = sheepsPosition;
 			this.opponentList = opponentList;
 		}
 
@@ -120,9 +123,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			registrationFrame.dispose();
 			gameFrame = new GameFrame(
 					username, 
+					sheepsPosition,
 					opponentList.toArray(new String[opponentList.size()]),
-					ModelConst.FIELD_ROWS, 
-					ModelConst.FIELD_COLS, 
 					Battlesheep.getInstance());
 		}
 	}
@@ -169,17 +171,17 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 	@Override
 	public void onRegistrationFrameExitClick() {
-		// registrationFrame.dispose();//
-		// TODO -> gestire l'uscita dal programma (client)
+		registrationFrame.dispose();
 		if (playerServer != null)
 			unbindAndClose(0);
 	}
 
-	private void removeFromActivePlayers(final String username) {
+	private void removeFromActivePlayers(final String username, final boolean crashed) {
 
 		System.out.println("removeFromActivePlayers(" + username + ")");
 
-		crashedOpponents.add(username);
+		if (crashed)
+			crashedOpponents.add(username);
 		orderList.remove(playerMap.get(username));
 		playerMap.remove(username);
 
@@ -187,7 +189,10 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.playerCrashed(username);
+					if (crashed)
+						gameFrame.playerCrashed(username);
+					else
+						gameFrame.playerLost(username);
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
@@ -199,7 +204,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		target.setHit(x, y, hit);
 		if (target.lost()) {
 			System.out.println(target.getUsername() + " has lost!");
-			removeFromActivePlayers(target.getUsername());
+			removeFromActivePlayers(target.getUsername(), false);
 		}
 	}
 
@@ -288,7 +293,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				}
 					
 				try {
-					SwingUtilities.invokeAndWait(new DisposeRegistrationFrameAndCreateGameFrame(myUsername, opponentList));
+					SwingUtilities.invokeAndWait(new DisposeRegistrationFrameAndCreateGameFrame(myUsername, sheepsPosition, opponentList));
 				} catch (InvocationTargetException | InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -342,7 +347,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 								lastMove.isHit());
 
 					for (String removedPlayer : lastMove.getCrashedOpponents())
-						removeFromActivePlayers(removedPlayer);
+						removeFromActivePlayers(removedPlayer, true);
 
 				} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
 					// il tizio col turno è morto, ricomincio
@@ -365,7 +370,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				currPlayerIndex = (orderList.indexOf(turnOwner) + 1) % orderList.size();
 			else {
 				currPlayerIndex = orderList.indexOf(turnOwner) % (orderList.size() - 1);
-				removeFromActivePlayers(turnOwner.getUsername());
+				removeFromActivePlayers(turnOwner.getUsername(), true);
 				removedTurnOwner = false;
 			}
 
@@ -377,7 +382,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.matchResult(orderList.size() + 1, true);
+					gameFrame.matchResult(orderList.size(), true);
 				}
 			});
 		} else if (!me.lost()) {
@@ -393,7 +398,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.matchResult(orderList.size() + 1, false);
+					gameFrame.matchResult(orderList.size(), false);
 				}
 			});
 		}
@@ -413,7 +418,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	@Override
 	public void notifyNotConnectedUser(String username) {
 		System.out.println(username + " did not connect!");
-		removeFromActivePlayers(username);
+		removeFromActivePlayers(username, true);
 	}
 
 	@Override
@@ -440,7 +445,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				} catch (NullPointerException | MalformedURLException | RemoteException | NotBoundException
 						| ServerNotActiveException e) {
 					System.out.println(e.getMessage());
-					removeFromActivePlayers(username);
+					removeFromActivePlayers(username, true);
 					onTurnOwnerCanMove();
 				}
 			}

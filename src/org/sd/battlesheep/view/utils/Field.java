@@ -121,10 +121,10 @@ public class Field extends JPanel
 	}
 	
 	public boolean[][] getSheeps() {
-		boolean[][] sheeps = new boolean[rows][cols];
+		boolean[][] sheeps = new boolean[cols][rows];
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)
-				sheeps[r][c] = cells[r][c].isSheep();
+				sheeps[c][r] = cells[r][c].isSheep();
 		return sheeps;
 	}
 	

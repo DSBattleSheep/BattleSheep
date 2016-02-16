@@ -78,14 +78,23 @@ public class Me extends APlayer
 	/**
 	 * funzione che si occupa di settare una cella come colpita
 	 * 
-	 * @param r - l'indice della riga che identifica la cella
-	 * @param c - l'indice della colonna che identifica la cella
-	 * @return true se è stata colpita una pecora, false altrimenti
+	 * @param x - coordinata x della mappa
+	 * @param y - coordinata y della mappa
 	 */
-	public void hit(int r, int c) {
-		myField.hit(r, c);
+	public void hit(int x, int y) {
+		myField.hit(x, y);
 	}
 	
+	
+	
+	/**
+	 * funzione che si occupa di verificare se nella cella indicata
+	 * c'è una pecora oppure no
+	 * 
+	 * @param x - cordinata x della mappa
+	 * @param y - cordinata y della mappa
+	 * @return true se c'è una pecora nella cella indicata, false altrimenti
+	 */
 	public boolean isSheep(int x, int y) {
 		return myField.isSheep(x, y);
 	}
