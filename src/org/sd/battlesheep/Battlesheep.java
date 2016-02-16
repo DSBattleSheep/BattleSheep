@@ -174,7 +174,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		System.exit(0);
 	}
 
-	private void removeFromActivePlayers(String username) {
+	private void removeFromActivePlayers(final String username) {
 
 		// FIXME: ragionare se serve una lock per queste remove
 
@@ -188,7 +188,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.playerCrashed(me.getUsername());
+					gameFrame.playerCrashed(username);
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
