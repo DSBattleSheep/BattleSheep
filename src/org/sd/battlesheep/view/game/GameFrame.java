@@ -27,6 +27,7 @@ package org.sd.battlesheep.view.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -87,7 +88,7 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	private JLabel opponentUsernameLabel;
 	
-	private Field[] opponentsField;
+	private ArrayList<Field> opponentsField;
 	
 	
 	
@@ -122,13 +123,13 @@ public class GameFrame extends AFrame implements FieldObserver
 			throw new IllegalArgumentException("Opponents username: null array");
 		if (opponentsUsername.length < 1)
 			throw new IllegalArgumentException("Opponents username: less than 1");
-		opponentsField = new Field[opponentsUsername.length];
+		opponentsField = new ArrayList<>();
 		for (int i = 0; i < opponentsUsername.length; i++) {
 			if (opponentsUsername[i] == null)
 				throw new IllegalArgumentException("Opponent username " + (i + 1) + ": null string");
 			if (opponentsUsername[i].isEmpty())
 				throw new IllegalArgumentException("Opponent username " + (i + 1) + ": empty string");
-			opponentsField[i] = new Field(opponentsUsername[i], rows, cols, this);
+			opponentsField.add(new Field(opponentsUsername[i], rows, cols, this));
 		}
 		
 		if (observer == null)
@@ -146,7 +147,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		opponentsListLabel = new JLabel("Opponents", JLabel.CENTER);
 		
-		fieldsList = new JList<Field>(opponentsField);
+		fieldsList = new JList<Field>(opponentsField.toArray(new Field[opponentsField.size()]));
 		fieldsList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -166,7 +167,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		myUsernameLabel = new JLabel(myField.getUsername(), JLabel.CENTER);
 		
-		opponentUsernameLabel = new JLabel(opponentsField[0].getUsername(), JLabel.CENTER);
+		opponentUsernameLabel = new JLabel(opponentsField.get(0).getUsername(), JLabel.CENTER);
 		
 		myPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		myPanel.addNorthPanel(myUsernameLabel);
@@ -174,7 +175,7 @@ public class GameFrame extends AFrame implements FieldObserver
 		
 		opponentPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		opponentPanel.addNorthPanel(opponentUsernameLabel);
-		opponentPanel.addMiddlePanel(opponentsField[0]);
+		opponentPanel.addMiddlePanel(opponentsField.get(0));
 		
 		playerPanel = new APanel(ViewConst.TRANSPARENT_BACKGROUND) {};
 		playerPanel.addMiddlePanel(myPanel, opponentPanel);
@@ -208,9 +209,9 @@ public class GameFrame extends AFrame implements FieldObserver
 	private void actionList() {
 		int index = fieldsList.getSelectedIndex();
 		if (index != -1) {
-			opponentUsernameLabel.setText(opponentsField[index].getUsername());
+			opponentUsernameLabel.setText(opponentsField.get(index).getUsername());
 			opponentPanel.remove(1);
-			opponentPanel.addMiddlePanel(opponentsField[index]);
+			opponentPanel.addMiddlePanel(opponentsField.get(index));
 			SwingUtilities.updateComponentTreeUI(opponentPanel);
 		}
 	}
@@ -245,12 +246,12 @@ public class GameFrame extends AFrame implements FieldObserver
 				myField.setHitGrass(y, x);
 		// someone else is the defender, chenge the image in its field and show it
 		} else
-			for (int i = 0; i < opponentsField.length; i++)
-				if (opponentsField[i].getUsername().equals(usernameDefender)) {
+			for (int i = 0; i < opponentsField.size(); i++)
+				if (opponentsField.get(i).getUsername().equals(usernameDefender)) {
 					if (hit)
-						opponentsField[i].setHitSheep(y, x);
+						opponentsField.get(i).setHitSheep(y, x);
 					else
-						opponentsField[i].setHitGrass(y, x);
+						opponentsField.get(i).setHitGrass(y, x);
 					fieldsList.setSelectedIndex(i);
 					actionList();
 				}
@@ -285,13 +286,15 @@ public class GameFrame extends AFrame implements FieldObserver
 	}
 	
 	public void playerCrashed(String username) {
-		Field[] newOpponentsField = new Field[opponentsField.length - 1];
-		for (int i = 0, j = 0; i < opponentsField.length; i++)
-			if (!opponentsField[i].getUsername().equals(username))
-				newOpponentsField[j++] = opponentsField[i];
-			else
-				fieldsList.remove(i);
-		opponentsField = newOpponentsField;
+		// remove field from opponentsField
+		for (Field opponentField : opponentsField)
+			if (opponentField.getUsername().equals(username)) {
+				opponentsField.remove(opponentField);
+				break;
+			}
+		// update list
+		fieldsList.setListData(opponentsField.toArray(new Field[opponentsField.size()]));
+		// log and show message
 		logTextArea.append(username + " CRASHED!");
 		MessageFactory.informationDialog(this, username + " CRASHED!");
 	}

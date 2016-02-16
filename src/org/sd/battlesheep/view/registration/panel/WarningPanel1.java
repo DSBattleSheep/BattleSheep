@@ -28,7 +28,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
