@@ -153,10 +153,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		@Override
 		public void run() {
 			gameFrame.setTurn(username);
-			if (lock)
-				gameFrame.lock();
-			else
-				gameFrame.unlock();
 		}		
 	}
 	
@@ -452,7 +448,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 
 	@Override
 	public void onGameFrameAttack(final String username, final int x, final int y) {
-		gameFrame.lock();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {	
