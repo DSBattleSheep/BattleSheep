@@ -20,10 +20,11 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 
 
-@SuppressWarnings("serial")
+
 public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemoteInterface
 {
-	private int port;
+	private static final long serialVersionUID = -5365778052892677266L;
+
 	
 	private Registry registry;
 	
@@ -41,7 +42,6 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	
 	public LobbyServerRMI(int port, LobbyJoinInterface lobbyJoinInterface) throws RemoteException, AlreadyBoundException {
 		super();
-		this.port = port;
 		this.lobbyJoinInterface = lobbyJoinInterface;
 		playerMap = new HashMap<String, NetPlayer>();
 		registry = LocateRegistry.createRegistry(port);

@@ -23,55 +23,54 @@ import org.sd.battlesheep.model.player.APlayer;
 import org.sd.battlesheep.model.player.Me;
 import org.sd.battlesheep.model.player.Opponent;
 
-@SuppressWarnings("serial")
+
 public class PlayerServer extends UnicastRemoteObject implements OrderInterface, TurnOwnerInterface, AttackInterface, PushMoveInterface {
 
-	private static final int PLAYERS_CONNECTION_MAX_TIMEOUT = 500; //millis
+	private static final long serialVersionUID = 5096751122974952805L;
+	
+	private static final int PLAYERS_CONNECTION_MAX_TIMEOUT = 500; // millis
+
 	
 	private PlayersConnectedInterface observer;
-	
 
 	private int boundPort;
-	
+
 	private int myValueRandom;
 
 	private Me me;
-	
-	
+
 	private ReentrantLock pLock;
-	
+
 	private Condition moveSelectedCondition;
-	
+
 	private Condition itsMyTurn;
-	
+
 	private Condition allClientsConnected;
-	
+
 	private int turnIndex;
-	
+
 	private int playerCount;
-	
+
 	private boolean myTurnStarted;
-	
+
 	private boolean expiredDeadline;
-	
+
 	private boolean allPlayersAlreadyConnected;
 
 	private List<String> expectedPlayers;
-	
+
 	private Move currentMove;
-	
+
 	private Move lastMove;
-	
-	
-	
+
 	private class PlayersConnectionTurnTimeOut implements Runnable {
-		
+
 		int currentTurnIndex;
-		
+
 		private PlayersConnectionTurnTimeOut(int currentTurnIndex) {
 			this.currentTurnIndex = currentTurnIndex;
 		}
-		
+
 		@Override
 		public void run() {
 			try {
@@ -83,7 +82,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 			if (currentTurnIndex != turnIndex) {
 				pLock.unlock();
 				return;
-			}	
+			}
 			expiredDeadline = true;
 			if (allPlayersAlreadyConnected)
 				pLock.unlock();
@@ -96,10 +95,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 				pLock.unlock();
 			}
 		}
-	} 
-	
-	
-	
+	}
 
 	public PlayerServer(PlayersConnectedInterface observer) throws RemoteException, MaxPortRetryException {
 		super();
@@ -133,7 +129,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		pLock = new ReentrantLock();
 		itsMyTurn = pLock.newCondition();
 		moveSelectedCondition = pLock.newCondition();
-		allClientsConnected=pLock.newCondition();
+		allClientsConnected = pLock.newCondition();
 		expectedPlayers = new ArrayList<String>();
 		myValueRandom = randomGenerator.nextInt();
 	}
@@ -149,19 +145,19 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 			if (player instanceof Opponent)
 				expectedPlayers.add(player.getUsername());
 		}
-		playerCount=0;
+		playerCount = 0;
 		turnIndex++;
 		expiredDeadline = false;
 		allPlayersAlreadyConnected = false;
 		myTurnStarted = true;
-		this.lastMove=lastMove;
+		this.lastMove = lastMove;
 		itsMyTurn.signalAll();
-		
+
 		new Thread(new PlayersConnectionTurnTimeOut(turnIndex)).start();
-		
+
 		pLock.unlock();
 	}
-	
+
 	public void setMove(Move move) {
 		pLock.lock();
 		currentMove = move;
@@ -170,7 +166,6 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		pLock.unlock();
 	}
 
-	
 	/**
 	 * funzione che si occupa di restituire la porta per la comunicazione con
 	 * gli altri giocatori
@@ -180,37 +175,33 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	public int getPort() {
 		return boundPort;
 	}
-	
-	
 
 	@Override
 	public int getValueRandom() {
 		return myValueRandom;
 	}
 
-	
 	@Override
 	public Move connectToTurnOwner(String username, Move oldMove) throws KickedOutPlayerException {
-		
+
 		pLock.lock();
-		
-		if (! myTurnStarted) {
+
+		if (!myTurnStarted) {
 			try {
 				itsMyTurn.await();
 			} catch (InterruptedException e) {
-				System.out.println("Qui siamo messi malino");
 				e.printStackTrace();
 			}
 		}
-		
-		if(oldMove.getMoveIndex()>lastMove.getMoveIndex()) {
-			lastMove=oldMove;
+
+		if (oldMove.getMoveIndex() > lastMove.getMoveIndex()) {
+			lastMove = oldMove;
 			observer.updateMove(lastMove);
 		}
-		
+
 		System.out.println("connectCurrentPlayer: client " + username + " connected");
-		//FIXME gestire lista di user connessi, così rimuoviamo quelli non connessi
-		
+		// FIXME gestire lista di user connessi, così rimuoviamo quelli non connessi
+
 		try {
 			if (!expiredDeadline) {
 				expectedPlayers.remove(username);
@@ -228,30 +219,28 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 				}
 			} else {
 				pLock.unlock();
-				throw new KickedOutPlayerException("Sorry! You are in late."); //FIXME: throw new TooLateException! :D				
+				throw new KickedOutPlayerException("Sorry! You are in late."); // FIXME: throw new TooLateException!
 			}
 		} catch (NullPointerException e) {
 			pLock.unlock();
 			// TODO: così non ci può essere un player che si infila a caso.. Va bene?
 			throw new KickedOutPlayerException(username + ": You are not an expected player.");
 		}
-		
-		
-		if(oldMove.getMoveIndex()<lastMove.getMoveIndex()) {
+
+		if (oldMove.getMoveIndex() < lastMove.getMoveIndex()) {
 			try {
-				observer.pushMoveUpdate(username,lastMove);
+				observer.pushMoveUpdate(username, lastMove);
 			} catch (MalformedURLException | RemoteException | NotBoundException | ServerNotActiveException e) {
+				observer.notifyNotConnectedUser(username);
 				pLock.unlock();
-				//FIXME devo essere eliminato
 				return null;
 			}
 		}
-		
+
 		playerCount--;
-		
-		if(playerCount==0) {
+
+		if (playerCount == 0)
 			observer.onTurnOwnerCanMove();
-		}
 		
 		try {
 			moveSelectedCondition.await();
@@ -264,7 +253,6 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		return currentMove;
 	}
 
-	
 	@Override
 	public boolean attackPlayer(int x, int y) throws RemoteException, ServerNotActiveException {
 		return me.isSheep(x, y);

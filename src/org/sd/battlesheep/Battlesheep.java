@@ -102,11 +102,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				ModelConst.FIELD_COLS,
 				ModelConst.SHEEPS_NUMBER, 
 				this);
-
-		MessageFactory.endGameDialog(registrationFrame, 1);
-		MessageFactory.endGameDialog(registrationFrame, 2);
-		MessageFactory.endGameDialog(registrationFrame, 3);
-		MessageFactory.endGameDialog(registrationFrame, 4);
 	}
 
 	private class DisposeRegistrationFrameAndCreateGameFrame implements Runnable {

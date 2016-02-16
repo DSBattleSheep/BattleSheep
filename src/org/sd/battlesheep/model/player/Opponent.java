@@ -42,9 +42,12 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
  * 
  * @author Giulio Biagini
  */
-@SuppressWarnings("serial")
+
 public class Opponent extends APlayer implements Serializable
 {
+	private static final long serialVersionUID = 3803295068039264485L;
+
+	
 	/**
 	 * l'host dell'avversario
 	 */

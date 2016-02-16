@@ -3,9 +3,11 @@ package org.sd.battlesheep.model.field;
 import java.io.Serializable;
 import java.util.List;
 
-//FIXME!
-@SuppressWarnings("serial")
+
 public class Move implements Serializable {
+
+	private static final long serialVersionUID = -2548231018360975595L;
+	
 
 	private String target;
 

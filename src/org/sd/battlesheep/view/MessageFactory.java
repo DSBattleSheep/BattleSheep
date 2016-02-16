@@ -25,7 +25,13 @@ package org.sd.battlesheep.view;
 
 
 import java.awt.Component;
+import java.awt.Dialog.ModalityType;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
@@ -47,5 +53,38 @@ public class MessageFactory
 	
 	public static void errorDialog(Component parent, String message) {
 		showDialog(parent, message, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void endGameDialog(Component parent, int position) {
+		JDialog dialog = new JDialog();
+		ImageIcon icon = null;
+		switch (position) {
+			case 1:
+				dialog.setTitle("You Win!");
+				icon = ViewConst.IMG_1_PLACE;	
+				break;
+			case 2:
+				dialog.setTitle("You were GREAT, but..!");
+				icon = ViewConst.IMG_2_PLACE;
+				break;
+			case 3:
+				dialog.setTitle("Third place.. Too bad!");
+				icon = ViewConst.IMG_3_PLACE;
+				break;
+			default:
+				dialog.setTitle("Let's face it.. You lost this fight!");
+				icon = ViewConst.IMG_LOST;
+				break;
+		}
+		
+		
+		JLabel label = new JLabel(icon);
+		
+		dialog.add(label);
+		dialog.pack();
+		dialog.setLocationByPlatform(true);
+		dialog.setModalityType(ModalityType.TOOLKIT_MODAL);
+		//dialog.setModal(true);
+		dialog.setVisible(true);     
 	}
 }
