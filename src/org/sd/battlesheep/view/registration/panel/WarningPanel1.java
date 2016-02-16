@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
@@ -52,6 +53,7 @@ public class WarningPanel1 extends APanel
 		loadingLabel = new JLabel("Loading...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		loadingLabel.setBackground(new Color(0, 0, 0, 0));
+		loadingLabel.setOpaque(true);
 		loadingLabel.setForeground(Color.WHITE);
 		
 		/* this panel */

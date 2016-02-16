@@ -27,6 +27,8 @@ package org.sd.battlesheep.view.registration.panel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -74,6 +76,21 @@ public class LobbyAddressPanel extends APanel
 		addressLabel.setForeground(Color.WHITE);
 		
 		addressTextField = new JTextField("127.0.0.1");
+		addressTextField.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					actionNext();
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+		});
 		
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
