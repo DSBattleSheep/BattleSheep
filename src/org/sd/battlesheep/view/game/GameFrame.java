@@ -225,10 +225,12 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	
 	public void setTurn(String username) {
+		// it's my turn, unlock cells
 		if (username.equals(myField.getUsername())) {
 			for (Field opponentField : opponentsField)
 				opponentField.unlock();
 			logTextArea.append("TURNO: MIO\n");
+		// it's someone else turn, lock cells
 		} else {
 			for (Field opponentField : opponentsField)
 				opponentField.lock();
@@ -237,14 +239,13 @@ public class GameFrame extends AFrame implements FieldObserver
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
-		logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "] -> " + (hit ? "HIT" : "don't hit") + "\n");
 		// I'm the defender, change image in my field
 		if (usernameDefender.equals(myField.getUsername())) {
 			if (hit)
 				myField.setHitSheep(y, x);
 			else
 				myField.setHitGrass(y, x);
-		// someone else is the defender, chenge the image in its field and show it
+		// someone else is the defender, chenge the image in its field
 		} else
 			for (int i = 0; i < opponentsField.size(); i++)
 				if (opponentsField.get(i).getUsername().equals(usernameDefender)) {
@@ -252,37 +253,52 @@ public class GameFrame extends AFrame implements FieldObserver
 						opponentsField.get(i).setHitSheep(y, x);
 					else
 						opponentsField.get(i).setHitGrass(y, x);
+					// show the defender field
 					fieldsList.setSelectedIndex(i);
 					actionList();
+					break;
 				}
+		logTextArea.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "] -> " + (hit ? "HIT" : "don't hit") + "\n");
 	}
 	
-	public void playerWon(String username) {
+	public void matchResult(int position) {
 		// lock the fields
 		for (Field opponentField : opponentsField)
 			opponentField.lock();
-		// I'm the winner
-		if (myField.getUsername().equals(username)) {
-			logTextArea.append("I WON!");
-			MessageFactory.informationDialog(this, "I WON!");
-		// someone else is the winner
-		} else {
-			logTextArea.append(username + " WON!");
-			MessageFactory.informationDialog(this, username + " WON!");
+		// show message
+		switch (position) {
+			case 1:
+				logTextArea.append("I WON!");
+				MessageFactory.informationDialog(this, "I WON!");
+				break;
+			case 2:
+				logTextArea.append("I WON!");
+				MessageFactory.informationDialog(this, "I WON!");
+				break;
+			case 3:
+				logTextArea.append("I WON!");
+				MessageFactory.informationDialog(this, "I WON!");
+				break;
+			default:
+				logTextArea.append("I WON!");
+				MessageFactory.informationDialog(this, "I WON!");
 		}
 	}
 	
-	public void playerLost(String username, int position, boolean kickedOut) {
-		if (username.equals(myField.getUsername())) {
-			if (kickedOut) {
-				// sono stato eliminato dalla partita perchè ho laggato troppo e sono arrivato dopo l'inizio del turno
-			} else {
-				// ho perso perchè mi hanno abbattuto tutte le pecuredde
+	public void playerLost(String username) {
+		// remove field from opponentsField
+		for (Field opponentField : opponentsField)
+			if (opponentField.getUsername().equals(username)) {
+				opponentsField.remove(opponentField);
+				break;
 			}
-		} else {
-			// Il player 'username' è stato eliminato dalla partita perchè ha perso. 
-			// Per ora non viene differenziato se è stato buttato fuori per lag o per aver perso.
-		}
+		// update list
+		fieldsList.setListData(opponentsField.toArray(new Field[opponentsField.size()]));
+		fieldsList.setSelectedIndex(0);
+		actionList();
+		// log and show message
+		logTextArea.append(username + " LOST!\n");
+		MessageFactory.informationDialog(this, username + " LOST!");
 	}
 	
 	public void playerCrashed(String username) {
@@ -294,8 +310,26 @@ public class GameFrame extends AFrame implements FieldObserver
 			}
 		// update list
 		fieldsList.setListData(opponentsField.toArray(new Field[opponentsField.size()]));
+		fieldsList.setSelectedIndex(0);
+		actionList();
 		// log and show message
-		logTextArea.append(username + " CRASHED!");
+		logTextArea.append(username + " CRASHED!\n");
 		MessageFactory.informationDialog(this, username + " CRASHED!");
+	}
+	
+	public void playerKickedOut(String username) {
+		// remove field from opponentsField
+		for (Field opponentField : opponentsField)
+			if (opponentField.getUsername().equals(username)) {
+				opponentsField.remove(opponentField);
+				break;
+			}
+		// update list
+		fieldsList.setListData(opponentsField.toArray(new Field[opponentsField.size()]));
+		fieldsList.setSelectedIndex(0);
+		actionList();
+		// log and show message
+		logTextArea.append(username + " KICKED OUT!\n");
+		MessageFactory.informationDialog(this, username + " KICKED OUT!");
 	}
 }
