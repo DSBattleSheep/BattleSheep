@@ -83,7 +83,7 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		plock.unlock();
 		try {
 			registry.unbind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
-			UnicastRemoteObject.unexportObject(registry, true);
+			UnicastRemoteObject.unexportObject(this, true);
 		} catch (RemoteException | NotBoundException e) {
 			e.printStackTrace();
 		}
