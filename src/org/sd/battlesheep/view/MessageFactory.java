@@ -51,7 +51,6 @@ public class MessageFactory
 	}
 	
 	
-	
 	public static void endGameDialog(int position) {
 		JDialog dialog = new JDialog();
 		JLabel label;

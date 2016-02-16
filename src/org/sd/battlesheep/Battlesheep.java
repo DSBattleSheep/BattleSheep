@@ -283,8 +283,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				}
 
 				if (opponentList.size() == 0) {
-					//FIXME: nessuno ha partecipato, messaggio da creare
-					MessageFactory.endGameDialog(registrationFrame, 1);
+					MessageFactory.informationDialog(null, "Game has started without opponents..");
 					unbindAndClose(0);
 				}
 					
@@ -378,7 +377,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.playerLost(me.getUsername(), orderList.size() + 1, true);
+					gameFrame.matchResult(orderList.size() + 1, true);
 				}
 			});
 		} else if (!me.lost()) {
@@ -386,7 +385,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.playerWon(me.getUsername());
+					gameFrame.matchResult(1, false);
 				}
 			});
 		} else {
@@ -394,7 +393,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					gameFrame.playerLost(me.getUsername(), orderList.size() + 1, false);
+					gameFrame.matchResult(orderList.size() + 1, false);
 				}
 			});
 		}
