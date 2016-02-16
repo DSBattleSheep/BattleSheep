@@ -77,16 +77,21 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		return playerMap;
 	}
 	
-	public void startGame() {
-		plock.lock();
-		waitForStart.signalAll();
-		plock.unlock();
+	public void close() {
 		try {
 			registry.unbind(CommunicationConst.LOBBY_DEFAULT_ROOM_NAME);
 			UnicastRemoteObject.unexportObject(this, true);
 		} catch (RemoteException | NotBoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void startGame() {
+		plock.lock();
+		waitForStart.signalAll();
+		plock.unlock();
+		
+		close();
 		
 		System.out.println("Thread active count = " + Thread.activeCount());// XXX <- "C'è qualcosa che non va" - cit. vasco
 	}

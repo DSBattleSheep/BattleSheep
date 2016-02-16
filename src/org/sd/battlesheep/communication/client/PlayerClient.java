@@ -32,7 +32,7 @@ public class PlayerClient {
 			 *  tento una connessione al player e chiedo il suo valore random.
 			 *  per evitare conflitti di valori abbiamo concatenato il valore e lo username
 			 *  per avere una stringa composta che usiamo come chiave nella orderMap.
-			 *  La orderMap è una TreeMap e tiene gli elementi in ordine alfabetico! ( FIXME : ne siamo sicuri? )
+			 *  La orderMap è una TreeMap e tiene gli elementi in ordine alfabetico!
 			 */
 			try {
 				System.out.println(player.getHost() + ":" + player.getPort());

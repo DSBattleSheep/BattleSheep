@@ -36,6 +36,8 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 	private int boundPort;
 
 	private int myValueRandom;
+	
+	private Registry registry;
 
 	private Me me;
 
@@ -107,7 +109,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 
 		while (retry < CommunicationConst.MAX_RETRY && notBound) {
 			try {
-				Registry registry = LocateRegistry.createRegistry(port);
+				registry = LocateRegistry.createRegistry(port);
 				registry.bind(CommunicationConst.GAME_SERVICE_NAME, this);
 				notBound = false;
 				this.boundPort = port;
@@ -132,6 +134,15 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		allClientsConnected = pLock.newCondition();
 		expectedPlayers = new ArrayList<String>();
 		myValueRandom = randomGenerator.nextInt();
+	}
+	
+	public void close() {
+		try {
+			registry.unbind(CommunicationConst.GAME_SERVICE_NAME);
+			UnicastRemoteObject.unexportObject(this, true);
+		} catch (RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setMe(Me me) {
@@ -200,8 +211,7 @@ public class PlayerServer extends UnicastRemoteObject implements OrderInterface,
 		}
 
 		System.out.println("connectCurrentPlayer: client " + username + " connected");
-		// FIXME gestire lista di user connessi, così rimuoviamo quelli non connessi
-
+		
 		try {
 			if (!expiredDeadline) {
 				expectedPlayers.remove(username);

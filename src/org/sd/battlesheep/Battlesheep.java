@@ -171,12 +171,11 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	public void onRegistrationFrameExitClick() {
 		// registrationFrame.dispose();//
 		// TODO -> gestire l'uscita dal programma (client)
-		System.exit(0);
+		if (playerServer != null)
+			unbindAndClose(0);
 	}
 
 	private void removeFromActivePlayers(final String username) {
-
-		// FIXME: ragionare se serve una lock per queste remove
 
 		System.out.println("removeFromActivePlayers(" + username + ")");
 
@@ -219,14 +218,6 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				/*
-				 * FIXME se ci sono dei problemi nella join (exception) dobbiamo
-				 * mostrare un messaggio che qualcosa è andato storto,
-				 * altrimenti dobbiamo andare nella schermata di gioco! Ma
-				 * intanto il la view dovrebbe entrare in una fase di waiting!
-				 * Bisogna certamente creare un Observer con almeno 2 metodi:
-				 * onStart e onError!
-				 */
 
 				Map<String, NetPlayer> players = null;
 
@@ -253,7 +244,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					return;
 				} catch (MaxPortRetryException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
-					System.exit(1);
+					unbindAndClose(1);
 				} catch (NotBoundException | ServerNotActiveException | MalformedURLException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					e.printStackTrace();
@@ -292,8 +283,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				}
 
 				if (opponentList.size() == 0) {
+					//FIXME: nessuno ha partecipato, messaggio da creare
 					MessageFactory.endGameDialog(registrationFrame, 1);
-					System.exit(0);
+					unbindAndClose(0);
 				}
 					
 				try {
@@ -474,10 +466,13 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		PlayerClient.pushMoveUpdate(target, newMove);
 	}
 
+	public void unbindAndClose(int status) {
+		playerServer.close();
+		System.exit(status);
+	}
 
 	@Override
 	public void onGameFrameExitClick() {
-		// FIXME chiudi i thread di RMI
-		System.exit(0);
+		unbindAndClose(0);
 	}
 }

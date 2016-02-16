@@ -16,7 +16,7 @@ public class Move implements Serializable {
 	private int y;
 
 	private boolean hit;
-	// FIXME!
+
 	private List<String> crashedOpponents;
 	
 	private int moveIndex;
