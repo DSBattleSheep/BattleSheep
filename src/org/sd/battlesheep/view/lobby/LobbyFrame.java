@@ -23,6 +23,7 @@
 package org.sd.battlesheep.view.lobby;
 
 
+
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;

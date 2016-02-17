@@ -111,19 +111,26 @@ public class GameFrame extends AFrame implements FieldObserver
 	public GameFrame(String myUsername, boolean[][] mySheepsPosition, String[] opponentsUsername, GameFrameObserver observer) {
 		super(WIDTH, HEIGHT);
 		
-
-		// TODO BIAGIO FIXA
-		int rows = mySheepsPosition[0].length;
-		int cols = mySheepsPosition.length;
-		
-		
 		/* model */
 		
 		if (myUsername == null)
 			throw new IllegalArgumentException("My username: null string");
 		if (myUsername.isEmpty())
 			throw new IllegalArgumentException("My username: empty string");
+		
+		if (mySheepsPosition == null)
+			throw new IllegalArgumentException("My sheeps position: null matrix");
+		if (mySheepsPosition.length < 1)
+			throw new IllegalArgumentException("My sheeps position: less than 1");
+		if (mySheepsPosition[0].length < 1)
+			throw new IllegalArgumentException("My sheeps position: less than 1");
+		int cols = mySheepsPosition.length;
+		int rows = mySheepsPosition[0].length;
 		myField = new Field(myUsername, rows, cols, null);
+		for (int r = 0; r < rows; r++)
+			for (int c = 0; c < cols; c++)
+				if (mySheepsPosition[c][r])
+					myField.setSheep(r, c);
 		
 		if (opponentsUsername == null)
 			throw new IllegalArgumentException("Opponents username: null array");

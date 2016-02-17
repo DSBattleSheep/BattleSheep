@@ -51,8 +51,6 @@ public class WarningPanel1 extends APanel
 		
 		loadingLabel = new JLabel("Loading...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		loadingLabel.setBackground(new Color(0, 0, 0, 0));
-		loadingLabel.setOpaque(true);
 		loadingLabel.setForeground(Color.WHITE);
 		
 		/* this panel */

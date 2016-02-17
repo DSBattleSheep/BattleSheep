@@ -51,7 +51,6 @@ public class WarningPanel3 extends APanel
 		
 		hackedLabel = new JLabel("The game has been hacked!", JLabel.CENTER);
 		hackedLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		hackedLabel.setBackground(new Color(0, 0, 0, 0));
 		hackedLabel.setForeground(Color.RED);
 		
 		/* this panel */
