@@ -457,7 +457,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	@Override
 	public void updateMove(Move newMove) {
 		lastMove = newMove;
-		if (newMove.getTarget().equals(me.getUsername())) {
+		if (!newMove.getTarget().equals(me.getUsername())) {
 			Opponent target = (Opponent) playerMap.get(newMove.getTarget());
 			hitPlayer(target, newMove.getX(), newMove.getY(), newMove.isHit());
 		} else {
