@@ -30,14 +30,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
+import org.sd.battlesheep.view.registration.utils.WhiteButton;
+import org.sd.battlesheep.view.registration.utils.WhiteLabel;
+import org.sd.battlesheep.view.registration.utils.WhiteTextField;
 
 
 
@@ -47,13 +46,13 @@ import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
 @SuppressWarnings("serial")
 public class UsernamePanel extends APanel
 {
-	private JLabel usernameLabel;
+	private WhiteLabel usernameLabel;
 	
-	private JTextField usernameTextField;
+	private WhiteTextField usernameTextField;
 	
-	private JButton previousButton;
+	private WhiteButton previousButton;
 	
-	private JButton nextButton;
+	private WhiteButton nextButton;
 	
 	
 	
@@ -72,10 +71,10 @@ public class UsernamePanel extends APanel
 		
 		/* items */
 		
-		usernameLabel = new JLabel("Username:");
+		usernameLabel = new WhiteLabel("Username:");
 		usernameLabel.setForeground(Color.WHITE);
 		
-		usernameTextField = new JTextField();
+		usernameTextField = new WhiteTextField();
 		usernameTextField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -92,7 +91,7 @@ public class UsernamePanel extends APanel
 			}
 		});
 		
-		previousButton = new JButton("Prevoius");
+		previousButton = new WhiteButton("Prevoius");
 		previousButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +99,7 @@ public class UsernamePanel extends APanel
 			}
 		});
 		
-		nextButton = new JButton("Next");
+		nextButton = new WhiteButton("Next");
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

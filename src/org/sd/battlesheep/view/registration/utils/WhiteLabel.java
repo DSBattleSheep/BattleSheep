@@ -41,4 +41,10 @@ public class WhiteLabel extends JLabel
 		setBackground(new Color(0, 0, 0, 0));
 		setForeground(Color.WHITE);
 	}
+	
+	public WhiteLabel(String text, int position) {
+		super(text, position);
+		setBackground(new Color(0, 0, 0, 0));
+		setForeground(Color.WHITE);
+	}
 }

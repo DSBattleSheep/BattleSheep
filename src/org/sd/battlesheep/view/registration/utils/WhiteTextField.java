@@ -39,21 +39,11 @@ public class WhiteTextField extends JTextField
 {
 	public WhiteTextField() {
 		super();
-		setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-		setBackground(new Color(0, 0, 0, 0));
-		setForeground(Color.WHITE);
-		setSelectedTextColor(Color.BLACK);
-		setSelectionColor(Color.WHITE);
-		setCaretColor(Color.WHITE);
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 	}
 	
 	public WhiteTextField(String text) {
 		super(text);
-		setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-		setBackground(new Color(0, 0, 0, 0));
-		setForeground(Color.WHITE);
-		setSelectedTextColor(Color.BLACK);
-		setSelectionColor(Color.WHITE);
-		setCaretColor(Color.WHITE);
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 	}
 }

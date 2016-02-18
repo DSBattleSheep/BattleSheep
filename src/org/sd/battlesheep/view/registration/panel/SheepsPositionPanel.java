@@ -28,7 +28,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -36,6 +35,8 @@ import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.SheepsPositionPanelObserver;
+import org.sd.battlesheep.view.registration.utils.WhiteButton;
+import org.sd.battlesheep.view.registration.utils.WhiteLabel;
 import org.sd.battlesheep.view.utils.Cell;
 import org.sd.battlesheep.view.utils.Field;
 import org.sd.battlesheep.view.utils.FieldObserver;
@@ -48,15 +49,15 @@ import org.sd.battlesheep.view.utils.FieldObserver;
 @SuppressWarnings("serial")
 public class SheepsPositionPanel extends APanel implements FieldObserver
 {
-	private JLabel positionLabel;
+	private WhiteLabel positionLabel;
 	
-	private JLabel remainingLabel;
+	private WhiteLabel remainingLabel;
 	
 	private Field field;
 	
-	private JButton previousButton;
+	private WhiteButton previousButton;
 	
-	private JButton registrationButton;
+	private WhiteButton registrationButton;
 	
 	
 	
@@ -83,15 +84,15 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 		
 		/* items */
 		
-		positionLabel = new JLabel("Sheeps Position:");
+		positionLabel = new WhiteLabel("Sheeps Position:");
 		positionLabel.setForeground(Color.WHITE);
 		
-		remainingLabel = new JLabel(sheeps + "", JLabel.CENTER);
+		remainingLabel = new WhiteLabel(sheeps + "", JLabel.CENTER);
 		remainingLabel.setForeground(Color.WHITE);
 		
 		field = new Field(null, rows, cols, this);
 		
-		previousButton = new JButton("Prevoius");
+		previousButton = new WhiteButton("Prevoius");
 		previousButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -99,7 +100,7 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 			}
 		});
 		
-		registrationButton = new JButton("Registration");
+		registrationButton = new WhiteButton("Registration");
 		registrationButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

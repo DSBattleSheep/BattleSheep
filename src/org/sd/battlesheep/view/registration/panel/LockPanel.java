@@ -29,12 +29,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
+import org.sd.battlesheep.view.registration.utils.WhiteButton;
 
 
 
@@ -46,7 +46,7 @@ public class LockPanel extends APanel
 {
 	private JLabel waitingLabel;
 	
-	private JButton exitButton;
+	private WhiteButton exitButton;
 	
 	
 	
@@ -69,7 +69,7 @@ public class LockPanel extends APanel
 		waitingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		waitingLabel.setForeground(Color.WHITE);
 		
-		exitButton = new JButton("Exit");
+		exitButton = new WhiteButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
