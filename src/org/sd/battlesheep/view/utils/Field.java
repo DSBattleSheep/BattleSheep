@@ -58,6 +58,10 @@ public class Field extends JPanel
 		
 		/* model */
 		
+		if (username == null)
+			throw new IllegalArgumentException("Username: null string");
+		if (username.isEmpty())
+			throw new IllegalArgumentException("Username: empty string");
 		this.username = username;
 		
 		if (rows < 1)
@@ -120,12 +124,28 @@ public class Field extends JPanel
 		return username;
 	}
 	
+	public int getRows() {
+		return rows;
+	}
+	
+	public int getCols() {
+		return cols;
+	}
+	
 	public boolean[][] getSheeps() {
 		boolean[][] sheeps = new boolean[cols][rows];
 		for (int r = 0; r < rows; r++)
 			for (int c = 0; c < cols; c++)
 				sheeps[c][r] = cells[r][c].isSheep();
 		return sheeps;
+	}
+	
+	public void setUsername(String username) {
+		if (username == null)
+			throw new IllegalArgumentException("Username: null string");
+		if (username.isEmpty())
+			throw new IllegalArgumentException("Username: empty string");
+		this.username = username;
 	}
 	
 	public void setGrass(int r, int c) {
@@ -142,6 +162,22 @@ public class Field extends JPanel
 	
 	public void setHitSheep(int r, int c) {
 		cells[r][c].setHitSheep();
+	}
+	
+	public boolean isGrass(int r, int c) {
+		return cells[r][c].isGrass();
+	}
+	
+	public boolean isSheep(int r, int c) {
+		return cells[r][c].isSheep();
+	}
+	
+	public boolean isHitGrass(int r, int c) {
+		return cells[r][c].isHitGrass();
+	}
+	
+	public boolean isHitSheep(int r, int c) {
+		return cells[r][c].isHitSheep();
 	}
 	
 	

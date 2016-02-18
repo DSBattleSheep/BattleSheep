@@ -90,7 +90,7 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 		remainingLabel = new WhiteLabel(sheeps + "", JLabel.CENTER);
 		remainingLabel.setForeground(Color.WHITE);
 		
-		field = new Field(null, rows, cols, this);
+		field = new Field("Dummy", rows, cols, this);
 		
 		previousButton = new WhiteButton("Prevoius");
 		previousButton.addActionListener(new ActionListener() {

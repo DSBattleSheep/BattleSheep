@@ -56,11 +56,25 @@ public abstract class AFrame extends JFrame
 	
 	
 	
-	public void addPanel(APanel panel) {
+	public void addNorthPanel(APanel panel) {
+		add(panel, BorderLayout.NORTH);
+	}
+	
+	public void addRightPanel(APanel panel) {
+		add(panel, BorderLayout.EAST);
+	}
+	
+	public void addMiddlePanel(APanel panel) {
 		add(panel, BorderLayout.CENTER);
 	}
 	
-	public void replacePanel(APanel oldPanel, APanel newPanel) {
+	public void addSouthPanel(APanel panel) {
+		add(panel, BorderLayout.SOUTH);
+	}
+	
+	
+	
+	public void replaceMiddlePanel(APanel oldPanel, APanel newPanel) {
 		remove(oldPanel);
 		add(newPanel, BorderLayout.CENTER);
 		SwingUtilities.updateComponentTreeUI(this);

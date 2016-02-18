@@ -20,13 +20,14 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.game.panel;
 
 
 
-import org.sd.battlesheep.view.AFrame;
-import org.sd.battlesheep.view.main.observer.MainPanelObserver;
-import org.sd.battlesheep.view.main.panel.MainPanel;
+import javax.swing.JLabel;
+
+import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -34,45 +35,21 @@ import org.sd.battlesheep.view.main.panel.MainPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainFrame extends AFrame implements MainPanelObserver
+public class BannerPanel extends APanel
 {
-	private MainPanel mainPanel;
+	private JLabel bannerLabel;
 	
 	
 	
-	private MainFrameObserver observer;
-	
-	
-	
-	public MainFrame(MainFrameObserver observer) {
-		super();
+	public BannerPanel() {
+		super(ViewConst.TRANSPARENT_BACKGROUND);
 		
-		/* model */
+		/* items */
 		
-		if (observer == null)
-			throw new IllegalArgumentException("Observer: null object");
-		this.observer = observer;
+		bannerLabel= new JLabel(ViewConst.BANNER_ICON, JLabel.CENTER);
 		
-		/* panels */
+		/* this panel */
 		
-		mainPanel = new MainPanel(this);
-		
-		/* this frame */
-		
-		addMiddlePanel(mainPanel);
-		pack();
-		setVisible(true);
-	}
-	
-	
-	
-	@Override
-	public void onMainPanelExitClick() {
-		observer.onMainFrameExitClick();
-	}
-	
-	@Override
-	public void onMainPanelStartClick(boolean isServerSelected) {
-		observer.onMainFrameStartClick(isServerSelected);
+		addMiddlePanel(bannerLabel);
 	}
 }

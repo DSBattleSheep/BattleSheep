@@ -115,7 +115,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 		
 		/* this frame */
 		
-		addPanel(lobbyAddressPanel);
+		addMiddlePanel(lobbyAddressPanel);
 		setVisible(true);
 	}
 	
@@ -129,19 +129,19 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	@Override
 	public void onLobbyAddressPanelNextClick(String lobbyAddress) {
 		this.lobbyAddress = lobbyAddress;
-		replacePanel(lobbyAddressPanel, warningPanel1);
+		replaceMiddlePanel(lobbyAddressPanel, warningPanel1);
 		Timer timer1 = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				replacePanel(warningPanel1, warningPanel2);
+				replaceMiddlePanel(warningPanel1, warningPanel2);
 				Timer timer2 = new Timer(WARNING_PANEL_2_DURATION, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						replacePanel(warningPanel2, warningPanel3);
+						replaceMiddlePanel(warningPanel2, warningPanel3);
 						Timer timer3 = new Timer(WARNING_PANEL_3_DURATION, new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								replacePanel(warningPanel3, usernamePanel);
+								replaceMiddlePanel(warningPanel3, usernamePanel);
 							}
 						});
 						timer3.setRepeats(false);
@@ -158,23 +158,23 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	@Override
 	public void onUsernamePanelPreviousClick() {
-		replacePanel(usernamePanel, lobbyAddressPanel);
+		replaceMiddlePanel(usernamePanel, lobbyAddressPanel);
 	}
 	
 	@Override
 	public void onUsernamePanelNextClick(String username) {
 		this.username = username;
-		replacePanel(usernamePanel, sheepsPositionPanel);
+		replaceMiddlePanel(usernamePanel, sheepsPositionPanel);
 	}
 	
 	@Override
 	public void onSheepsPositionPanelPreviousClick() {
-		replacePanel(sheepsPositionPanel, usernamePanel);
+		replaceMiddlePanel(sheepsPositionPanel, usernamePanel);
 	}
 	
 	@Override
 	public void onSheepsPositionPanelRegistrationClick(boolean[][] sheepsPosition) {
-		replacePanel(sheepsPositionPanel, lockPanel);
+		replaceMiddlePanel(sheepsPositionPanel, lockPanel);
 		observer.onRegistrationFrameRegistrationClick(lobbyAddress, username, sheepsPosition);
 	}
 	
@@ -186,6 +186,6 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	public void unlock() {
-		replacePanel(lockPanel, sheepsPositionPanel);
+		replaceMiddlePanel(lockPanel, sheepsPositionPanel);
 	}
 }

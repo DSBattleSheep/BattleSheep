@@ -27,7 +27,7 @@ package org.sd.battlesheep.view.lobby;
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
 import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
-import org.sd.battlesheep.view.lobby.panel.ClientsPanel;
+import org.sd.battlesheep.view.lobby.panel.ClientsTablePanel;
 import org.sd.battlesheep.view.lobby.panel.WaitingPanel;
 
 
@@ -46,7 +46,7 @@ public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsP
 	
 	private WaitingPanel waitingPanel;
 	
-	private ClientsPanel clientsPanel;
+	private ClientsTablePanel clientsTablePanel;
 	
 	
 	
@@ -67,11 +67,11 @@ public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsP
 		
 		waitingPanel = new WaitingPanel(host, port, this);
 		
-		clientsPanel = new ClientsPanel(host, port, this);
+		clientsTablePanel = new ClientsTablePanel(host, port, this);
 		
 		/* this frame */
 		
-		addPanel(waitingPanel);
+		addMiddlePanel(waitingPanel);
 		setVisible(true);
 	}
 	
@@ -95,8 +95,8 @@ public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsP
 	
 	
 	public void addClient(String username, String host, int port) {
-		clientsPanel.addClient(username, host, port);
-		if (clientsPanel.getClientsNumber() == 1)
-			replacePanel(waitingPanel, clientsPanel);
+		clientsTablePanel.addClient(username, host, port);
+		if (clientsTablePanel.getClientsNumber() == 1)
+			replaceMiddlePanel(waitingPanel, clientsTablePanel);
 	}
 }

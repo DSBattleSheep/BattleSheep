@@ -74,7 +74,7 @@ public class LobbyAddressPanel extends APanel
 		addressLabel = new WhiteLabel("Lobby Ip Address:");
 		addressLabel.setForeground(Color.WHITE);
 		
-		addressTextField = new WhiteTextField("127.0.0.1");
+		addressTextField = new WhiteTextField("127.0.0.1|130.136.152.110");
 		addressTextField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {

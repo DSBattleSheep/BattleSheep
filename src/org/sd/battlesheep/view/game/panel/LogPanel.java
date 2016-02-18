@@ -20,13 +20,18 @@
 
 
 
-package org.sd.battlesheep.view.main;
+package org.sd.battlesheep.view.game.panel;
 
 
 
-import org.sd.battlesheep.view.AFrame;
-import org.sd.battlesheep.view.main.observer.MainPanelObserver;
-import org.sd.battlesheep.view.main.panel.MainPanel;
+import java.awt.Color;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
+
+import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -34,45 +39,37 @@ import org.sd.battlesheep.view.main.panel.MainPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class MainFrame extends AFrame implements MainPanelObserver
+public class LogPanel extends APanel
 {
-	private MainPanel mainPanel;
+	private JTextArea logTextArea;
+	
+	private JScrollPane logScrollPane;
 	
 	
 	
-	private MainFrameObserver observer;
-	
-	
-	
-	public MainFrame(MainFrameObserver observer) {
-		super();
+	public LogPanel() {
+		super(ViewConst.TRANSPARENT_BACKGROUND);
 		
-		/* model */
+		/* items */
 		
-		if (observer == null)
-			throw new IllegalArgumentException("Observer: null object");
-		this.observer = observer;
+		logTextArea = new JTextArea();
+		logTextArea.setEditable(false);
+		logTextArea.setBackground(Color.BLACK);
+		logTextArea.setForeground(Color.GREEN);
 		
-		/* panels */
+		((DefaultCaret) logTextArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
-		mainPanel = new MainPanel(this);
+		logScrollPane = new JScrollPane(logTextArea);
 		
-		/* this frame */
+		/* this panel */
 		
-		addMiddlePanel(mainPanel);
-		pack();
-		setVisible(true);
+		addMiddlePanel(logScrollPane);
+		//.setPreferredSize(new Dimension(getWidth(), 100));
 	}
 	
 	
 	
-	@Override
-	public void onMainPanelExitClick() {
-		observer.onMainFrameExitClick();
-	}
-	
-	@Override
-	public void onMainPanelStartClick(boolean isServerSelected) {
-		observer.onMainFrameStartClick(isServerSelected);
+	public void append(String text) {
+		logTextArea.append(text);
 	}
 }

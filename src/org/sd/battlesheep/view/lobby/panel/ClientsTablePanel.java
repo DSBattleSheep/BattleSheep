@@ -47,7 +47,7 @@ import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class ClientsPanel extends APanel
+public class ClientsTablePanel extends APanel
 {
 	private static final String[] COLUMN_NAMES = {"Username", "Host", "Port"};
 	
@@ -71,7 +71,7 @@ public class ClientsPanel extends APanel
 	
 	
 	
-	public ClientsPanel(String host, int port, ClientsPanelObserver observer) {
+	public ClientsTablePanel(String host, int port, ClientsPanelObserver observer) {
 		super(ViewConst.WHITE_BACKGROUND);
 		
 		/* model */
