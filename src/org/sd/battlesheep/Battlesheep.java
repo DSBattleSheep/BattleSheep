@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.rmi.AccessException;
 import java.rmi.ConnectException;
+import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.UnmarshalException;
@@ -240,7 +241,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					unlockRegistration();
 					return;
-				} catch (ConnectException e) {
+				} catch (ConnectException | ConnectIOException e) {
 					MessageFactory.errorDialog(registrationFrame, "Can't reach the lobby server!");
 					unlockRegistration();
 					return;
@@ -251,7 +252,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				} catch (MaxPortRetryException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					unbindAndClose(1);
-				} catch (NotBoundException | ServerNotActiveException | MalformedURLException | AccessException e) {
+				} catch (NotBoundException | ServerNotActiveException | MalformedURLException | AccessException  e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					e.printStackTrace();
 					return;

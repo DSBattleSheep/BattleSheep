@@ -4,6 +4,7 @@ package org.sd.battlesheep.communication.client;
 
 import java.net.MalformedURLException;
 import java.rmi.AccessException;
+import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.UnmarshalException;
@@ -22,7 +23,7 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 public class PlayerRegistration
 {
 	public static Map<String, NetPlayer> Join(String lobbyAddress, String username, int playerPort) 
-			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException, AccessException {
+			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException, AccessException, ConnectIOException {
 		
 		Map<String, NetPlayer> playerMap;
 		
