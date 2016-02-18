@@ -8,6 +8,7 @@ public class Move implements Serializable {
 
 	private static final long serialVersionUID = -2548231018360975595L;
 	
+	private String attacker;
 
 	private String target;
 
@@ -22,7 +23,8 @@ public class Move implements Serializable {
 	private int moveIndex;
 
 
-	public Move(String target, int x, int y, boolean hit, List<String> crashedList, int moveIndex) {
+	public Move(String attacker, String target, int x, int y, boolean hit, List<String> crashedList, int moveIndex) {
+		this.attacker = attacker;
 		this.target = target;
 		this.x = x;
 		this.y = y;
@@ -68,6 +70,13 @@ public class Move implements Serializable {
 	 */
 	public List<String> getCrashedOpponents() {
 		return crashedOpponents;
+	}
+
+	/**
+	 * @return the attacker
+	 */
+	public String getAttacker() {
+		return attacker;
 	}
 
 }

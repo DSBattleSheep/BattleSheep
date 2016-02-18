@@ -313,7 +313,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		int currPlayerIndex = 0;
 		APlayer turnOwner;
 
-		lastMove = new Move("", 0, 0, false, null, 0);
+		lastMove = new Move("", "", 0, 0, false, null, 0);
 
 		while (!ended && !kickedOut) {
 			// se è il mio turno assegno il numero di opponent (ovvero mi
@@ -435,7 +435,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 						throw new NullPointerException(username + " does not exist in playerMap");
 					boolean hit = PlayerClient.attackPlayer(target, x, y);
 					hitPlayer(target, x, y, hit);
-					lastMove = new Move(username, x, y, hit, crashedOpponents, lastMove.getMoveIndex() + 1);
+					lastMove = new Move(me.getUsername(), username, x, y, hit, crashedOpponents, lastMove.getMoveIndex() + 1);
 					playerServer.setMove(lastMove);
 
 					SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(me.getUsername(), lastMove));
@@ -463,6 +463,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		} else {
 			me.hit(newMove.getX(), newMove.getY());
 		}
+		
+		SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(lastMove.getAttacker(), lastMove));
 	}
 
 	@Override
