@@ -39,8 +39,7 @@ import javax.swing.JOptionPane;
 public class MessageFactory
 {
 	private static void showDialog(final Component parent, final String message, final int type) {
-		new Thread(new Runnable() {
-			
+		new Thread(new Runnable() {			
 			@Override
 			public void run() {
 				JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);

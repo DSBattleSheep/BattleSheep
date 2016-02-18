@@ -466,9 +466,9 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 	}
 
 	@Override
-	public void pushMoveUpdate(String userName, Move newMove)
+	public void pushMoveUpdate(String username, Move newMove)
 			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException {
-		Opponent target = (Opponent) playerMap.get(newMove.getTarget());
+		Opponent target = (Opponent) playerMap.get(username);
 		PlayerClient.pushMoveUpdate(target, newMove);
 	}
 
