@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class PlayerClient {
 		List<String> orderedPlayers = new ArrayList<String>();
 		
 		
+		
 		for (String playerName : players.keySet()) {
 			NetPlayer player = players.get(playerName);
 			
@@ -35,17 +38,19 @@ public class PlayerClient {
 			 *  La orderMap è una TreeMap e tiene gli elementi in ordine alfabetico!
 			 */
 			try {
+				Registry registry = LocateRegistry.getRegistry(player.getHost(), player.getPort());
+				OrderInterface orderInterface = (OrderInterface) registry.lookup(CommunicationConst.GAME_SERVICE_NAME);
+				
 				System.out.println(player.getHost() + ":" + player.getPort());
-				OrderInterface orderInterface = (OrderInterface) Naming
-						.lookup("rmi://" + player.getHost() + ":" + player.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
 				
 				orderMap.put(orderInterface.getValueRandom() + playerName, playerName);
 				
-			} catch (MalformedURLException | ServerNotActiveException | RemoteException | NotBoundException e) {
+			} catch (ServerNotActiveException | RemoteException | NotBoundException e) {
 				/**
 				 *  in caso si Exception è sicuramente colpa della connessione perciò possiamo eliminare il client
 				 *  dalla lista dei giocatori 
 				 */
+				e.printStackTrace();
 				System.out.println("deleteList.add: " + playerName);
 				System.out.println(e.getMessage());
 				deleteList.add(playerName);
@@ -70,6 +75,7 @@ public class PlayerClient {
 	}
 	
 	public static Move connectToPlayer(Opponent turnOwner, String myUser, Move oldMove) throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, KickedOutPlayerException {
+		//System.out.println("user is:"+ turnOwner.getUsername()+"host is: "turnOwner.getHost()+ "");
 		TurnOwnerInterface turnInterface = (TurnOwnerInterface) Naming
 				.lookup("rmi://" + turnOwner.getHost() + ":" + turnOwner.getPort() + "/" + CommunicationConst.GAME_SERVICE_NAME);
 		return turnInterface.connectToTurnOwner(myUser, oldMove);
