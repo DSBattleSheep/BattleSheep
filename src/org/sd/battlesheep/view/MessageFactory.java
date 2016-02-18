@@ -38,8 +38,15 @@ import javax.swing.JOptionPane;
  */
 public class MessageFactory
 {
-	private static void showDialog(Component parent, String message, int type) {
-		JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
+	private static void showDialog(final Component parent, final String message, final int type) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
+			}
+		}).start();
+		
 	}
 	
 	public static void informationDialog(Component parent, String message) {
