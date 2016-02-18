@@ -22,6 +22,7 @@ package org.sd.battlesheep;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.rmi.AccessException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -250,7 +251,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				} catch (MaxPortRetryException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					unbindAndClose(1);
-				} catch (NotBoundException | ServerNotActiveException | MalformedURLException e) {
+				} catch (NotBoundException | ServerNotActiveException | MalformedURLException | AccessException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					e.printStackTrace();
 					return;
