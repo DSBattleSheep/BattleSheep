@@ -38,22 +38,29 @@ import javax.swing.JOptionPane;
  */
 public class MessageFactory
 {
-	private static void showDialog(final Component parent, final String message, final int type) {
-		new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
-			}
-		}).start();
+	private static void showDialog(final Component parent, final String message, final int type, boolean blocking) {
+		if (!blocking) {
+			new Thread(new Runnable() {			
+				@Override
+				public void run() {
+					JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
+				}
+			}).start();
+		} else 
+			JOptionPane.showMessageDialog(parent, message, ViewConst.PROGRAM_NAME, type);
 		
 	}
 	
 	public static void informationDialog(Component parent, String message) {
-		showDialog(parent, message, JOptionPane.INFORMATION_MESSAGE);
+		showDialog(parent, message, JOptionPane.INFORMATION_MESSAGE, false);
+	}
+	
+	public static void informationDialogBlocking(Component parent, String message) {
+		showDialog(parent, message, JOptionPane.INFORMATION_MESSAGE, true);
 	}
 	
 	public static void errorDialog(Component parent, String message) {
-		showDialog(parent, message, JOptionPane.ERROR_MESSAGE);
+		showDialog(parent, message, JOptionPane.ERROR_MESSAGE, false);
 	}
 	
 	

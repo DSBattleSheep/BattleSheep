@@ -290,7 +290,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				}
 
 				if (opponentList.size() == 0) {
-					MessageFactory.informationDialog(null, "Game has started without opponents..");
+					MessageFactory.informationDialogBlocking(null, "Game has started without opponents..");
 					unbindAndClose(0);
 				}
 					
