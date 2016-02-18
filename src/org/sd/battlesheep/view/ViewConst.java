@@ -60,19 +60,11 @@ public class ViewConst
 	
 	public static final Icon BANNER_ICON = new ImageIcon(IMGS_PATH + "banner.png");
 	
-	/* background images */
+	/* background */
 	
 	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
 	
 	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
-	
-	/* background colors */
-	
-	public static final Color TRANSPARENT_BACKGROUND = new Color(0, 0, 0, 0);
-	
-	public static final Color WHITE_BACKGROUND = Color.WHITE;
-	
-	public static final Color GREEN_BACKGROUND = Color.GREEN;
 	
 	/* field */
 	
@@ -93,4 +85,22 @@ public class ViewConst
 	public static final ImageIcon IMG_3_PLACE = new ImageIcon(IMGS_PATH + "medallion3.jpg");
 	
 	public static final ImageIcon IMG_LOST = new ImageIcon(IMGS_PATH + "medallion4.jpg");
+	
+	
+	
+	/*
+	 * colors
+	 */
+	
+	/* background */
+	
+	public static final Color TRANSPARENT_BACKGROUND = new Color(0, 0, 0, 0);
+	
+	public static final Color WHITE_BACKGROUND = Color.WHITE;
+	
+	public static final Color GREEN_BACKGROUND = Color.GREEN;
+	
+	/* border */
+	
+	public static final Color CELL_BORDER = new Color(62, 104, 14);
 }

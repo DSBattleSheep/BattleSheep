@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -38,6 +37,9 @@ import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
+import org.sd.battlesheep.view.registration.utils.WhiteButton;
+import org.sd.battlesheep.view.registration.utils.WhiteLabel;
+import org.sd.battlesheep.view.registration.utils.WhiteTextField;
 
 
 
@@ -47,13 +49,13 @@ import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
 @SuppressWarnings("serial")
 public class LobbyAddressPanel extends APanel
 {
-	private JLabel addressLabel;
+	private WhiteLabel addressLabel;
 	
-	private JTextField addressTextField;
+	private WhiteTextField addressTextField;
 	
-	private JButton exitButton;
+	private WhiteButton exitButton;
 	
-	private JButton nextButton;
+	private WhiteButton nextButton;
 	
 	
 	
@@ -72,10 +74,10 @@ public class LobbyAddressPanel extends APanel
 		
 		/* items */
 		
-		addressLabel = new JLabel("Lobby Ip Address:");
+		addressLabel = new WhiteLabel("Lobby Ip Address:");
 		addressLabel.setForeground(Color.WHITE);
 		
-		addressTextField = new JTextField("127.0.0.1");
+		addressTextField = new WhiteTextField("127.0.0.1");
 		addressTextField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -92,7 +94,7 @@ public class LobbyAddressPanel extends APanel
 			}
 		});
 		
-		exitButton = new JButton("Exit");
+		exitButton = new WhiteButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +102,7 @@ public class LobbyAddressPanel extends APanel
 			}
 		});
 		
-		nextButton = new JButton("Next");
+		nextButton = new WhiteButton("Next");
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -56,5 +56,7 @@ public class WarningPanel2 extends APanel
 		/* this panel */
 		
 		addMiddlePanel(hackingLabel);
+		// necessary otherwise the background image isn't shown
+		addSouthPanel(new JLabel());
 	}
 }

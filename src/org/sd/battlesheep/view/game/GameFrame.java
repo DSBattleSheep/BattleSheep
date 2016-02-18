@@ -110,6 +110,7 @@ public class GameFrame extends AFrame implements FieldObserver
 	
 	public GameFrame(String myUsername, boolean[][] mySheepsPosition, String[] opponentsUsername, GameFrameObserver observer) {
 		super(WIDTH, HEIGHT);
+		setBackground(ViewConst.GREEN_BACKGROUND);
 		
 		/* model */
 		

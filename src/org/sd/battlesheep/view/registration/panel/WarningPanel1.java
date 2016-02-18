@@ -24,7 +24,6 @@ package org.sd.battlesheep.view.registration.panel;
 
 
 
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -51,10 +50,11 @@ public class WarningPanel1 extends APanel
 		
 		loadingLabel = new JLabel("Loading...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		loadingLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		loadingLabel.setForeground(Color.WHITE);
 		
 		/* this panel */
 		
 		addMiddlePanel(loadingLabel);
+		// necessary otherwise the background image isn't shown
+		addSouthPanel(new JLabel());
 	}
 }

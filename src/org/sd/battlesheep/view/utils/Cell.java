@@ -24,7 +24,6 @@ package org.sd.battlesheep.view.utils;
 
 
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -53,7 +52,7 @@ public class Cell extends JLabel
 	
 	
 	public Cell(int r, int c) {
-		setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		setBorder(BorderFactory.createLineBorder(ViewConst.CELL_BORDER, 1));
 		background = ViewConst.GRASS;
 		
 		if (r < 0)

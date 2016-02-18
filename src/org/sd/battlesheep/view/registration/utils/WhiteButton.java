@@ -20,17 +20,14 @@
 
 
 
-package org.sd.battlesheep.view.registration.panel;
+package org.sd.battlesheep.view.registration.utils;
 
 
 
 import java.awt.Color;
-import java.awt.Font;
 
-import javax.swing.JLabel;
-
-import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.ViewConst;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 
 
 
@@ -38,25 +35,12 @@ import org.sd.battlesheep.view.ViewConst;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel3 extends APanel
+public class WhiteButton extends JButton
 {
-	private JLabel hackedLabel;
-	
-	
-	
-	public WarningPanel3() {
-		super(ViewConst.BATTLESHEEP_BACKGROUND);
-		
-		/* items */
-		
-		hackedLabel = new JLabel("The game has been hacked!", JLabel.CENTER);
-		hackedLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		hackedLabel.setForeground(Color.RED);
-		
-		/* this panel */
-		
-		addMiddlePanel(hackedLabel);
-		// necessary otherwise the background image isn't shown
-		addSouthPanel(new JLabel());
+	public WhiteButton(String text) {
+		super(text);
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+		setBackground(new Color(0, 0, 0, 0));
+		setForeground(Color.WHITE);
 	}
 }

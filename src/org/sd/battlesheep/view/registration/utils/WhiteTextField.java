@@ -20,17 +20,14 @@
 
 
 
-package org.sd.battlesheep.view.registration.panel;
+package org.sd.battlesheep.view.registration.utils;
 
 
 
 import java.awt.Color;
-import java.awt.Font;
 
-import javax.swing.JLabel;
-
-import org.sd.battlesheep.view.APanel;
-import org.sd.battlesheep.view.ViewConst;
+import javax.swing.BorderFactory;
+import javax.swing.JTextField;
 
 
 
@@ -38,25 +35,25 @@ import org.sd.battlesheep.view.ViewConst;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WarningPanel3 extends APanel
+public class WhiteTextField extends JTextField
 {
-	private JLabel hackedLabel;
+	public WhiteTextField() {
+		super();
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+		setBackground(new Color(0, 0, 0, 0));
+		setForeground(Color.WHITE);
+		setSelectedTextColor(Color.BLACK);
+		setSelectionColor(Color.WHITE);
+		setCaretColor(Color.WHITE);
+	}
 	
-	
-	
-	public WarningPanel3() {
-		super(ViewConst.BATTLESHEEP_BACKGROUND);
-		
-		/* items */
-		
-		hackedLabel = new JLabel("The game has been hacked!", JLabel.CENTER);
-		hackedLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		hackedLabel.setForeground(Color.RED);
-		
-		/* this panel */
-		
-		addMiddlePanel(hackedLabel);
-		// necessary otherwise the background image isn't shown
-		addSouthPanel(new JLabel());
+	public WhiteTextField(String text) {
+		super(text);
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+		setBackground(new Color(0, 0, 0, 0));
+		setForeground(Color.WHITE);
+		setSelectedTextColor(Color.BLACK);
+		setSelectionColor(Color.WHITE);
+		setCaretColor(Color.WHITE);
 	}
 }
