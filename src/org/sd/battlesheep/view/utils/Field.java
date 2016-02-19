@@ -38,15 +38,13 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class Field extends JPanel
 {
-	private Cell[][] cells;
-	
-	
-	
 	private String username;
 	
-	private int rows;
+	private int width;
 	
-	private int cols;
+	private int height;
+	
+	private Cell[][] cells;
 	
 	private boolean locked;
 	
@@ -54,7 +52,7 @@ public class Field extends JPanel
 	
 	
 	
-	public Field(String username, int rows, int cols, FieldObserver observer) {
+	public Field(String username, int width, int height, FieldObserver observer) {
 		
 		/* model */
 		
@@ -64,13 +62,13 @@ public class Field extends JPanel
 			throw new IllegalArgumentException("Username: empty string");
 		this.username = username;
 		
-		if (rows < 1)
-			throw new IllegalArgumentException("Rows: less than 1");
-		this.rows = rows;
+		if (width < 1)
+			throw new IllegalArgumentException("Width: less than 1");
+		this.width = width;
 		
-		if (cols < 1)
-			throw new IllegalArgumentException("Columns: less than 1");
-		this.cols = cols;
+		if (height < 1)
+			throw new IllegalArgumentException("Height: less than 1");
+		this.height = height;
 		
 		this.locked = false;
 		
@@ -78,11 +76,11 @@ public class Field extends JPanel
 		
 		/* items */
 		
-		cells = new Cell[rows][cols];
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
-				cells[r][c] = new Cell(r, c);
-				cells[r][c].addMouseListener(new MouseListener() {
+		cells = new Cell[width][height];
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				cells[x][y] = new Cell(x, y);
+				cells[x][y].addMouseListener(new MouseListener() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
 					}
@@ -105,10 +103,72 @@ public class Field extends JPanel
 		
 		/* this panel */
 		
-		setLayout(new GridLayout(rows, cols));
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				add(cells[r][c]);
+		setLayout(new GridLayout(width, height));
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				add(cells[x][y]);
+	}
+	
+	public Field(String username, boolean[][] sheepsPosition, FieldObserver observer) {
+		
+		/* model */
+		
+		if (username == null)
+			throw new IllegalArgumentException("Username: null string");
+		if (username.isEmpty())
+			throw new IllegalArgumentException("Username: empty string");
+		this.username = username;
+		
+		if (sheepsPosition == null)
+			throw new IllegalArgumentException("Sheeps position: null matrix");
+		if (sheepsPosition.length < 1)
+			throw new IllegalArgumentException("Sheeps position: less than 1");
+		if (sheepsPosition[0].length < 1)
+			throw new IllegalArgumentException("Sheeps position: less than 1");
+		this.width = sheepsPosition.length;
+		this.height = sheepsPosition[0].length;
+		
+		this.locked = false;
+		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
+		this.observer = observer;
+		
+		/* items */
+		
+		cells = new Cell[width][height];
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				cells[x][y] = new Cell(x, y);
+				if (sheepsPosition[x][y])
+					cells[x][y].setSheep();
+				cells[x][y].addMouseListener(new MouseListener() {
+					@Override
+					public void mouseReleased(MouseEvent e) {
+					}
+					@Override
+					public void mousePressed(MouseEvent e) {
+					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+					}
+					@Override
+					public void mouseEntered(MouseEvent e) {
+					}
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						actionClick((Cell) e.getSource());
+					}
+				});
+			}
+		}
+		
+		/* this panel */
+		
+		setLayout(new GridLayout(width, height));
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				add(cells[x][y]);
 	}
 	
 	
@@ -124,62 +184,29 @@ public class Field extends JPanel
 		return username;
 	}
 	
-	public int getRows() {
-		return rows;
-	}
-	
 	public int getCols() {
-		return cols;
+		return width;
 	}
 	
-	public boolean[][] getSheeps() {
-		boolean[][] sheeps = new boolean[cols][rows];
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				sheeps[c][r] = cells[r][c].isSheep();
+	public int getRows() {
+		return height;
+	}
+	
+	public boolean[][] getSheepsPosition() {
+		boolean[][] sheeps = new boolean[width][height];
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				sheeps[x][y] = cells[x][y].isSheep();
 		return sheeps;
 	}
 	
-	public void setUsername(String username) {
-		if (username == null)
-			throw new IllegalArgumentException("Username: null string");
-		if (username.isEmpty())
-			throw new IllegalArgumentException("Username: empty string");
-		this.username = username;
+	public void setHitGrass(int x, int y) {
+		cells[x][y].setHitGrass();
 	}
 	
-	public void setGrass(int r, int c) {
-		cells[r][c].setGrass();
+	public void setHitSheep(int x, int y) {
+		cells[x][y].setHitSheep();
 	}
-	
-	public void setSheep(int r, int c) {
-		cells[r][c].setSheep();
-	}
-	
-	public void setHitGrass(int r, int c) {
-		cells[r][c].setHitGrass();
-	}
-	
-	public void setHitSheep(int r, int c) {
-		cells[r][c].setHitSheep();
-	}
-	
-	public boolean isGrass(int r, int c) {
-		return cells[r][c].isGrass();
-	}
-	
-	public boolean isSheep(int r, int c) {
-		return cells[r][c].isSheep();
-	}
-	
-	public boolean isHitGrass(int r, int c) {
-		return cells[r][c].isHitGrass();
-	}
-	
-	public boolean isHitSheep(int r, int c) {
-		return cells[r][c].isHitSheep();
-	}
-	
 	
 	
 	public void lock() {

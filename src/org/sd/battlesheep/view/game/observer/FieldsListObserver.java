@@ -24,14 +24,10 @@ package org.sd.battlesheep.view.game.observer;
 
 
 
-import org.sd.battlesheep.view.utils.Field;
-
-
-
 /**
  * @author Giulio Biagini
  */
 public interface FieldsListObserver
 {
-	public void onListValueChanged(Field field);
+	public void onListValueChanged(int fieldIndex);
 }

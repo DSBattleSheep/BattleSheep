@@ -18,7 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
 package org.sd.battlesheep;
+
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -56,6 +60,8 @@ import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.game.GameFrameObserver;
 import org.sd.battlesheep.view.registration.RegistrationFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
+
+
 
 /**
  * Classe principale per il client (gioco).
@@ -100,8 +106,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 		myTurnEnded = pLock.newCondition();
 
 		registrationFrame = new RegistrationFrame(
-				ModelConst.FIELD_ROWS, 
-				ModelConst.FIELD_COLS,
+				ModelConst.FIELD_WIDTH, 
+				ModelConst.FIELD_HEIGHT,
 				ModelConst.SHEEPS_NUMBER, 
 				this);
 	}
@@ -280,8 +286,8 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 						NetPlayer currPlayer = players.get(username);
 						Opponent opponent = new Opponent(
 								currPlayer, 
-								ModelConst.FIELD_ROWS, 
-								ModelConst.FIELD_COLS,
+								ModelConst.FIELD_WIDTH, 
+								ModelConst.FIELD_HEIGHT,
 								ModelConst.SHEEPS_NUMBER);
 						orderList.add(opponent);
 						playerMap.put(opponent.getUsername(), opponent);

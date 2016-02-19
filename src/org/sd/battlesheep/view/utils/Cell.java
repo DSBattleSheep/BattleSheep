@@ -41,36 +41,36 @@ import org.sd.battlesheep.view.ViewConst;
 @SuppressWarnings("serial")
 public class Cell extends JLabel
 {
+	private int x;
+	
+	private int y;
+	
 	private Image background;
 	
 	
 	
-	private int r;
-	
-	private int c;
-	
-	
-	
-	public Cell(int r, int c) {
+	public Cell(int x, int y) {
+		super();
 		setBorder(BorderFactory.createLineBorder(ViewConst.CELL_BORDER, 1));
-		background = ViewConst.GRASS;
 		
-		if (r < 0)
-			throw new IllegalArgumentException("Row: less than 0");
-		this.r = r;
-		if (c < 0)
-			throw new IllegalArgumentException("Column: less than 0");
-		this.c = c;
+		if (x < 0)
+			throw new IllegalArgumentException("X: less than 0");
+		this.x = x;
+		if (y < 0)
+			throw new IllegalArgumentException("Y: less than 0");
+		this.y = y;
+		
+		background = ViewConst.GRASS;
 	}
 	
 	
 	
-	public int getRow() {
-		return r;
+	public int getPosX() {
+		return x;
 	}
 	
-	public int getCol() {
-		return c;
+	public int getPosY() {
+		return y;
 	}
 	
 	

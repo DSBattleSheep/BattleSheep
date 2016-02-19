@@ -10,14 +10,14 @@ package org.sd.battlesheep.model;
 public class ModelConst
 {
 	/**
-	 * costante per il numero di righe del campo di gioco
+	 * costante per la larghezza del campo di gioco
 	 */
-	public static final int FIELD_ROWS = 10;
+	public static final int FIELD_WIDTH = 10;
 	
 	/**
-	 * costante per il numero di colonne del campo di gioco
+	 * costante per l'altezza del campo di gioco
 	 */
-	public static final int FIELD_COLS = 10;
+	public static final int FIELD_HEIGHT = 10;
 	
 	/**
 	 * costante per il numero di pecore nel campo di gioco

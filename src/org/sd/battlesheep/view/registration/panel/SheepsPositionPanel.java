@@ -53,13 +53,13 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 	
 	private WhiteLabel remainingLabel;
 	
-	private Field field;
-	
 	private WhiteButton previousButton;
 	
 	private WhiteButton registrationButton;
 	
 	
+	
+	private Field field;
 	
 	private int sheeps;
 	
@@ -67,14 +67,16 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 	
 	
 	
-	public SheepsPositionPanel(int rows, int cols, int sheeps, SheepsPositionPanelObserver observer) {
+	public SheepsPositionPanel(int width, int height, int sheeps, SheepsPositionPanelObserver observer) {
 		super(ViewConst.BATTLESHEEP_BACKGROUND);
 		
 		/* model */
 		
+		field = new Field("Dummy", width, height, this);
+		
 		if (sheeps < 1)
 			throw new IllegalArgumentException("Sheeps: less than 1");
-		if (sheeps > (rows * cols))
+		if (sheeps > (width * height))
 			throw new IllegalArgumentException("Sheeps: greater than cells number");
 		this.sheeps = sheeps;
 		
@@ -89,8 +91,6 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 		
 		remainingLabel = new WhiteLabel(sheeps + "", JLabel.CENTER);
 		remainingLabel.setForeground(Color.WHITE);
-		
-		field = new Field("Dummy", rows, cols, this);
 		
 		previousButton = new WhiteButton("Prevoius");
 		previousButton.addActionListener(new ActionListener() {
@@ -144,6 +144,6 @@ public class SheepsPositionPanel extends APanel implements FieldObserver
 		else if (sheeps != 0)
 			MessageFactory.informationDialog(this, "Please, add another " + sheeps + " sheeps");
 		else
-			observer.onSheepsPositionPanelRegistrationClick(field.getSheeps());
+			observer.onSheepsPositionPanelRegistrationClick(field.getSheepsPosition());
 	}
 }

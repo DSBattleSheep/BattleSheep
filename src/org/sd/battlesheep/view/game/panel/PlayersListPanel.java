@@ -43,95 +43,82 @@ import org.sd.battlesheep.view.utils.Field;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class FieldsListPanel extends APanel
+public class PlayersListPanel extends APanel
 {
 	private JLabel opponentsLabel;
 	
-	private JList<Field> fieldsList;
+	private JList<String> usernamesList;
 	
-	private JScrollPane fieldsListScrollPane;
+	private JScrollPane usernamesListScrollPane;
 	
 	
-	
-	private ArrayList<Field> fields;
 	
 	private FieldsListObserver observer;
 	
 	
 	
-	public FieldsListPanel(String[] usernames, int rows, int cols, FieldsListObserver observer) {
+	public PlayersListPanel(String[] usernames, FieldsListObserver observer) {
 		super(ViewConst.TRANSPARENT_BACKGROUND);
 		
 		/* model */
-		
-		if (observer == null)
-			throw new IllegalArgumentException("Observer: null object");
-		this.observer = observer;
 		
 		if (usernames == null)
 			throw new IllegalArgumentException("Usernames: null array");
 		if (usernames.length < 1)
 			throw new IllegalArgumentException("Usernames: less than 1");
-		fields = new ArrayList<>();
-		for (int i = 0; i < usernames.length; i++) {
-			if (usernames[i] == null)
-				throw new IllegalArgumentException("Username " + (i + 1) + ": null string");
-			if (usernames[i].isEmpty())
-				throw new IllegalArgumentException("Username " + (i + 1) + ": empty string");
-			fields.add(new Field(usernames[i], rows, cols, null));
-		}
+		
+		if (observer == null)
+			throw new IllegalArgumentException("Observer: null object");
+		this.observer = observer;
 		
 		/* items */
 		
 		opponentsLabel = new JLabel("Opponents", JLabel.CENTER);
 		
-		fieldsList = new JList<Field>(fields.toArray(new Field[fields.size()]));
-		fieldsList.addListSelectionListener(new ListSelectionListener() {
+		usernamesList = new JList<String>(usernames);
+		usernamesList.setSelectedIndex(0);
+		usernamesList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// neither press nor adjust event but release event
-				if (!fieldsList.getValueIsAdjusting())
+				if (!usernamesList.getValueIsAdjusting())
 					actionList();
 			}
 		});
 		
-		fieldsListScrollPane = new JScrollPane(fieldsList);
+		usernamesListScrollPane = new JScrollPane(usernamesList);
 		
 		/* this panel */
 		
 		addNorthPanel(opponentsLabel);
-		addMiddlePanel(fieldsListScrollPane);
+		addMiddlePanel(usernamesListScrollPane);
 	}
 	
 	
 	
 	private void actionList() {
-		try {
-			observer.onListValueChanged(fields.get(fieldsList.getSelectedIndex()));
-		} catch (ArrayIndexOutOfBoundsException ex){
-			
-		}
+		int fieldIndex = usernamesList.getSelectedIndex();
+		if (fieldIndex > -1)
+			observer.onListValueChanged(fieldIndex);
 	}
 	
 	
 	
-	public void selectField(String username) {
+	public void selectUsername(int fieldIndex) {
+		usernamesList.setSelectedIndex(fieldIndex);
+		observer.onListValueChanged(fieldIndex);
+	}
+	
+	public void replaceUsernames(ArrayList<Field> fields) {
+		if (fields == null)
+			throw new IllegalArgumentException("Fields: null array");
+		String[] usernames = new String[fields.size()];
 		for (int i = 0; i < fields.size(); i++)
-			if (fields.get(i).getUsername().equals(username)) {
-				fieldsList.setSelectedIndex(i);
-				actionList();
-				break;
-			}
-	}
-	
-	public void removeField(String username) {
-		for (Field field : fields)
-			if (field.getUsername().equals(username)) {
-				fields.remove(field);
-				break;
-			}
-		fieldsList.setListData(fields.toArray(new Field[fields.size()]));
-		fieldsList.setSelectedIndex(0);
-		actionList();
+			usernames[i] = fields.get(i).getUsername();
+		usernamesList.setListData(usernames);
+		if (fields.size() != 0) {
+			usernamesList.setSelectedIndex(0);
+			observer.onListValueChanged(0);
+		}
 	}
 }

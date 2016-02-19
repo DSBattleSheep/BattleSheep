@@ -25,13 +25,14 @@ package org.sd.battlesheep.view.game;
 
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.game.observer.FieldsListObserver;
 import org.sd.battlesheep.view.game.panel.BannerPanel;
-import org.sd.battlesheep.view.game.panel.FieldsListPanel;
+import org.sd.battlesheep.view.game.panel.PlayersListPanel;
 import org.sd.battlesheep.view.game.panel.PlayerPanel;
 import org.sd.battlesheep.view.game.panel.LogPanel;
 import org.sd.battlesheep.view.utils.Cell;
@@ -54,13 +55,17 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	
 	private BannerPanel bannerPanel;
 	
-	private FieldsListPanel fieldsListPanel;
+	private PlayersListPanel playersListPanel;
 	
 	private PlayerPanel playerPanel;
 	
 	private LogPanel logPanel;
 	
 	
+	
+	private Field myField;
+	
+	private ArrayList<Field> opponentsField;
 	
 	private GameFrameObserver observer;
 	
@@ -72,11 +77,19 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 		
 		/* model */
 		
+		myField = new Field(myUsername, mySheepsPosition, this);
+		myField.lock();
+		
 		if (opponentsUsername == null)
 			throw new IllegalArgumentException("Usernames: null array");
 		if (opponentsUsername.length < 1)
 			throw new IllegalArgumentException("Usernames: less than 1");
-		
+		opponentsField = new ArrayList<>();
+		for (int i = 0; i < opponentsUsername.length; i++) {
+			opponentsField.add(new Field(opponentsUsername[i], myField.getCols(), myField.getRows(), this));
+			opponentsField.get(i).lock();
+		}
+			
 		if (observer == null)
 			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
@@ -85,9 +98,9 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 		
 		bannerPanel = new BannerPanel();
 		
-		playerPanel = new PlayerPanel(myUsername, mySheepsPosition, opponentsUsername[0], this);
+		playerPanel = new PlayerPanel(myField, opponentsField.get(0));
 		
-		fieldsListPanel = new FieldsListPanel(opponentsUsername, mySheepsPosition[0].length, mySheepsPosition.length, this);
+		playersListPanel = new PlayersListPanel(opponentsUsername, this);
 		
 		logPanel = new LogPanel();
 		logPanel.setPreferredSize(new Dimension(getWidth(), 100));
@@ -95,7 +108,7 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 		/* this frame */
 		
 		addNorthPanel(bannerPanel);
-		addRightPanel(fieldsListPanel);
+		addRightPanel(playersListPanel);
 		addMiddlePanel(playerPanel);
 		addSouthPanel(logPanel);
 		setVisible(true);
@@ -104,51 +117,57 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	
 	
 	@Override
-	public void onListValueChanged(Field field) {
-		playerPanel.setOpponentField(field);
+	public void onListValueChanged(int fieldIndex) {
+		playerPanel.setOpponentField(opponentsField.get(fieldIndex));
 	}
 	
 	@Override
 	public void onFieldCellClick(String username, Cell source) {
 		if (source.isGrass())
-			observer.onGameFrameAttack(username, source.getCol(), source.getRow());
+			observer.onGameFrameAttack(username, source.getPosX(), source.getPosY());
 	}
 	
 	
 	
 	public void setTurn(String username) {
-		// it's my turn, unlock cells
-		if (playerPanel.getMyUsername().equals(username)) {
-			playerPanel.unlockOpponentField();
+		// it's my turn, unlock opponents cells
+		if (myField.getUsername().equals(username)) {
+			for (Field opponentField : opponentsField)
+				opponentField.unlock();
 			logPanel.append("TURNO: MIO\n");
 		// it's someone else turn, lock cells
 		} else {
-			playerPanel.lockOpponentField();
+			for (Field opponentField : opponentsField)
+				opponentField.lock();
 			logPanel.append("TURNO: " + username + "\n");
 		}
 	}
 	
 	public void attackResult(String usernameAttacker, String usernameDefender, int x, int y, boolean hit) {
 		// I'm the defender, change image in my field
-		if (playerPanel.getMyUsername().equals(usernameDefender)) {
+		if (myField.getUsername().equals(usernameDefender)) {
 			if (hit)
-				playerPanel.setHitSheepOnMyField(y, x);
+				myField.setHitSheep(x, y);
 			else
-				playerPanel.setHitGrassOnMyField(y, x);
-		// someone else is the defender, change the image in its field
-		} else {
-			fieldsListPanel.selectField(usernameDefender);
-			if (hit)
-				playerPanel.setHitSheepOnOpponentField(y, x);
-			else
-				playerPanel.setHitGrassOnOpponentField(y, x);
-		}
+				myField.setHitGrass(x, y);
+		// someone else is the defender, change image in its field and show it
+		} else
+			for (int i = 0; i < opponentsField.size(); i++)
+				if (opponentsField.get(i).getUsername().equals(usernameDefender)) {
+					if (hit)
+						opponentsField.get(i).setHitSheep(x, y);
+					else
+						opponentsField.get(i).setHitGrass(x, y);
+					playersListPanel.selectUsername(i);
+					break;
+				}
 		logPanel.append("\t" + usernameAttacker + " attack " + usernameDefender + " in [" + x + "," + y + "] -> " + (hit ? "HIT" : "don't hit") + "\n");
 	}
 	
 	public void matchResult(int position, boolean kickedOut) {
-		// lock the opponent field
-		playerPanel.lockOpponentField();
+		// lock opponents field
+		for (Field opponentField :opponentsField)
+			opponentField.lock();
 		// show message
 		if (kickedOut)
 			logPanel.append("HERE IS A NICKEL, KID GET YOURSELF A BETTER CONNECTION\n");
@@ -165,7 +184,12 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	
 	public void playerLost(String username) {
 		// remove field from opponents list
-		fieldsListPanel.removeField(username);
+		for (int i = 0; i < opponentsField.size(); i++)
+			if (opponentsField.get(i).getUsername().equals(username)) {
+				opponentsField.remove(i);
+				playersListPanel.replaceUsernames(opponentsField);
+				break;
+			}
 		// log and show message
 		logPanel.append(username + " LOST!\n");
 		MessageFactory.informationDialog(this, username + " LOST!");
@@ -173,7 +197,12 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	
 	public void playerCrashed(String username) {
 		// remove field from opponents list
-		fieldsListPanel.removeField(username);
+		for (int i = 0; i < opponentsField.size(); i++)
+			if (opponentsField.get(i).getUsername().equals(username)) {
+				opponentsField.remove(i);
+				playersListPanel.replaceUsernames(opponentsField);
+				break;
+			}
 		// log and show message
 		logPanel.append(username + " CRASHED!\n");
 		MessageFactory.informationDialog(this, username + " CRASHED!");
@@ -181,7 +210,12 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	
 	public void playerKickedOut(String username) {
 		// remove field from opponents list
-		fieldsListPanel.removeField(username);
+		for (int i = 0; i < opponentsField.size(); i++)
+			if (opponentsField.get(i).getUsername().equals(username)) {
+				opponentsField.remove(i);
+				playersListPanel.replaceUsernames(opponentsField);
+				break;
+			}
 		// log and show message
 		logPanel.append(username + " KICKED OUT!\n");
 		MessageFactory.informationDialog(this, username + " KICKED OUT!");

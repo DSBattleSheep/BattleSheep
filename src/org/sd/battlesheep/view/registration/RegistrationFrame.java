@@ -88,7 +88,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	
-	public RegistrationFrame(int rows, int cols, int sheeps, RegistrationFrameObserver observer) {
+	public RegistrationFrame(int width, int height, int sheeps, RegistrationFrameObserver observer) {
 		super(WIDTH, HEIGHT);
 		
 		/* model */
@@ -109,7 +109,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 		
 		usernamePanel = new UsernamePanel(this);
 		
-		sheepsPositionPanel = new SheepsPositionPanel(rows, cols, sheeps, this);
+		sheepsPositionPanel = new SheepsPositionPanel(width, height, sheeps, this);
 		
 		lockPanel = new LockPanel(this);
 		
