@@ -27,7 +27,6 @@ package org.sd.battlesheep.view.game.panel;
 import java.awt.Container;
 
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.ViewConst;
@@ -82,6 +81,6 @@ public class PlayerPanel extends APanel
 		opponentUsernameLabel.setText(field.getUsername());
 		opponentFieldParent.remove(1);
 		opponentFieldParent.add(field);
-		SwingUtilities.updateComponentTreeUI(this);
+		//SwingUtilities.updateComponentTreeUI(this);
 	}
 }

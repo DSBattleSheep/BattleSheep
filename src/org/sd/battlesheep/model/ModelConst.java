@@ -22,5 +22,5 @@ public class ModelConst
 	/**
 	 * costante per il numero di pecore nel campo di gioco
 	 */
-	public static final int SHEEPS_NUMBER = 3;
+	public static final int SHEEPS_NUMBER = 10;
 }

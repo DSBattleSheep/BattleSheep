@@ -119,6 +119,8 @@ public class GameFrame extends AFrame implements FieldsListObserver, FieldObserv
 	@Override
 	public void onListValueChanged(int fieldIndex) {
 		playerPanel.setOpponentField(opponentsField.get(fieldIndex));
+		repaint();
+		revalidate();
 	}
 	
 	@Override
