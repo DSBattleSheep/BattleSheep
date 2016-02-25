@@ -13,7 +13,7 @@ import org.sd.battlesheep.communication.CommunicationConst;
 public class DiscoveryService {
 
 	
-	private String subnetwork;
+	private String subnet;
 	
 	private DiscoveryInterface observer;
 	
@@ -51,10 +51,10 @@ public class DiscoveryService {
 		if (st.length != 4)
 			throw new NumberFormatException("Invalid IP address: " + currIpv4Address);
 		 
-		subnetwork = st[0] + "." + st[1] + "." + st[2] + ".";
+		subnet = st[0] + "." + st[1] + "." + st[2] + ".";
 		this.observer = observer;
 		
-		startDiscovery();
+		startDiscovery(); // TODO: vogliamo che venga chiamata dall'esterno? Tipo fare un pulsante per aggiornare le lobby?
 	}
 	
 	public void startDiscovery() {
@@ -64,7 +64,7 @@ public class DiscoveryService {
 				ExecutorService executor = Executors.newFixedThreadPool(100);
 				
 				for (int i = 0; i < 255; i++)
-					executor.execute(new WorkerThread(subnetwork + i, observer));
+					executor.execute(new WorkerThread(subnet + i, observer));
 				
 				executor.shutdown();
 				 
