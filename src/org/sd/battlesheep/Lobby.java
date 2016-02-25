@@ -27,6 +27,8 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	
 	private LobbyServerRMI lobbyServer;
 	
+	private String currHost;
+	
 	
 	
 	private class UpdateGuiThread implements Runnable {
@@ -38,7 +40,6 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 		private String host;
 		
 		private int port;
-		
 		
 		
 		public UpdateGuiThread(LobbyFrame lobbyFrame, String username, String host, int port) {
@@ -57,29 +58,16 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	
 	
 	
+	
+	
 	public Lobby() {
-		try {
-			String currHost = Utils.getLocalAddress().getHostAddress();
-			if (currHost == null)
-				currHost = "127.0.0.1";
-			
-			System.out.println("Thread.activeCount()=" + Thread.activeCount());
-			
-			lobbyServer = new LobbyServerRMI(CommunicationConst.LOBBY_PORT, this);
-			
-			System.out.println("Thread.activeCount()=" + Thread.activeCount());
-			lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
-			System.out.println("Thread.activeCount()=" + Thread.activeCount());
+		currHost = Utils.getLocalAddress().getHostAddress();
+		if (currHost == null)
+			currHost = "127.0.0.1";
 		
-		} catch (RemoteException | AlreadyBoundException e) {
-			if (e instanceof ExportException) {
-				System.out.println("Port " + CommunicationConst.LOBBY_PORT + " already bound! Lobby server cannot start..");
-				System.exit(1);
-			}
-			
-			e.printStackTrace();
-		}
+		lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
 		
+		onLobbyFrameEnterLobbyName(currHost); // FIXME: metterlo nel LobbyFrame dopo aver inserito il nome
 	}
 	
 	@Override
@@ -109,5 +97,21 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 			
 		}).start();
 		
+	}
+
+	@Override
+	public void onLobbyFrameEnterLobbyName(String lobbyName) {
+		try {
+
+			lobbyServer = new LobbyServerRMI("MyLobbyName@"+currHost, CommunicationConst.LOBBY_PORT, this);
+		
+		} catch (RemoteException | AlreadyBoundException e) {
+			if (e instanceof ExportException) {
+				System.out.println("Port " + CommunicationConst.LOBBY_PORT + " already bound! Lobby server cannot start..");
+				System.exit(1);
+			}
+			
+			e.printStackTrace();
+		}
 	}
 }

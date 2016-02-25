@@ -22,7 +22,7 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 public class PlayerRegistration
 {
-	public static Map<String, NetPlayer> Join(String lobbyAddress, String username, int playerPort) 
+	public static Map<String, NetPlayer> join(String lobbyAddress, String username, int playerPort) 
 			throws MalformedURLException, RemoteException, NotBoundException, ServerNotActiveException, UnmarshalException, UsernameAlreadyTakenException, AccessException, ConnectIOException {
 		
 		Map<String, NetPlayer> playerMap;

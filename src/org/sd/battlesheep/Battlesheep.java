@@ -43,6 +43,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.SwingUtilities;
 
 import org.sd.battlesheep.communication.client.PlayersConnectedInterface;
+import org.sd.battlesheep.communication.lobby.DiscoveryInterface;
+import org.sd.battlesheep.communication.lobby.DiscoveryService;
 import org.sd.battlesheep.communication.client.PlayerClient;
 import org.sd.battlesheep.communication.client.PlayerRegistration;
 import org.sd.battlesheep.communication.client.PlayerServer;
@@ -68,7 +70,7 @@ import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
  * 
  * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
-public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver, PlayersConnectedInterface {
+public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserver, GameFrameObserver, PlayersConnectedInterface {
 	private static Battlesheep instance;
 
 	private RegistrationFrame registrationFrame;
@@ -110,7 +112,43 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 				ModelConst.FIELD_HEIGHT,
 				ModelConst.SHEEPS_NUMBER, 
 				this);
+		
+		String currAddress = Utils.getLocalAddress().getHostAddress();
+		if (currAddress != null)
+			new DiscoveryService(currAddress, this);
+		else 
+			MessageFactory.errorDialog(null, "");
 	}
+
+	@Override
+	public void onNewLobbyFound(final String host, final String name) {
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					//registrationFrame.addLobby(host, name);
+					System.out.println("registrationFrame.addLobby(" + host +", " + name +");");
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onDiscoveryFinished() {
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					System.out.println("registrationFrame.discoveryFinished();");
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	private class DisposeRegistrationFrameAndCreateGameFrame implements Runnable {
 
@@ -241,7 +279,7 @@ public class Battlesheep implements RegistrationFrameObserver, GameFrameObserver
 					if (playerServer == null)
 						playerServer = new PlayerServer(Battlesheep.getInstance());
 					playerServer.setMe(me);
-					players = PlayerRegistration.Join(lobbyAddress, myUsername, playerServer.getPort());
+					players = PlayerRegistration.join(lobbyAddress, myUsername, playerServer.getPort());
 
 				} catch (UsernameAlreadyTakenException e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());

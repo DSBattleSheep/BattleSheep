@@ -29,6 +29,8 @@ package org.sd.battlesheep.view.lobby.observer;
  */
 public interface LobbyFrameObserver
 {
+	public void onLobbyFrameEnterLobbyName(String lobbyName);
+	
 	public void onLobbyFrameExitClick();
 	
 	public void onLobbyFrameStartClick();

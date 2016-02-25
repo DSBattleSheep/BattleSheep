@@ -21,7 +21,7 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
 
 
 
-public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemoteInterface
+public class LobbyServerRMI extends UnicastRemoteObject implements LobbyDiscoveryRemoteInterface, LobbyJoinRemoteInterface
 {
 	private static final long serialVersionUID = -5365778052892677266L;
 
@@ -36,12 +36,15 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 	
 	private Condition waitForStart;
 	
+	private String lobbyName;
+	
 	
 
 	
 	
-	public LobbyServerRMI(int port, LobbyJoinInterface lobbyJoinInterface) throws RemoteException, AlreadyBoundException {
+	public LobbyServerRMI(String lobbyName, int port, LobbyJoinInterface lobbyJoinInterface) throws RemoteException, AlreadyBoundException {
 		super();
+		this.lobbyName = lobbyName; 
 		this.lobbyJoinInterface = lobbyJoinInterface;
 		playerMap = new HashMap<String, NetPlayer>();
 		registry = LocateRegistry.createRegistry(port);
@@ -49,12 +52,19 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		plock = new ReentrantLock();
 		waitForStart = plock.newCondition();
 	}
+	
 
+	@Override
+	public String retrieveLobbyName() throws RemoteException, ServerNotActiveException {
+		return lobbyName;
+	}
+
+	
 	@Override
 	public Map<String, NetPlayer> joinLobby(String username, int port) throws RemoteException, ServerNotActiveException, UsernameAlreadyTakenException {
 		String host = getClientHost();
 		plock.lock();
-		System.out.println("ip is "+host);
+		System.out.println("ip is " + host);
 		
 		if (playerMap.containsKey(username)) {
 			plock.unlock();
@@ -92,7 +102,5 @@ public class LobbyServerRMI extends UnicastRemoteObject implements LobbyJoinRemo
 		plock.unlock();
 		
 		close();
-		
-		System.out.println("Thread active count = " + Thread.activeCount());// XXX <- "C'è qualcosa che non va" - cit. vasco
 	}
 }
