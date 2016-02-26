@@ -26,8 +26,10 @@ package org.sd.battlesheep.view.registration.utils;
 
 import java.awt.Color;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.JList;
+
+import org.sd.battlesheep.view.ViewConst;
 
 
 
@@ -35,23 +37,12 @@ import javax.swing.JLabel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WhiteLabel extends JLabel
+public class WhiteList extends JList<String>
 {
-	public WhiteLabel(String text) {
-		super(text);
-		setBackground(new Color(0, 0, 0, 0));
-		setForeground(Color.WHITE);
-	}
-	
-	public WhiteLabel(String text, int position) {
-		super(text, position);
-		setBackground(new Color(0, 0, 0, 0));
-		setForeground(Color.WHITE);
-	}
-	
-	public WhiteLabel(String text, Icon icon, int position) {
-		super(text, icon, position);
-		setBackground(new Color(0, 0, 0, 0));
+	public WhiteList() {
+		super();
+		setBackground(ViewConst.TRANSPARENT_BACKGROUND);
+		setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 		setForeground(Color.WHITE);
 	}
 }

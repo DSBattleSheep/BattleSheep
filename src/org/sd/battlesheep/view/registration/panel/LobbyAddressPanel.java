@@ -27,8 +27,10 @@ package org.sd.battlesheep.view.registration.panel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.ArrayList;
+
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
@@ -36,7 +38,7 @@ import org.sd.battlesheep.view.ViewConst;
 import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
 import org.sd.battlesheep.view.registration.utils.WhiteButton;
 import org.sd.battlesheep.view.registration.utils.WhiteLabel;
-import org.sd.battlesheep.view.registration.utils.WhiteTextField;
+import org.sd.battlesheep.view.registration.utils.WhiteList;
 
 
 
@@ -48,13 +50,19 @@ public class LobbyAddressPanel extends APanel
 {
 	private WhiteLabel addressLabel;
 	
-	private WhiteTextField addressTextField;
+	private WhiteList lobbiesList;
+	
+	private JScrollPane lobbiesScrollPane;
 	
 	private WhiteButton exitButton;
 	
 	private WhiteButton nextButton;
 	
 	
+	
+	private ArrayList<String> hosts;
+	
+	private ArrayList<String> names;
 	
 	private LobbyAddressPanelObserver observer;
 	
@@ -65,31 +73,22 @@ public class LobbyAddressPanel extends APanel
 		
 		/* model */
 		
+		hosts = new ArrayList<String>();
+		names = new ArrayList<String>();
+		
 		if (observer == null)
 			throw new IllegalArgumentException("Observer: null object");
 		this.observer = observer;
 		
 		/* items */
 		
-		addressLabel = new WhiteLabel("Lobby Ip Address:");
+		addressLabel = new WhiteLabel("Looking for lobbies...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		addressLabel.setForeground(Color.WHITE);
 		
-		addressTextField = new WhiteTextField("127.0.0.1");
-		addressTextField.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					actionNext();
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				
-			}
-		});
+		lobbiesList = new WhiteList();
+		
+		lobbiesScrollPane = new JScrollPane(lobbiesList);
+		lobbiesScrollPane.setBackground(ViewConst.TRANSPARENT_BACKGROUND);
 		
 		exitButton = new WhiteButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
@@ -109,7 +108,8 @@ public class LobbyAddressPanel extends APanel
 		
 		/* this panel */
 		
-		addNorthPanel(addressLabel, addressTextField);
+		addNorthPanel(addressLabel);
+		addMiddlePanel(lobbiesScrollPane);
 		addSouthPanel(exitButton, nextButton);
 	}
 	
@@ -120,10 +120,36 @@ public class LobbyAddressPanel extends APanel
 	}
 	
 	private void actionNext() {
-		String text = addressTextField.getText();
-		if (text == null || text.isEmpty())
-			MessageFactory.informationDialog(this, "Please, fill the address field");
+		int index = lobbiesList.getSelectedIndex();
+		if (index == -1)
+			MessageFactory.informationDialog(this, "Please, select a lobby address");
 		else
-			observer.onLobbyAddressPanelNextClick(text);
+			observer.onLobbyAddressPanelNextClick(hosts.get(index));
+	}
+	
+	
+	
+	public void addLobby(String host, String name) {
+		if (host == null)
+			throw new IllegalArgumentException("Host: null string");
+		if (host.isEmpty())
+			throw new IllegalArgumentException("Host: empty string");
+		if (name == null)
+			throw new IllegalArgumentException("Name: null string");
+		if (name.isEmpty())
+			throw new IllegalArgumentException("Name: empty string");
+		hosts.add(host);
+		names.add(name);
+		String[] array = new String[hosts.size()];
+		for (int i = 0; i < array.length; i++)
+			array[i] = names.get(i) + "@" + hosts.get(i);
+		lobbiesList.setListData(array);
+	}
+	
+	public void discoveryFinished() {
+		addressLabel.setText("Lobbies:");
+		addressLabel.setIcon(null);
+		revalidate();
+		repaint();
 	}
 }

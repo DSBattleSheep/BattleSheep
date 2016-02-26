@@ -185,6 +185,14 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	
+	public void addLobby(String host, String name) {
+		lobbyAddressPanel.addLobby(host, name);
+	}
+	
+	public void discoveryFinished() {
+		lobbyAddressPanel.discoveryFinished();
+	}
+	
 	public void unlock() {
 		replaceMiddlePanel(lockPanel, sheepsPositionPanel);
 	}
