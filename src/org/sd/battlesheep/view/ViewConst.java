@@ -42,7 +42,7 @@ public class ViewConst
 	 * program name
 	 */
 	
-	public static final String PROGRAM_NAME = "Battlesheep v.0.1 - beta";
+	public static final String PROGRAM_NAME = "Battlesheep v.1.0";
 	
 	
 	

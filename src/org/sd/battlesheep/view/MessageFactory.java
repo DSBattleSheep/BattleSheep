@@ -63,7 +63,6 @@ public class MessageFactory
 		showDialog(parent, message, JOptionPane.ERROR_MESSAGE, false);
 	}
 	
-	
 	public static void endGameDialog(int position) {
 		JDialog dialog = new JDialog();
 		JLabel label;
@@ -89,5 +88,11 @@ public class MessageFactory
 		dialog.setLocationByPlatform(true);
 		dialog.setModalityType(ModalityType.TOOLKIT_MODAL);
 		dialog.setVisible(true);     
+	}
+	
+	
+	
+	public static String questionDialog(Component parent, String message) {
+		return JOptionPane.showInputDialog(parent, message, ViewConst.PROGRAM_NAME, JOptionPane.QUESTION_MESSAGE);
 	}
 }

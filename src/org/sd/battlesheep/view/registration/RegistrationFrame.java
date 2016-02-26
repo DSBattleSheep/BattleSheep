@@ -30,11 +30,11 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import org.sd.battlesheep.view.AFrame;
-import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
+import org.sd.battlesheep.view.registration.observer.LobbiesAddressPanelObserver;
 import org.sd.battlesheep.view.registration.observer.LockPanelObserver;
 import org.sd.battlesheep.view.registration.observer.SheepsPositionPanelObserver;
 import org.sd.battlesheep.view.registration.observer.UsernamePanelObserver;
-import org.sd.battlesheep.view.registration.panel.LobbyAddressPanel;
+import org.sd.battlesheep.view.registration.panel.LobbiesAddressPanel;
 import org.sd.battlesheep.view.registration.panel.LockPanel;
 import org.sd.battlesheep.view.registration.panel.SheepsPositionPanel;
 import org.sd.battlesheep.view.registration.panel.UsernamePanel;
@@ -48,7 +48,7 @@ import org.sd.battlesheep.view.registration.panel.WarningPanel3;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserver, UsernamePanelObserver, SheepsPositionPanelObserver, LockPanelObserver
+public class RegistrationFrame extends AFrame implements LobbiesAddressPanelObserver, UsernamePanelObserver, SheepsPositionPanelObserver, LockPanelObserver
 {
 	private static final int WIDTH = 500;
 	
@@ -64,7 +64,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	
-	private LobbyAddressPanel lobbyAddressPanel;
+	private LobbiesAddressPanel lobbiesAddressPanel;
 	
 	private WarningPanel1 warningPanel1;
 	
@@ -99,7 +99,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 		
 		/* panels */
 		
-		lobbyAddressPanel = new LobbyAddressPanel(this);
+		lobbiesAddressPanel = new LobbiesAddressPanel(this);
 		
 		warningPanel1 = new WarningPanel1();
 		
@@ -115,7 +115,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 		
 		/* this frame */
 		
-		addMiddlePanel(lobbyAddressPanel);
+		addMiddlePanel(lobbiesAddressPanel);
 		setVisible(true);
 	}
 	
@@ -129,7 +129,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	@Override
 	public void onLobbyAddressPanelNextClick(String lobbyAddress) {
 		this.lobbyAddress = lobbyAddress;
-		replaceMiddlePanel(lobbyAddressPanel, warningPanel1);
+		replaceMiddlePanel(lobbiesAddressPanel, warningPanel1);
 		Timer timer1 = new Timer(WARNING_PANEL_1_DURATION, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	@Override
 	public void onUsernamePanelPreviousClick() {
-		replaceMiddlePanel(usernamePanel, lobbyAddressPanel);
+		replaceMiddlePanel(usernamePanel, lobbiesAddressPanel);
 	}
 	
 	@Override
@@ -186,11 +186,11 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	public void addLobby(String host, String name) {
-		lobbyAddressPanel.addLobby(host, name);
+		lobbiesAddressPanel.addLobby(host, name);
 	}
 	
 	public void discoveryFinished() {
-		lobbyAddressPanel.discoveryFinished();
+		lobbiesAddressPanel.discoveryFinished();
 	}
 	
 	public void unlock() {

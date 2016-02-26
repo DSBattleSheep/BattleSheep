@@ -27,7 +27,7 @@ package org.sd.battlesheep.view.registration.observer;
 /**
  * @author Giulio Biagini
  */
-public interface LobbyAddressPanelObserver
+public interface LobbiesAddressPanelObserver
 {
 	public void onLobbyAddressPanelExitClick();
 	

@@ -31,11 +31,13 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.sd.battlesheep.view.APanel;
 import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
-import org.sd.battlesheep.view.registration.observer.LobbyAddressPanelObserver;
+import org.sd.battlesheep.view.registration.observer.LobbiesAddressPanelObserver;
 import org.sd.battlesheep.view.registration.utils.WhiteButton;
 import org.sd.battlesheep.view.registration.utils.WhiteLabel;
 import org.sd.battlesheep.view.registration.utils.WhiteList;
@@ -46,9 +48,11 @@ import org.sd.battlesheep.view.registration.utils.WhiteList;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyAddressPanel extends APanel
+public class LobbiesAddressPanel extends APanel
 {
 	private WhiteLabel addressLabel;
+	
+	private WhiteButton manualButton;
 	
 	private WhiteList lobbiesList;
 	
@@ -64,11 +68,11 @@ public class LobbyAddressPanel extends APanel
 	
 	private ArrayList<String> names;
 	
-	private LobbyAddressPanelObserver observer;
+	private LobbiesAddressPanelObserver observer;
 	
 	
 	
-	public LobbyAddressPanel(LobbyAddressPanelObserver observer) {
+	public LobbiesAddressPanel(LobbiesAddressPanelObserver observer) {
 		super(ViewConst.BATTLESHIP_BACKGROUND);
 		
 		/* model */
@@ -85,7 +89,21 @@ public class LobbyAddressPanel extends APanel
 		addressLabel = new WhiteLabel("Looking for lobbies...", ViewConst.WAITING_ICON, JLabel.CENTER);
 		addressLabel.setForeground(Color.WHITE);
 		
+		manualButton = new WhiteButton("Choose it manually...");
+		manualButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				actionManual();
+			}
+		});
+		
 		lobbiesList = new WhiteList();
+		lobbiesList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				actionList();
+			}
+		});
 		
 		lobbiesScrollPane = new JScrollPane(lobbiesList);
 		lobbiesScrollPane.setBackground(ViewConst.TRANSPARENT_BACKGROUND);
@@ -108,12 +126,29 @@ public class LobbyAddressPanel extends APanel
 		
 		/* this panel */
 		
-		addNorthPanel(addressLabel);
+		addNorthPanel(addressLabel, manualButton);
 		addMiddlePanel(lobbiesScrollPane);
 		addSouthPanel(exitButton, nextButton);
 	}
 	
 	
+	
+	private void actionManual() {
+		String input = MessageFactory.questionDialog(this, "Lobby ip address:");
+		if (input != null) {
+			if (input.isEmpty())
+				MessageFactory.informationDialog(this, "Please, insert a lobby address");
+			else
+				observer.onLobbyAddressPanelNextClick(input);
+		}
+		revalidate();
+		repaint();
+	}
+	
+	private void actionList() {
+		revalidate();
+		repaint();
+	}
 	
 	private void actionExit() {
 		observer.onLobbyAddressPanelExitClick();
