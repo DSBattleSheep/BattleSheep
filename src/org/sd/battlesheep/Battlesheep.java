@@ -126,7 +126,7 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					//registrationFrame.addLobby(host, name);
+					registrationFrame.addLobby(host, name);
 					System.out.println("registrationFrame.addLobby(" + host +", " + name +");");
 				}
 			});
@@ -141,7 +141,7 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					System.out.println("registrationFrame.discoveryFinished();");
+					registrationFrame.discoveryFinished();
 				}
 			});
 		} catch (InvocationTargetException | InterruptedException e) {
