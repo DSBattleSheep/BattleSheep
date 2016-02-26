@@ -78,7 +78,8 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	@Override
 	public void onLobbyFrameExitClick() {
 		lobbyFrame.dispose();
-		lobbyServer.close();
+		if (lobbyServer != null)
+			lobbyServer.close();
 	}
 
 	@Override
