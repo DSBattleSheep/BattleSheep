@@ -31,6 +31,7 @@ import java.rmi.ConnectException;
 import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.UnknownHostException;
 import java.rmi.UnmarshalException;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
@@ -113,11 +114,13 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 				ModelConst.SHEEPS_NUMBER, 
 				this);
 		
-		String currAddress = Utils.getLocalAddress().getHostAddress();
-		if (currAddress != null)
-			new DiscoveryService(currAddress, this);
-		else 
-			MessageFactory.errorDialog(null, "");
+		String currAddress = null;
+		try {
+			currAddress = Utils.getLocalAddress().getHostAddress();
+			new DiscoveryService(this).startDiscovery(currAddress);
+		} catch (NullPointerException e) {
+			new DiscoveryService(this).searchOnlyLocalhost();
+		}
 	}
 
 	@Override
@@ -285,7 +288,7 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					unlockRegistration();
 					return;
-				} catch (ConnectException | ConnectIOException e) {
+				} catch (ConnectException | ConnectIOException | UnknownHostException e) {
 					MessageFactory.errorDialog(registrationFrame, "Can't reach the lobby server!");
 					unlockRegistration();
 					return;
@@ -299,10 +302,10 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 				} catch (NotBoundException | ServerNotActiveException | MalformedURLException | AccessException  e) {
 					MessageFactory.errorDialog(registrationFrame, e.getMessage());
 					e.printStackTrace();
-					return;
+					unbindAndClose(1);
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					return;
+					unbindAndClose(1);
 				}
 
 				// Abbiamo joinato e la lobby ci ha restituito tutti i player
@@ -507,7 +510,6 @@ public class Battlesheep implements DiscoveryInterface, RegistrationFrameObserve
 		} else {
 			me.hit(newMove.getX(), newMove.getY());
 		}
-		
 		SwingUtilities.invokeLater(new GameFrameSetAttackResultRunnable(lastMove.getAttacker(), lastMove));
 	}
 

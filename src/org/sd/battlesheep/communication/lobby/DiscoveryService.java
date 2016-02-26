@@ -45,19 +45,17 @@ public class DiscoveryService {
 
 	
 	
-	public DiscoveryService(String currIpv4Address, DiscoveryInterface observer) throws NumberFormatException {
-		
+	public DiscoveryService(DiscoveryInterface observer) throws NumberFormatException {
+		this.observer = observer;
+	}
+	
+	public void startDiscovery(String currIpv4Address) {		
 		String[] st = currIpv4Address.split("\\.");
 		if (st.length != 4)
 			throw new NumberFormatException("Invalid IP address: " + currIpv4Address);
 		 
 		subnet = st[0] + "." + st[1] + "." + st[2] + ".";
-		this.observer = observer;
 		
-		startDiscovery(); // TODO: vogliamo che venga chiamata dall'esterno? Tipo fare un pulsante per aggiornare le lobby?
-	}
-	
-	public void startDiscovery() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -77,6 +75,10 @@ public class DiscoveryService {
 				observer.onDiscoveryFinished();
 			}
 		}).start();
+	}
+	
+	public void searchOnlyLocalhost() {
+		new Thread(new WorkerThread("127.0.0.1", observer)).start();
 	}
 
 }

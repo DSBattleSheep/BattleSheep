@@ -61,9 +61,12 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	
 	
 	public Lobby() {
-		currHost = Utils.getLocalAddress().getHostAddress();
-		if (currHost == null)
+		
+		try {
+			currHost = Utils.getLocalAddress().getHostAddress();
+		} catch (NullPointerException e) {
 			currHost = "127.0.0.1";
+		}
 		
 		lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
 	}
