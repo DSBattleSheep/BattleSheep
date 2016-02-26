@@ -54,37 +54,63 @@ public class ViewConst
 	
 	/* icons */
 	
-	public static final Image PROGRAM_ICON = new ImageIcon(IMGS_PATH + "icon.png").getImage();
+	public static final Image PROGRAM_ICON = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "icon.png")
+	).getImage();
 	
-	public static final Icon WAITING_ICON = new ImageIcon(IMGS_PATH + "ajax-loader.gif");
+	public static final Icon WAITING_ICON = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "ajax-loader.gif")
+	);
 	
-	public static final Icon BANNER_ICON = new ImageIcon(IMGS_PATH + "banner.png");
+	public static final Icon BANNER_ICON = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "banner.png")
+	);
 	
 	/* background */
 	
-	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(IMGS_PATH + "battleship.jpg").getImage();
+	public static final Image BATTLESHIP_BACKGROUND = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "battleship.jpg")
+	).getImage();
 	
-	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(IMGS_PATH + "battlesheep.jpg").getImage();
+	public static final Image BATTLESHEEP_BACKGROUND = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "battlesheep.jpg")
+	).getImage();
 	
 	/* field */
 	
-	public static final Image GRASS = new ImageIcon(IMGS_PATH + "grass.png").getImage();
+	public static final Image GRASS = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "grass.png")
+	).getImage();
 	
-	public static final Image SHEEP = new ImageIcon(IMGS_PATH + "sheep.png").getImage();
+	public static final Image SHEEP = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "sheep.png")
+	).getImage();
 	
-	public static final Image HIT_GRASS = new ImageIcon(IMGS_PATH + "hit_grass.png").getImage();
+	public static final Image HIT_GRASS = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "hit_grass.png")
+	).getImage();
 	
-	public static final Image HIT_SHEEP = new ImageIcon(IMGS_PATH + "hit_sheep.png").getImage();
+	public static final Image HIT_SHEEP = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "hit_sheep.png")
+	).getImage();
 	
 	/* medallions */
 	
-	public static final ImageIcon IMG_1_PLACE = new ImageIcon(IMGS_PATH + "medallion1.jpg");
+	public static final ImageIcon IMG_1_PLACE = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "medallion1.jpg")
+	);
 	
-	public static final ImageIcon IMG_2_PLACE = new ImageIcon(IMGS_PATH + "medallion2.jpg");
+	public static final ImageIcon IMG_2_PLACE = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "medallion2.jpg")
+	);
 	
-	public static final ImageIcon IMG_3_PLACE = new ImageIcon(IMGS_PATH + "medallion3.jpg");
+	public static final ImageIcon IMG_3_PLACE = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "medallion3.jpg")
+	);
 	
-	public static final ImageIcon IMG_LOST = new ImageIcon(IMGS_PATH + "medallion4.jpg");
+	public static final ImageIcon IMG_LOST = new ImageIcon(
+		ViewConst.class.getResource(IMGS_PATH + "medallion4.jpg")
+	);
 	
 	
 	
@@ -102,5 +128,5 @@ public class ViewConst
 	
 	/* border */
 	
-	public static final Color CELL_BORDER = new Color(62, 104, 14);
+	public static final Color CELL_BORDER = Color.GREEN;
 }

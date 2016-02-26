@@ -56,11 +56,11 @@ public class RegistrationFrame extends AFrame implements LobbyAddressPanelObserv
 	
 	
 	
-	private static final int WARNING_PANEL_1_DURATION = 200;// TODO -> 1000
+	private static final int WARNING_PANEL_1_DURATION = 1000;
 	
-	private static final int WARNING_PANEL_2_DURATION = 200;// TODO -> 3000
+	private static final int WARNING_PANEL_2_DURATION = 3000;
 	
-	private static final int WARNING_PANEL_3_DURATION = 200;// TODO -> 2000
+	private static final int WARNING_PANEL_3_DURATION = 2000;
 	
 	
 	
