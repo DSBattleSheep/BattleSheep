@@ -12,7 +12,7 @@ import org.sd.battlesheep.communication.CommunicationConst;
 import org.sd.battlesheep.communication.lobby.LobbyJoinInterface;
 import org.sd.battlesheep.communication.lobby.LobbyServerRMI;
 import org.sd.battlesheep.view.lobby.LobbyFrame;
-import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
+import org.sd.battlesheep.view.lobby.LobbyFrameObserver;
 
 
 
@@ -66,8 +66,6 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 			currHost = "127.0.0.1";
 		
 		lobbyFrame = new LobbyFrame(currHost, CommunicationConst.LOBBY_PORT, this);
-		
-		onLobbyFrameEnterLobbyName(currHost); // FIXME: metterlo nel LobbyFrame dopo aver inserito il nome
 	}
 	
 	@Override
@@ -100,10 +98,10 @@ public class Lobby implements LobbyJoinInterface, LobbyFrameObserver
 	}
 
 	@Override
-	public void onLobbyFrameEnterLobbyName(String lobbyName) {
+	public void onLobbyFrameLobbyNameEntered(String lobbyName) {
 		try {
 
-			lobbyServer = new LobbyServerRMI("MyLobbyName@"+currHost, CommunicationConst.LOBBY_PORT, this);
+			lobbyServer = new LobbyServerRMI(lobbyName, CommunicationConst.LOBBY_PORT, this);
 		
 		} catch (RemoteException | AlreadyBoundException e) {
 			if (e instanceof ExportException) {

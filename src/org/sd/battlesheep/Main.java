@@ -27,6 +27,7 @@ package org.sd.battlesheep;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.sd.battlesheep.view.lobby.LobbyFrame;
 import org.sd.battlesheep.view.main.MainFrame;
 import org.sd.battlesheep.view.main.MainFrameObserver;
 

@@ -26,8 +26,10 @@ package org.sd.battlesheep.view.lobby;
 
 import org.sd.battlesheep.view.AFrame;
 import org.sd.battlesheep.view.lobby.observer.ClientsPanelObserver;
-import org.sd.battlesheep.view.lobby.observer.LobbyFrameObserver;
+import org.sd.battlesheep.view.lobby.observer.LobbyNamePanelObserver;
+import org.sd.battlesheep.view.lobby.observer.WaitingPanelObserver;
 import org.sd.battlesheep.view.lobby.panel.ClientsTablePanel;
+import org.sd.battlesheep.view.lobby.panel.LobbyNamePanel;
 import org.sd.battlesheep.view.lobby.panel.WaitingPanel;
 
 
@@ -36,13 +38,15 @@ import org.sd.battlesheep.view.lobby.panel.WaitingPanel;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsPanelObserver
+public class LobbyFrame extends AFrame implements LobbyNamePanelObserver, WaitingPanelObserver, ClientsPanelObserver
 {
 	private static final int WIDTH = 400;
 	
 	private static final int HEIGHT = 400;
 	
 	
+	
+	private LobbyNamePanel lobbyNamePanel;
 	
 	private WaitingPanel waitingPanel;
 	
@@ -65,17 +69,30 @@ public class LobbyFrame extends AFrame implements WaitingPanelObserver, ClientsP
 		
 		/* panels */
 		
+		lobbyNamePanel = new LobbyNamePanel(this);
+		
 		waitingPanel = new WaitingPanel(host, port, this);
 		
 		clientsTablePanel = new ClientsTablePanel(host, port, this);
 		
 		/* this frame */
 		
-		addMiddlePanel(waitingPanel);
+		addMiddlePanel(lobbyNamePanel);
 		setVisible(true);
 	}
 	
 	
+	
+	@Override
+	public void onLobbyNamePanelExitClick() {
+		observer.onLobbyFrameExitClick();
+	}
+	
+	@Override
+	public void onLobbyNamePanelNextClick(String lobbyName) {
+		observer.onLobbyFrameLobbyNameEntered(lobbyName);
+		replaceMiddlePanel(lobbyNamePanel, waitingPanel);
+	}
 	
 	@Override
 	public void onWaitingPanelExitClick() {

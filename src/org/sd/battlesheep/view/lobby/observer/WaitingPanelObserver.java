@@ -27,11 +27,7 @@ package org.sd.battlesheep.view.lobby.observer;
 /**
  * @author Giulio Biagini
  */
-public interface LobbyFrameObserver
+public interface WaitingPanelObserver
 {
-	public void onLobbyFrameEnterLobbyName(String lobbyName);
-	
-	public void onLobbyFrameExitClick();
-	
-	public void onLobbyFrameStartClick();
+	public void onWaitingPanelExitClick();
 }

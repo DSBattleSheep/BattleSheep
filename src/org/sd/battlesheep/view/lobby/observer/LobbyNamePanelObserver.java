@@ -20,14 +20,16 @@
 
 
 
-package org.sd.battlesheep.view.lobby;
+package org.sd.battlesheep.view.lobby.observer;
 
 
 
 /**
  * @author Giulio Biagini
  */
-public interface WaitingPanelObserver
+public interface LobbyNamePanelObserver
 {
-	public void onWaitingPanelExitClick();
+	public void onLobbyNamePanelExitClick();
+	
+	public void onLobbyNamePanelNextClick(String lobbyName);
 }

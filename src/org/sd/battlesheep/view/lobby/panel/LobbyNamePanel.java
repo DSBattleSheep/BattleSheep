@@ -26,13 +26,17 @@ package org.sd.battlesheep.view.lobby.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import org.sd.battlesheep.view.APanel;
+import org.sd.battlesheep.view.MessageFactory;
 import org.sd.battlesheep.view.ViewConst;
-import org.sd.battlesheep.view.lobby.observer.WaitingPanelObserver;
+import org.sd.battlesheep.view.lobby.observer.LobbyNamePanelObserver;
 
 
 
@@ -40,34 +44,26 @@ import org.sd.battlesheep.view.lobby.observer.WaitingPanelObserver;
  * @author Giulio Biagini
  */
 @SuppressWarnings("serial")
-public class WaitingPanel extends APanel
+public class LobbyNamePanel  extends APanel
 {
-	private JLabel addressLabel;
+	private JLabel lobbyNameLabel;
 	
-	private JLabel waitingLabel;
+	private JTextField lobbyNameTextField;
 	
 	private JButton exitButton;
 	
-	
-	
-	private WaitingPanelObserver observer;
+	private JButton nextButton;
 	
 	
 	
-	public WaitingPanel(String host, int port, WaitingPanelObserver observer) {
+	private LobbyNamePanelObserver observer;
+	
+	
+	
+	public LobbyNamePanel(LobbyNamePanelObserver observer) {
 		super(ViewConst.WHITE_BACKGROUND);
 		
 		/* model */
-		
-		if (host == null)
-			throw new IllegalArgumentException("Host: null string");
-		if (host.isEmpty())
-			throw new IllegalArgumentException("Host: empty string");
-		
-		if (port < 0)
-			throw new IllegalArgumentException("Port: less than 0");
-		if (port > 65535)
-			throw new IllegalArgumentException("Port: greater than 65535");
 		
 		if (observer == null)
 			throw new IllegalArgumentException("Observer: null object");
@@ -75,9 +71,24 @@ public class WaitingPanel extends APanel
 		
 		/* items */
 		
-		addressLabel = new JLabel(host + ":" + port, JLabel.CENTER);
+		lobbyNameLabel = new JLabel("Lobby Name:");
 		
-		waitingLabel = new JLabel("Waiting for clients...", ViewConst.WAITING_ICON, JLabel.CENTER);
+		lobbyNameTextField = new JTextField();
+		lobbyNameTextField.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					actionNext();
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+		});
 		
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
@@ -87,16 +98,31 @@ public class WaitingPanel extends APanel
 			}
 		});
 		
+		nextButton = new JButton("Next");
+		nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionNext();
+			}
+		});
+		
 		/* this panel */
 		
-		addNorthPanel(addressLabel);
-		addMiddlePanel(waitingLabel);
-		addSouthPanel(exitButton);
+		addNorthPanel(lobbyNameLabel, lobbyNameTextField);
+		addSouthPanel(exitButton, nextButton);
 	}
 	
 	
 	
 	private void actionExit() {
-		observer.onWaitingPanelExitClick();
+		observer.onLobbyNamePanelExitClick();
+	}
+	
+	private void actionNext() {
+		String text = lobbyNameTextField.getText();
+		if (text == null || text.isEmpty())
+			MessageFactory.informationDialog(this, "Please, fill the lobby name field");
+		else
+			observer.onLobbyNamePanelNextClick(text);
 	}
 }
