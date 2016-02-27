@@ -24,8 +24,6 @@ package org.sd.battlesheep.model.player;
 
 
 
-import java.io.Serializable;
-
 import org.sd.battlesheep.model.field.OpponentField;
 import org.sd.battlesheep.model.lobby.NetPlayer;
 
@@ -43,10 +41,8 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
  * @author Giulio Biagini
  */
 
-public class Opponent extends APlayer implements Serializable
+public class Opponent extends APlayer
 {
-	private static final long serialVersionUID = 3803295068039264485L;
-
 	
 	/**
 	 * l'host dell'avversario
