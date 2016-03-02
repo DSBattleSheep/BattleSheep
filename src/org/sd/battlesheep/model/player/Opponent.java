@@ -38,7 +38,7 @@ import org.sd.battlesheep.model.lobby.NetPlayer;
  * inizialmente è memorizzata la sola erba e progressivamente viene aggiornato
  * con le celle colpite (con successo o meno) dagli avversari e dal giocatore.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 
 public class Opponent extends APlayer

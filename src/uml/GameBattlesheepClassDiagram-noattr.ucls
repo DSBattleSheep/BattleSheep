@@ -3,144 +3,145 @@
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="org.sd.battlesheep.Battlesheep" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/Battlesheep.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="119" y="665"/>    
+    <position height="-1" width="-1" x="119" y="544"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
   <interface id="2" language="java" name="org.sd.battlesheep.communication.client.TurnOwnerInterface" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/client/TurnOwnerInterface.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="442" y="1108"/>    
+    <position height="-1" width="-1" x="727" y="807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <class id="3" language="java" name="org.sd.battlesheep.communication.client.PlayerServer" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/client/PlayerServer.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="723" y="865"/>    
+    <position height="-1" width="-1" x="726" y="614"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="4" language="java" name="org.sd.battlesheep.communication.client.PlayerServer.PlayersConnectionTurnTimeOut" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/client/PlayerServer.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="720" y="463"/>    
+    <position height="-1" width="-1" x="726" y="437"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
   <interface id="5" language="java" name="org.sd.battlesheep.communication.client.PushMoveInterface" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/client/PushMoveInterface.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="440" y="810"/>    
+    <position height="-1" width="-1" x="450" y="604"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <interface id="6" language="java" name="org.sd.battlesheep.communication.client.PlayersConnectedInterface" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/client/PlayersConnectedInterface.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="438" y="463"/>    
+    <position height="-1" width="-1" x="426" y="462"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <class id="7" language="java" name="org.sd.battlesheep.communication.client.PlayerClient" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/client/PlayerClient.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="117" y="1072"/>    
+    <position height="-1" width="-1" x="119" y="807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <interface id="8" language="java" name="org.sd.battlesheep.communication.client.OrderInterface" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/client/OrderInterface.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="440" y="908"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="72" width="178" x="361" y="648"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <interface id="9" language="java" name="org.sd.battlesheep.communication.client.AttackInterface" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/client/AttackInterface.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="440" y="1008"/>    
+    <position height="-1" width="-1" x="450" y="763"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <dependency id="10">    
-    <bendpoint x="328" y="989"/>    
-    <bendpoint x="328" y="908"/>    
+    <bendpoint x="265" y="752"/>    
+    <bendpoint x="340" y="752"/>    
+    <bendpoint x="340" y="685"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="8"/>  
   </dependency>  
   <association id="11">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="12" name="instance">        
-        <position height="16" width="49" x="253" y="940"/>      
+        <position height="16" width="49" x="255" y="696"/>      
       </attribute>      
       <multiplicity id="13" minimum="0" maximum="1">        
-        <position height="14" width="23" x="253" y="930"/>      
+        <position height="14" width="23" x="255" y="687"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization id="14">    
-    <bendpoint x="589" y="908"/>    
+    <bendpoint x="602" y="684"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="8"/>  
   </realization>  
   <realization id="15">    
-    <bendpoint x="303" y="465"/>    
+    <bendpoint x="293" y="463"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
   <dependency id="16">    
-    <bendpoint x="298" y="1110"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
   <realization id="17">    
-    <bendpoint x="589" y="1107"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
   <dependency id="18">    
-    <bendpoint x="316" y="980"/>    
-    <bendpoint x="316" y="810"/>    
+    <bendpoint x="265" y="736"/>    
+    <bendpoint x="325" y="736"/>    
+    <bendpoint x="325" y="604"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
   <realization id="19">    
-    <bendpoint x="588" y="811"/>    
+    <bendpoint x="602" y="603"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="5"/>  
   </realization>  
   <realization id="20">    
-    <bendpoint x="588" y="1009"/>    
+    <bendpoint x="634" y="732"/>    
+    <bendpoint x="634" y="763"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="9"/>  
   </realization>  
@@ -149,18 +150,18 @@
     <end type="TARGET" refId="4"/>  
   </nesting>  
   <dependency id="22">    
-    <bendpoint x="325" y="1008"/>    
+    <bendpoint x="265" y="763"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="9"/>  
   </dependency>  
   <association id="23">    
-    <bendpoint x="589" y="596"/>    
+    <bendpoint x="601" y="509"/>    
     <end type="SOURCE" refId="3" navigable="false">      
       <attribute id="24" name="observer">        
-        <position height="16" width="52" x="535" y="527"/>      
+        <position height="16" width="52" x="539" y="478"/>      
       </attribute>      
       <multiplicity id="25" minimum="0" maximum="1">        
-        <position height="14" width="23" x="506" y="540"/>      
+        <position height="14" width="23" x="572" y="545"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
@@ -171,19 +172,20 @@
     <end type="TARGET" refId="7"/>  
   </dependency>  
   <association id="27">    
-    <bendpoint x="561" y="666"/>    
+    <bendpoint x="602" y="544"/>    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="28" name="playerServer">        
-        <position height="16" width="71" x="509" y="683"/>      
+        <position height="16" width="71" x="522" y="528"/>      
       </attribute>      
       <multiplicity id="29" minimum="0" maximum="1">        
-        <position height="14" width="23" x="560" y="696"/>      
+        <position height="14" width="23" x="529" y="496"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <dependency id="30">    
+    <bendpoint x="624" y="462"/>    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  

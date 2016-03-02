@@ -31,7 +31,7 @@ package org.sd.battlesheep.model.player;
  * ascolto in attesa di una connessione da parte di altri giocatori per la
  * comunicazione.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 public abstract class APlayer
 {

@@ -36,7 +36,7 @@ import org.sd.battlesheep.model.field.MyField;
  * memorizzata la posizione dell'erba, delle pecore e le celle colpite (con
  * successo o meno) dagli avversari.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 public class Me extends APlayer
 {

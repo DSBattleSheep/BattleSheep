@@ -18,10 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 package org.sd.battlesheep;
-
 
 
 import java.lang.reflect.InvocationTargetException;
@@ -63,7 +60,6 @@ import org.sd.battlesheep.view.game.GameFrame;
 import org.sd.battlesheep.view.game.GameFrameObserver;
 import org.sd.battlesheep.view.registration.RegistrationFrame;
 import org.sd.battlesheep.view.registration.RegistrationFrameObserver;
-
 
 
 /**

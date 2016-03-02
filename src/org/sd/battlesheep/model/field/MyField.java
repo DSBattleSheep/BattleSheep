@@ -32,7 +32,7 @@ package org.sd.battlesheep.model.field;
  * gioco del giocatore è memorizzata la posizione dell'erba, delle pecore e
  * delle celle colpite (con successo o meno) dagli avversari.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 public class MyField extends AField
 {

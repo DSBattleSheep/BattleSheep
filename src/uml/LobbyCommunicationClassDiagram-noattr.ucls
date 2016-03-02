@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.9" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="org.sd.battlesheep.Lobby" project="BattleSheep" 
+    file="/BattleSheep/src/org/sd/battlesheep/Lobby.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="67" y="104"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="org.sd.battlesheep.Lobby.UpdateGuiThread" project="BattleSheep" 
+    file="/BattleSheep/src/org/sd/battlesheep/Lobby.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="343" y="77"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="3" language="java" name="org.sd.battlesheep.communication.lobby.LobbyJoinInterface" 
+    project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/LobbyJoinInterface.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="72" width="254" x="216" y="135"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="4" language="java" name="org.sd.battlesheep.communication.lobby.LobbyDiscoveryRemoteInterface" 
+    project="BattleSheep" 
+    file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/LobbyDiscoveryRemoteInterface.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="72" width="253" x="216" y="221"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="5" language="java" name="org.sd.battlesheep.communication.lobby.LobbyJoinRemoteInterface" 
+    project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/LobbyJoinRemoteInterface.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="72" width="253" x="216" y="307"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="org.sd.battlesheep.communication.lobby.LobbyServerRMI" project="BattleSheep" 
+    file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/LobbyServerRMI.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="67" y="307"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="7">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <realization id="8">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <nesting id="9">    
+    <bendpoint x="216" y="101"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <realization id="10">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <association id="11">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="12" name="lobbyServer">        
+        <position height="0" width="0" x="0" y="-102"/>      
+      </attribute>      
+      <multiplicity id="13" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="-102"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <bendpoint x="123" y="193"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="15" name="lobbyJoinInterface">        
+        <position height="16" width="96" x="122" y="200"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="1">        
+        <position height="14" width="23" x="193" y="190"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

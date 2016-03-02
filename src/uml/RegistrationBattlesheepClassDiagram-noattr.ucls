@@ -2,75 +2,75 @@
 <class-diagram version="1.1.9" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="org.sd.battlesheep.Battlesheep" project="BattleSheep" 
-    file="/BattleSheep/src/org/sd/battlesheep/Battlesheep.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="154" y="217"/>    
+    file="/BattleSheep/src/org/sd/battlesheep/Battlesheep.java" binary="false" corner="TOP_RIGHT">    
+    <position height="-1" width="-1" x="187" y="69"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
   <interface id="2" language="java" name="org.sd.battlesheep.communication.lobby.DiscoveryInterface" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/DiscoveryInterface.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="510" y="-30"/>    
+    <position height="-1" width="-1" x="501" y="-30"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
   <class id="3" language="java" name="org.sd.battlesheep.communication.lobby.DiscoveryService.WorkerThread" 
     project="BattleSheep" file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/DiscoveryService.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="511" y="141"/>    
+    <position height="-1" width="-1" x="502" y="92"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="4" language="java" name="org.sd.battlesheep.communication.lobby.DiscoveryService" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/lobby/DiscoveryService.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="513" y="302"/>    
+    <position height="-1" width="-1" x="504" y="220"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="5" language="java" name="org.sd.battlesheep.communication.client.PlayerRegistration" project="BattleSheep" 
     file="/BattleSheep/src/org/sd/battlesheep/communication/client/PlayerRegistration.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="522" y="460"/>    
+    <position height="-1" width="-1" x="184" y="279"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <association id="6">    
     <end type="SOURCE" refId="3" navigable="false">      
       <attribute id="7" name="observer">        
-        <position height="16" width="52" x="513" y="31"/>      
+        <position height="16" width="52" x="504" y="31"/>      
       </attribute>      
       <multiplicity id="8" minimum="0" maximum="1">        
-        <position height="14" width="23" x="626" y="-22"/>      
+        <position height="14" width="23" x="617" y="-22"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="9">    
-    <bendpoint x="651" y="304"/>    
-    <bendpoint x="651" y="-29"/>    
+    <bendpoint x="642" y="218"/>    
+    <bendpoint x="642" y="-29"/>    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="10" name="observer">        
-        <position height="16" width="52" x="619" y="-51"/>      
+        <position height="16" width="52" x="610" y="-51"/>      
       </attribute>      
       <multiplicity id="11" minimum="0" maximum="1">        
-        <position height="14" width="23" x="486" y="32"/>      
+        <position height="14" width="23" x="477" y="32"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
@@ -83,10 +83,10 @@
   <association id="13">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="14" name="instance">        
-        <position height="16" width="49" x="341" y="483"/>      
+        <position height="16" width="49" x="324" y="222"/>      
       </attribute>      
       <multiplicity id="15" minimum="0" maximum="1">        
-        <position height="14" width="23" x="338" y="463"/>      
+        <position height="14" width="23" x="321" y="212"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    

@@ -33,7 +33,7 @@ package org.sd.battlesheep.model.field;
  * mano che il gioco avanza, sono memorizzate le celle colpite (con successo o
  * meno) dal giocatore e dagli altri avversari.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 public class OpponentField extends AField
 {

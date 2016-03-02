@@ -30,7 +30,7 @@ package org.sd.battlesheep.model.field;
  * Il campo di gioco è caratterizzato da una altezza ed una larghezza
  * che moltiplicate ne danno il numero di celle.
  * 
- * @author Giulio Biagini
+ * @author Giulio Biagini, Michele Corazza, Gianluca Iselli
  */
 public abstract class AField
 {
